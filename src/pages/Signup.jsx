@@ -1,4 +1,4 @@
-import { CircleArrowLeft } from "lucide-react";
+import { ArrowRight, CircleArrowLeft } from "lucide-react";
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -34,74 +34,100 @@ export default function Signup() {
       return () => clearTimeout(timer);
     }
   }, [success]);
-
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-black to-gray-900 text-white flex items-center justify-center">
+    <div className="relative min-h-screen bg-gradient-to-br from-black to-gray-900 text-white flex items-center justify-center p-6">
       {loading && <Loader />}
       <Link
         to="/"
-        className="absolute top-8 left-8 flex items-center text-cyan-400 hover:text-cyan-300 transition-opacity opacity-80 hover:opacity-100"
+        className="absolute top-8 left-8 flex items-center text-cyan-400 hover:text-cyan-300 transition-all group"
       >
-        <CircleArrowLeft className="w-5 h-5 mr-2" />
-        <span>Go to home</span>
+        <CircleArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
+        <span>Back to Home</span>
       </Link>
-      <div className="bg-white/5 backdrop-blur-md border-white/20 rounded-2xl p-10 shadow-xl space-y-6 w-full max-w-md">
-        <h2 className="text-3xl font-bold text-cyan-400 text-center">
-          Sign Up
-        </h2>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <input
-            type="text"
-            placeholder="Email"
-            {...register("email")}
-            className="w-full px-4 py-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-          />
-          {errors.email && (
-            <p className="text-red-400 text-sm">{errors.email.message}</p>
-          )}
 
-          <input
-            type="password"
-            placeholder="Password"
-            {...register("password")}
-            className="w-full px-4 py-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-          />
-          {errors.password && (
-            <p className="text-red-400 text-sm">{errors.password.message}</p>
-          )}
+      <div className="bg-white/5 backdrop-blur-lg border border-white/20 rounded-2xl p-8 w-full max-w-md shadow-2xl space-y-6">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent p-2">
+            Create Account
+          </h2>
+        </div>
 
-          <input
-            type="password"
-            placeholder="Confirm Password"
-            {...register("confirmPassword")}
-            className="w-full px-4 py-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-          />
-          {errors.confirmPassword && (
-            <p className="text-red-400 text-sm">
-              {errors.confirmPassword.message}
-            </p>
-          )}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          <div>
+            <input
+              type="text"
+              placeholder="Email"
+              {...register("email")}
+              className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/30 text-white placeholder-gray-400 transition-all outline-none"
+            />
+            {errors.email && (
+              <p className="mt-1 text-sm text-pink-400">
+                {errors.email.message}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <input
+              type="password"
+              placeholder="Password"
+              {...register("password")}
+              className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/30 text-white placeholder-gray-400 transition-all outline-none"
+            />
+            {errors.password && (
+              <p className="mt-1 text-sm text-pink-400">
+                {errors.password.message}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              {...register("confirmPassword")}
+              className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/30 text-white placeholder-gray-400 transition-all outline-none"
+            />
+            {errors.confirmPassword && (
+              <p className="mt-1 text-sm text-pink-400">
+                {errors.confirmPassword.message}
+              </p>
+            )}
+          </div>
+
           <button
             type="submit"
             disabled={loading}
-            className={`w-full px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-cyan-400/40 ${
-              loading ? "opacity-50 cursor-not-allowed" : ""
+            className={`w-full py-3 px-6 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-cyan-500/30 flex items-center justify-center ${
+              loading ? "opacity-70 cursor-not-allowed" : ""
             }`}
           >
-            Sign Up
+            <span>Create Account</span>
+            <ArrowRight className="w-4 h-4 ml-2" />
           </button>
         </form>
-        {error && <p className="text-red-400 text-center mt-2">{error}</p>}
-        {success && (
-          <p className="text-green-400 text-center mt-2">
-            {success} Redirecting to login...
-          </p>
+
+        {error && (
+          <div className="p-3 bg-red-900/30 border border-red-500/50 rounded-lg text-center text-red-300">
+            {error}
+          </div>
         )}
-        <Link to="/login">
-          <p className="text-cyan-400 text-center opacity-60 hover:opacity-100">
-            Already have an account? Login
-          </p>
-        </Link>
+
+        {success && (
+          <div className="p-3 bg-green-900/30 border border-green-500/50 rounded-lg text-center text-green-300">
+            {success} Redirecting to login...
+          </div>
+        )}
+
+        <div className="text-center text-sm text-gray-400">
+          Nai, Pehle wi aya'n saa{"  "}
+          <Link
+            to="/login"
+            className="text-cyan-400 hover:text-cyan-300 underline underline-offset-4"
+          >
+            Sign in
+          </Link>
+        </div>
       </div>
     </div>
   );

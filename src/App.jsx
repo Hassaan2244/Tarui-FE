@@ -6,6 +6,10 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicLayout from "./components/PublicRoute";
+import Layout from "./components/Layout";
+import Ledger from "./pages/Ledger";
+import Inventory from "./pages/Inventory";
+import Billing from "./pages/Billing";
 
 function App() {
   return (
@@ -22,10 +26,16 @@ function App() {
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <Dashboard />
+              <Layout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route index element={<Dashboard />} />
+          <Route path="" element={<Dashboard />} />
+          <Route path="ledger" element={<Ledger />} />
+          <Route path="inventory" element={<Inventory />} />
+          <Route path="billing" element={<Billing />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

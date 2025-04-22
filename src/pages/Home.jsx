@@ -56,13 +56,17 @@ export default function Home() {
       </div>
 
       <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-2xl p-10 w-full max-w-2xl shadow-xl space-y-6 mt-10">
-        <h1 className="text-3xl font-bold text-center text-cyan-400 drop-shadow-lg">
-          Welcome to the Future
-        </h1>
+        <div className="text-center">
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent p-2">
+            Welcome!
+          </h2>
+        </div>
 
         <div className="space-y-4 text-center">
           <div className="text-lg">
-            <span className="font-semibold text-purple-300">CPU Usage:</span>{" "}
+            <span className="font-semibold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+              CPU Usage:
+            </span>{" "}
             {cpuUsage}%
           </div>
 
@@ -83,19 +87,19 @@ export default function Home() {
           </ResponsiveContainer>
           {token ? (
             <Link to={"/dashboard"}>
-              <button className="mt-6 px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-cyan-400/40 mr-4">
+              <button className="mt-6 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-cyan-500/30">
                 Go to Dashboard
               </button>
             </Link>
           ) : (
             <>
               <Link to={"/login"}>
-                <button className="mt-6 px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-cyan-400/40 mr-4">
+                <button className="mt-6 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-cyan-500/30 mr-4">
                   Login
                 </button>
               </Link>
               <Link to={"/signup"}>
-                <button className="mt-6 px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-cyan-400/40">
+                <button className="mt-6 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-cyan-500/30">
                   Signup
                 </button>
               </Link>
