@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signupSchema } from "../validation-schema/validation-schemas";
 import { useDispatch, useSelector } from "react-redux";
-import { signupUser } from "../redux/slices/authSlice";
+import { clearAuthState, signupUser } from "../redux/slices/authSlice";
 import Loader from "../components/Loader";
 
 export default function Signup() {
@@ -28,6 +28,7 @@ export default function Signup() {
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
+        dispatch(clearAuthState());
         navigate("/login");
       }, 2000);
       return () => clearTimeout(timer);

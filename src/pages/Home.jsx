@@ -10,11 +10,13 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
+import { useSelector } from "react-redux";
 
 export default function Home() {
   const [time, setTime] = useState(new Date());
   const [cpuUsage, setCpuUsage] = useState(0);
   const [cpuHistory, setCpuHistory] = useState([]);
+  const { token } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const timeInterval = setInterval(() => {
@@ -24,7 +26,6 @@ export default function Home() {
     const getCpu = async () => {
       try {
         const usage = await invoke("get_cpu_usage");
-        console.log(usage);
         const usageFixed = parseFloat(usage.toFixed(2));
         setCpuUsage(usageFixed);
 
@@ -80,16 +81,26 @@ export default function Home() {
               />
             </LineChart>
           </ResponsiveContainer>
-          <Link to={"/login"}>
-            <button className="mt-6 px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-cyan-400/40 mr-4">
-              Login
-            </button>
-          </Link>
-          <Link to={"/signup"}>
-            <button className="mt-6 px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-cyan-400/40">
-              Signup
-            </button>
-          </Link>
+          {token ? (
+            <Link to={"/dashboard"}>
+              <button className="mt-6 px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-cyan-400/40 mr-4">
+                Go to Dashboard
+              </button>
+            </Link>
+          ) : (
+            <>
+              <Link to={"/login"}>
+                <button className="mt-6 px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-cyan-400/40 mr-4">
+                  Login
+                </button>
+              </Link>
+              <Link to={"/signup"}>
+                <button className="mt-6 px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-cyan-400/40">
+                  Signup
+                </button>
+              </Link>
+            </>
+          )}
         </div>
       </div>
 
