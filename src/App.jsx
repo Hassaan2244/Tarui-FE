@@ -10,6 +10,7 @@ import Layout from "./components/Layout";
 import Ledger from "./pages/Ledger";
 import Inventory from "./pages/Inventory";
 import Billing from "./pages/Billing";
+import AddLedger from "./pages/AddLedger";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="" element={<Dashboard />} />
           <Route path="ledger" element={<Ledger />} />
+          <Route path="ledger/add" element={<AddLedger />} />
           <Route path="inventory" element={<Inventory />} />
           <Route path="billing" element={<Billing />} />
         </Route>
