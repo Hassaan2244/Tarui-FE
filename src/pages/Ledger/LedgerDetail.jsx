@@ -10,7 +10,6 @@ export default function LedgerDetail() {
   const { id } = useParams();
   const ledgerState = useSelector((state) => state.ledger);
   const singleLedger = ledgerState?.singleLedger;
-  console.log(ledgerState);
 
   useEffect(() => {
     dispatch(fetchSingleLedger(id));

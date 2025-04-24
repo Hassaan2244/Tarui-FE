@@ -14,7 +14,6 @@ export default function Ledger() {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const ledgers = ledgerState?.ledgers?.data;
-  console.log(ledgerState);
 
   useEffect(() => {
     const handler = setTimeout(() => {
