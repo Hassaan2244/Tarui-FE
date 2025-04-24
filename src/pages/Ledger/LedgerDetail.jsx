@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchSingleLedger } from "../../redux/slices/ledgerSlice";
 import { useParams } from "react-router-dom";
 import { formatDate } from "../../config/helperFunctions";
+import Loader from "../../components/Loader";
 
 export default function LedgerDetail() {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ export default function LedgerDetail() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black to-gray-900 text-white p-6">
+      {ledgerState?.loading && <Loader />}
       <div className="max-w-6xl mx-auto">
         <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-xl p-6 shadow-xl">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent pb-2 wrap-break-word">
