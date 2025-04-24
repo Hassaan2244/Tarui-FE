@@ -74,12 +74,12 @@ export default function Ledger() {
 
         <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden shadow-xl">
           <div className="grid grid-cols-12 bg-white/5 border-b border-white/10 p-4 text-gray-400 text-sm font-medium">
-            <div className="col-span-8 md:col-span-6 ">Ledger Name</div>
-            <div className="col-span-4 md:col-span-2 text-center">
+            <div className="col-span-5 md:col-span-3">Ledger Name</div>
+            <div className="hidden lg:block lg:col-span-6 text-center">
               Description
             </div>
-            <div className="hidden md:block md:col-span-3">Last Updated</div>
-            <div className="hidden md:block md:col-span-1"></div>
+            <div className="hidden md:block md:col-span-2">Last Updated</div>
+            <div className="col-span-2 md:col-span-1"></div>
           </div>
 
           {ledgers?.map((ledger) => (
@@ -87,23 +87,23 @@ export default function Ledger() {
               key={ledger.id}
               className="grid grid-cols-12 items-center border-b border-white/5 hover:bg-white/5 transition-colors p-4"
             >
-              <div className="col-span-8 md:col-span-6">
-                <h3 className="font-medium text-white wrap-break-word mr-2">
+              <div className="col-span-5 md:col-span-3">
+                <h3 className="font-medium text-white break-words mr-2">
                   {ledger.name}
                 </h3>
               </div>
-              <div className="col-span-4 md:col-span-2 text-center text-cyan-400 wrap-break-word mr-2">
+              <div className="hidden lg:block lg:col-span-6 text-center text-cyan-400 break-words mr-2">
                 {ledger.description}
               </div>
-              <div className="hidden md:block md:col-span-3 text-sm text-gray-400">
+              <div className="hidden md:block md:col-span-2 text-sm text-gray-400">
                 {formatDate(ledger.updatedAt)}
               </div>
-              <div className="hidden md:block md:col-span-1 text-right">
+              <div className="col-span-2 md:col-span-1  text-right">
                 <Link
                   to={`/ledger/${ledger.id}`}
                   className="text-cyan-400 hover:text-cyan-300 transition-colors flex items-center justify-end"
                 >
-                  <span className="sr-only">View</span>
+                  <span className="hidden sm:inline">Details</span>
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>
