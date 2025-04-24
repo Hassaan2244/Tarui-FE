@@ -22,9 +22,11 @@ export const createLedger = createAsyncThunk(
 
 export const fetchLedgers = createAsyncThunk(
     "ledger/fetch",
-    async (_, { rejectWithValue }) => {
+    async ({ page = 1, search = "" }, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`${baseURL}/api/ledger`, getAuthHeaders());
+            const params = new URLSearchParams({ page, search });
+
+            const response = await axios.get(`${baseURL}/api/ledger?${params.toString()}`, getAuthHeaders());
             return response.data;
         } catch (err) {
             return rejectWithValue(err.response?.data?.message || "An error occured");

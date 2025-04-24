@@ -10,6 +10,7 @@ import Inventory from "./pages/Inventory";
 import Billing from "./pages/Billing";
 import AddLedger from "./pages/Ledger/AddLedger";
 import Sidebar from "./components/Sidebar";
+import LedgerDetail from "./pages/Ledger/LedgerDetail";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/product" element={<Dashboard />} />
           <Route path="/ledger" element={<Ledger />} />
           <Route path="/ledger/add" element={<AddLedger />} />
+          <Route path="/ledger/:id" element={<LedgerDetail />} />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/billing" element={<Billing />} />
         </Route>

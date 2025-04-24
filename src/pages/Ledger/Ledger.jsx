@@ -1,38 +1,48 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, PlusCircle, Search } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchLedgers } from "../../redux/slices/ledgerSlice";
+import { formatDate } from "../../config/helperFunctions";
+import ReactPaginate from "react-paginate";
+import Loader from "../../components/Loader";
 
 export default function Ledger() {
-  const ledgers = [
-    {
-      id: 1,
-      name: "Main Operations Ledger",
-      entries: 142,
-      updated: "2 hours ago",
-    },
-    {
-      id: 2,
-      name: "Quantum Research Budget",
-      entries: 87,
-      updated: "1 day ago",
-    },
-    { id: 3, name: "Core Infrastructure", entries: 256, updated: "3 days ago" },
-    {
-      id: 4,
-      name: "Security Expenditures",
-      entries: 53,
-      updated: "1 week ago",
-    },
-    { id: 5, name: "Personnel Accounts", entries: 198, updated: "2 weeks ago" },
-    {
-      id: 6,
-      name: "Experimental Projects",
-      entries: 31,
-      updated: "3 weeks ago",
-    },
-  ];
+  const dispatch = useDispatch();
+  const ledgerState = useSelector((state) => state.ledger);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const ledgers = ledgerState?.ledgers?.data;
+  console.log(ledgerState);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+    }, 500);
+
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
+
+  useEffect(() => {
+    dispatch(fetchLedgers({ page: currentPage + 1, search: debouncedSearch }));
+  }, [currentPage, debouncedSearch]);
+
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [debouncedSearch]);
+
+  const handlePageClick = (event) => {
+    setCurrentPage(event.selected);
+  };
+
+  const handleSeach = (e) => {
+    setSearchTerm(e.target.value);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black to-gray-900 text-white p-6">
+      {ledgerState?.loading && <Loader />}
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
           <div>
@@ -56,6 +66,8 @@ export default function Ledger() {
             <input
               type="text"
               placeholder="Search ledgers..."
+              value={searchTerm}
+              onChange={handleSeach}
               className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-cyan-400/30"
             />
           </div>
@@ -63,28 +75,29 @@ export default function Ledger() {
 
         <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden shadow-xl">
           <div className="grid grid-cols-12 bg-white/5 border-b border-white/10 p-4 text-gray-400 text-sm font-medium">
-            <div className="col-span-8 md:col-span-6">Ledger Name</div>
-            <div className="col-span-4 md:col-span-2 text-center">Entries</div>
+            <div className="col-span-8 md:col-span-6 ">Ledger Name</div>
+            <div className="col-span-4 md:col-span-2 text-center">
+              Description
+            </div>
             <div className="hidden md:block md:col-span-3">Last Updated</div>
             <div className="hidden md:block md:col-span-1"></div>
           </div>
 
-          {ledgers.map((ledger) => (
+          {ledgers?.map((ledger) => (
             <div
               key={ledger.id}
               className="grid grid-cols-12 items-center border-b border-white/5 hover:bg-white/5 transition-colors p-4"
             >
               <div className="col-span-8 md:col-span-6">
-                <h3 className="font-medium text-white">{ledger.name}</h3>
-                <p className="text-xs text-gray-400 md:hidden">
-                  {ledger.entries} entries • {ledger.updated}
-                </p>
+                <h3 className="font-medium text-white wrap-break-word mr-2">
+                  {ledger.name}
+                </h3>
               </div>
-              <div className="col-span-4 md:col-span-2 text-center text-cyan-400">
-                {ledger.entries}
+              <div className="col-span-4 md:col-span-2 text-center text-cyan-400 wrap-break-word mr-2">
+                {ledger.description}
               </div>
               <div className="hidden md:block md:col-span-3 text-sm text-gray-400">
-                {ledger.updated}
+                {formatDate(ledger.updatedAt)}
               </div>
               <div className="hidden md:block md:col-span-1 text-right">
                 <Link
@@ -98,20 +111,26 @@ export default function Ledger() {
             </div>
           ))}
         </div>
-
-        <div className="flex justify-between items-center mt-6 text-sm">
-          <button className="px-4 py-2 bg-white/5 border border-white/10 hover:bg-white/10 rounded-lg transition-all">
-            Previous
-          </button>
-          <div className="text-gray-400">
-            Showing <span className="text-white">1-{ledgers.length}</span> of{" "}
-            <span className="text-white">{ledgers.length}</span> ledgers
-          </div>
-          <button className="px-4 py-2 bg-white/5 border border-white/10 hover:bg-white/10 rounded-lg transition-all">
-            Next
-          </button>
-        </div>
       </div>
+      {ledgerState?.ledgers?.pages > 1 && (
+        <div className="flex justify-center mt-6">
+          <ReactPaginate
+            breakLabel={"..."}
+            pageCount={ledgerState?.ledgers?.pages}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={3}
+            onPageChange={handlePageClick}
+            forcePage={currentPage}
+            containerClassName={"flex space-x-2 text-white"}
+            pageLinkClassName="block px-4 py-2 rounded-xl transition-all hover:bg-white/10"
+            activeLinkClassName="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white"
+            previousLinkClassName="block px-4 py-2 rounded-xl transition-all hover:bg-white/10"
+            nextLinkClassName="block px-4 py-2 rounded-xl transition-all hover:bg-white/10"
+            breakLinkClassName="block px-4 py-2 rounded-xl text-gray-400"
+            disabledLinkClassName="opacity-50 pointer-events-none"
+          />
+        </div>
+      )}
     </div>
   );
 }
