@@ -1,8 +1,8 @@
-import { Link, Outlet, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/slices/authSlice";
 
-export default function Layout() {
+export default function Sidebar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -10,6 +10,11 @@ export default function Layout() {
     dispatch(logout());
     navigate("/");
   };
+  const { token } = useSelector((state) => state.auth);
+
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
 
   return (
     <div className="flex h-screen bg-gradient-to-br from-black to-gray-900 text-white">
@@ -31,7 +36,7 @@ export default function Layout() {
             </Link>
 
             <Link
-              to="/dashboard/ledger"
+              to="/ledger"
               className="px-4 py-3 rounded-lg hover:bg-white/10 transition-all flex items-center group"
             >
               <div className="w-2 h-2 rounded-full bg-purple-400 mr-3 group-hover:shadow-purple-400/40 group-hover:shadow-sm"></div>
@@ -39,7 +44,7 @@ export default function Layout() {
             </Link>
 
             <Link
-              to="/dashboard/inventory"
+              to="/inventory"
               className="px-4 py-3 rounded-lg hover:bg-white/10 transition-all flex items-center group"
             >
               <div className="w-2 h-2 rounded-full bg-blue-400 mr-3 group-hover:shadow-blue-400/40 group-hover:shadow-sm"></div>
@@ -47,11 +52,18 @@ export default function Layout() {
             </Link>
 
             <Link
-              to="/dashboard/billing"
+              to="/billing"
               className="px-4 py-3 rounded-lg hover:bg-white/10 transition-all flex items-center group"
             >
               <div className="w-2 h-2 rounded-full bg-green-400 mr-3 group-hover:shadow-green-400/40 group-hover:shadow-sm"></div>
               <span>Billing</span>
+            </Link>
+            <Link
+              to="/product"
+              className="px-4 py-3 rounded-lg hover:bg-white/10 transition-all flex items-center group"
+            >
+              <div className="w-2 h-2 rounded-full bg-green-400 mr-3 group-hover:shadow-green-400/40 group-hover:shadow-sm"></div>
+              <span>Products</span>
             </Link>
           </nav>
         </div>

@@ -34,7 +34,6 @@ export default function Ledger() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-black to-gray-900 text-white p-6">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent pb-2">
@@ -62,7 +61,6 @@ export default function Ledger() {
           </div>
         </div>
 
-        {/* Ledger List */}
         <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden shadow-xl">
           <div className="grid grid-cols-12 bg-white/5 border-b border-white/10 p-4 text-gray-400 text-sm font-medium">
             <div className="col-span-8 md:col-span-6">Ledger Name</div>
