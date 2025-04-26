@@ -14,6 +14,7 @@ import LedgerDetail from "./pages/Ledger/LedgerDetail";
 import Products from "./pages/Product/Product";
 import AddProduct from "./pages/Product/Addproduct";
 import ProductDetail from "./pages/Product/ProductDetail";
+import EditProduct from "./pages/Product/EditProduct";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           {/** Product routes */}
           <Route path="/product" element={<Products />} />
           <Route path="/product/add" element={<AddProduct />} />
+          <Route path="/product/edit" element={<EditProduct />} />
           <Route path="/product/:id" element={<ProductDetail />} />
 
           {/** Inventory routes */}

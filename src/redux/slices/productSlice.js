@@ -23,6 +23,24 @@ export const createProduct = createAsyncThunk(
     }
 );
 
+export const updateProduct = createAsyncThunk(
+    "product/update",
+    async ({ name, description, price, qty, id }, { rejectWithValue }) => {
+        try {
+            const response = await axios.patch(
+                `${baseURL}/api/product/${id}`,
+                { name, description, price, qty },
+                getAuthHeaders()
+            );
+            return response.data;
+        } catch (err) {
+            return rejectWithValue(
+                err.response?.data?.message || "An error occurred"
+            );
+        }
+    }
+);
+
 export const fetchProducts = createAsyncThunk(
     "product/fetch",
     async ({ page = 1, search = "" }, { rejectWithValue }) => {
@@ -92,6 +110,21 @@ const productSlice = createSlice({
                 state.error = action.payload;
             })
 
+            // Edit
+            .addCase(updateProduct.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+                state.success = null;
+            })
+            .addCase(updateProduct.fulfilled, (state, action) => {
+                state.loading = false;
+                state.success = action.payload?.message;
+            })
+            .addCase(updateProduct.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
             // Fetch
             .addCase(fetchProducts.pending, (state) => {
                 state.loading = true;
@@ -100,7 +133,6 @@ const productSlice = createSlice({
             })
             .addCase(fetchProducts.fulfilled, (state, action) => {
                 state.loading = false;
-                state.success = action.payload?.message;
                 state.products = action.payload;
             })
             .addCase(fetchProducts.rejected, (state, action) => {
@@ -116,7 +148,6 @@ const productSlice = createSlice({
             })
             .addCase(fetchSingleProduct.fulfilled, (state, action) => {
                 state.loading = false;
-                state.success = action.payload?.message;
                 state.singleProduct = action.payload;
             })
             .addCase(fetchSingleProduct.rejected, (state, action) => {
