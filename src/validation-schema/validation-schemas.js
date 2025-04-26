@@ -21,3 +21,24 @@ export const ledgerSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
     description: Yup.string().required("Description is required"),
 });
+
+export const productSchema = Yup.object().shape({
+    name: Yup.string().required("Product name is required"),
+    description: Yup.string().required("Description is required"),
+    price: Yup.number()
+        .transform((value, originalValue) =>
+            originalValue === '' ? undefined : value
+        )
+        .required("Price is required")
+        .typeError("Price must be a number")
+        .positive("Price must be a positive number"),
+
+    qty: Yup.number()
+        .transform((value, originalValue) =>
+            originalValue === '' ? undefined : value
+        )
+        .required("Quantity is required")
+        .typeError("Quantity must be a number")
+        .integer("Quantity must be a whole number")
+        .positive("Quantity must be a positive number"),
+});
