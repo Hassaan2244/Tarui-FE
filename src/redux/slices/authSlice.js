@@ -38,7 +38,7 @@ const authSlice = createSlice({
     name: "auth",
     initialState: {
         user: null,
-        token: null,
+        token: localStorage.getItem("token"),
         loading: false,
         error: null,
         success: null,

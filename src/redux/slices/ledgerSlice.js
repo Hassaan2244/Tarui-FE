@@ -1,18 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import config from "../../config/vars";
-import { getAuthHeaders } from "../../config/helperFunctions";
-
-const { baseURL } = config;
+import api from "../../config/api";
 
 export const createLedger = createAsyncThunk(
     "ledger/create",
     async ({ name, description }, { rejectWithValue }) => {
         try {
-            const response = await axios.post(`${baseURL}/api/ledger`, {
+            const response = await api.post(`/api/ledger`, {
                 name,
                 description,
-            }, getAuthHeaders());
+            });
             return response.data;
         } catch (err) {
             return rejectWithValue(err.response?.data?.message || "An error occured");
@@ -26,7 +22,7 @@ export const fetchLedgers = createAsyncThunk(
         try {
             const params = new URLSearchParams({ page, search });
 
-            const response = await axios.get(`${baseURL}/api/ledger?${params.toString()}`, getAuthHeaders());
+            const response = await api.get(`/api/ledger?${params.toString()}`);
             return response.data;
         } catch (err) {
             return rejectWithValue(err.response?.data?.message || "An error occured");
@@ -38,7 +34,7 @@ export const fetchSingleLedger = createAsyncThunk(
     "ledger/fetchSingle",
     async (id, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`${baseURL}/api/ledger/${id}`, getAuthHeaders());
+            const response = await api.get(`/api/ledger/${id}`);
             return response.data;
         } catch (err) {
             return rejectWithValue(err.response?.data?.message || "An error occured");

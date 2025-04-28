@@ -16,8 +16,6 @@ export default function ProductDetail() {
     dispatch(fetchSingleProduct(id));
   }, [id]);
 
-  console.log(singleProduct);
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-black to-gray-900 text-white p-6">
       {productState?.loading && <Loader />}

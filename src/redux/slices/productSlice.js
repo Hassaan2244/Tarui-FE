@@ -1,24 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import config from "../../config/vars";
-import { getAuthHeaders } from "../../config/helperFunctions";
-
-const { baseURL } = config;
+import api from "../../config/api";
 
 export const createProduct = createAsyncThunk(
     "product/create",
     async ({ name, description, price, qty }, { rejectWithValue }) => {
         try {
-            const response = await axios.post(
-                `${baseURL}/api/product`,
-                { name, description, price, qty },
-                getAuthHeaders()
-            );
+            const response = await api.post("/api/product", { name, description, price, qty });
             return response.data;
         } catch (err) {
-            return rejectWithValue(
-                err.response?.data?.message || "An error occurred"
-            );
+            return rejectWithValue(err.response?.data?.message || "An error occurred");
         }
     }
 );
@@ -27,16 +17,10 @@ export const updateProduct = createAsyncThunk(
     "product/update",
     async ({ name, description, price, qty, id }, { rejectWithValue }) => {
         try {
-            const response = await axios.patch(
-                `${baseURL}/api/product/${id}`,
-                { name, description, price, qty },
-                getAuthHeaders()
-            );
+            const response = await api.patch(`/api/product/${id}`, { name, description, price, qty });
             return response.data;
         } catch (err) {
-            return rejectWithValue(
-                err.response?.data?.message || "An error occurred"
-            );
+            return rejectWithValue(err.response?.data?.message || "An error occurred");
         }
     }
 );
@@ -46,16 +30,10 @@ export const fetchProducts = createAsyncThunk(
     async ({ page = 1, search = "" }, { rejectWithValue }) => {
         try {
             const params = new URLSearchParams({ page, search });
-
-            const response = await axios.get(
-                `${baseURL}/api/product?${params.toString()}`,
-                getAuthHeaders()
-            );
+            const response = await api.get(`/api/product?${params.toString()}`);
             return response.data;
         } catch (err) {
-            return rejectWithValue(
-                err.response?.data?.message || "An error occurred"
-            );
+            return rejectWithValue(err.response?.data?.message || "An error occurred");
         }
     }
 );
@@ -64,15 +42,10 @@ export const fetchSingleProduct = createAsyncThunk(
     "product/fetchSingle",
     async (id, { rejectWithValue }) => {
         try {
-            const response = await axios.get(
-                `${baseURL}/api/product/${id}`,
-                getAuthHeaders()
-            );
+            const response = await api.get(`/api/product/${id}`);
             return response.data;
         } catch (err) {
-            return rejectWithValue(
-                err.response?.data?.message || "An error occurred"
-            );
+            return rejectWithValue(err.response?.data?.message || "An error occurred");
         }
     }
 );
