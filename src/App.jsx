@@ -15,6 +15,7 @@ import Products from "./pages/Product/Product";
 import AddProduct from "./pages/Product/Addproduct";
 import ProductDetail from "./pages/Product/ProductDetail";
 import EditProduct from "./pages/Product/EditProduct";
+import Transaction from "./pages/Transaction/Transaction";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
 
           {/** Billing routes */}
           <Route path="/billing" element={<Billing />} />
+          <Route path="/billing/add" element={<Transaction />} />
         </Route>
       </Routes>
     </BrowserRouter>
