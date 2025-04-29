@@ -46,9 +46,6 @@ export default function ProductDetail() {
           </p>
           <div className="mt-6 space-y-2">
             <div className="text-gray-400">
-              <strong>Price:</strong> ${singleProduct?.price}
-            </div>
-            <div className="text-gray-400">
               <strong>Quantity Available:</strong> {singleProduct?.qty}
             </div>
             <div className="text-gray-400">

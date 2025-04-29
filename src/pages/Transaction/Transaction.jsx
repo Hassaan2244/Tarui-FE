@@ -6,8 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../components/Loader";
 import { createTransaction } from "../../redux/slices/billingSlice";
 import { fetchProducts } from "../../redux/slices/productSlice";
+import { transactionSchema } from "../../validation-schema/validation-schemas";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 export default function Transaction() {
+  const [selectedProducts, setSelectedProducts] = useState([]);
   const {
     register,
     handleSubmit,
@@ -15,7 +18,10 @@ export default function Transaction() {
     setValue,
     resetField,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    resolver: yupResolver(transactionSchema),
+    context: { selectedProducts },
+  });
   const dispatch = useDispatch();
   const productState = useSelector((state) => state.product);
   const billingState = useSelector((state) => state.billing);
@@ -25,18 +31,27 @@ export default function Transaction() {
     if (!products || products.length === 0) dispatch(fetchProducts({}));
   }, []);
 
-  const [selectedProducts, setSelectedProducts] = useState([]);
-
   const transactionType = watch("type");
   const selectedProductId = watch("product");
   const quantity = watch("quantity");
   const price = watch("price");
 
   const onSubmit = (data) => {
-    console.log({
-      ...data,
-      selectedProducts,
-    });
+    const productRequiredTypes = [
+      "Buy",
+      "Sell",
+      "Open Sell",
+      "Return",
+      "Breakage",
+    ];
+
+    if (
+      productRequiredTypes.includes(data.type) &&
+      selectedProducts.length === 0
+    ) {
+      alert("At least one product must be selected.");
+      return;
+    }
     const payload = {
       ...data,
       selectedProducts,
@@ -45,34 +60,42 @@ export default function Transaction() {
   };
 
   const handleAddProduct = () => {
-    if (!transactionType === "Breakage")
-      if (!selectedProductId || !quantity || !price) return;
+    const isBreakage = transactionType === "Breakage";
+
+    if (!selectedProductId || !quantity || (!isBreakage && !price)) return;
 
     const product = products.find((p) => p.id === parseInt(selectedProductId));
-
     if (!product) return;
 
-    if (quantity > product.qty) {
+    if (quantity > product.qty || quantity < 1) {
       alert(
-        `Quantity cannot be more than available stock (${product.quantity})`
+        `Quantity cannot be more than available stock (${product.qty}) or smaller than 1`
       );
+      return;
+    }
+
+    const parsedQuantity = Number(quantity);
+    const parsedPrice = isBreakage ? 1 : Number(price);
+    if (parsedPrice < 1) {
+      alert(`Price should be a positive number.`);
       return;
     }
 
     const newProduct = {
       id: product.id,
       name: product.name,
-      quantity: Number(quantity),
-      price: Number(price),
-      total: Number(quantity) * Number(price),
+      quantity: parsedQuantity,
+      price: parsedPrice,
+      total: parsedQuantity * parsedPrice,
     };
 
     setSelectedProducts((prev) => [...prev, newProduct]);
 
-    // Reset product fields
     resetField("product");
     resetField("quantity");
-    resetField("price");
+    if (!isBreakage) {
+      resetField("price");
+    }
   };
 
   const handleRemoveProduct = (id) => {
@@ -82,7 +105,7 @@ export default function Transaction() {
   const availableProducts = products.filter(
     (p) => !selectedProducts.some((sp) => sp.id === p.id)
   );
-
+  console.log(errors);
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-black to-gray-900 text-white flex items-center justify-center p-6">
       {billingState?.loading && <Loader />}
@@ -95,7 +118,7 @@ export default function Transaction() {
         <span>Back to Dashboard</span>
       </Link>
 
-      <div className="bg-white/5 backdrop-blur-md border-white/20 rounded-2xl p-8 shadow-2xl space-y-6 w-full max-w-2xl mt-10">
+      <div className="bg-white/5 backdrop-blur-md border-white/20 rounded-2xl p-8 shadow-2xl space-y-6 w-full max-w-5xl mt-10">
         <div className="text-center">
           <h2 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent p-2">
             Create Transaction
@@ -160,21 +183,24 @@ export default function Transaction() {
 
                 <input
                   type="number"
+                  min="1"
                   placeholder="Quantity"
                   {...register("quantity")}
                   className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/30 text-white placeholder-gray-400 transition-all outline-none"
                 />
 
                 {transactionType !== "Breakage" && (
-                  <input
-                    type="number"
-                    placeholder="Price"
-                    {...register("price")}
-                    className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/30 text-white placeholder-gray-400 transition-all outline-none"
-                  />
+                  <>
+                    <input
+                      type="number"
+                      min="1"
+                      placeholder="Price"
+                      {...register("price")}
+                      className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/30 text-white placeholder-gray-400 transition-all outline-none"
+                    />
+                  </>
                 )}
               </div>
-
               <button
                 type="button"
                 onClick={handleAddProduct}
@@ -182,7 +208,25 @@ export default function Transaction() {
               >
                 Add Product
               </button>
-
+              {transactionType !== "Breakage" && (
+                <>
+                  {errors.price && (
+                    <p className="mt-1 text-sm text-pink-400">
+                      {errors.price.message}
+                    </p>
+                  )}
+                </>
+              )}
+              {errors.quantity && (
+                <p className="mt-1 text-sm text-pink-400">
+                  {errors.quantity.message}
+                </p>
+              )}
+              {errors.product && (
+                <p className="mt-1 text-sm text-pink-400">
+                  {errors.product.message}
+                </p>
+              )}
               {/* Selected Products Table */}
               {selectedProducts.length > 0 && (
                 <div className="mt-6 space-y-3">
@@ -228,7 +272,28 @@ export default function Transaction() {
               className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/30 text-white placeholder-gray-400 transition-all outline-none"
             />
           )}
-
+          {errors.amount && (
+            <p className="mt-1 text-sm text-pink-400">
+              {errors.amount.message}
+            </p>
+          )}
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              Description
+            </label>
+            <textarea
+              {...register("description")}
+              rows={4}
+              className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/30 text-white placeholder-gray-400 transition-all outline-none"
+              placeholder="Add notes about the transaction if you want..."
+              defaultValue={""}
+            />
+            {errors.description && (
+              <p className="mt-1 text-sm text-pink-400">
+                {errors.description.message}
+              </p>
+            )}
+          </div>
           <button
             type="submit"
             disabled={billingState?.loading}

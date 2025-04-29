@@ -25,14 +25,6 @@ export const ledgerSchema = Yup.object().shape({
 export const productSchema = Yup.object().shape({
     name: Yup.string().required("Product name is required"),
     description: Yup.string().required("Description is required"),
-    price: Yup.number()
-        .transform((value, originalValue) =>
-            originalValue === '' ? undefined : value
-        )
-        .required("Price is required")
-        .typeError("Price must be a number")
-        .positive("Price must be a positive number"),
-
     qty: Yup.number()
         .transform((value, originalValue) =>
             originalValue === '' ? undefined : value
@@ -42,3 +34,74 @@ export const productSchema = Yup.object().shape({
         .integer("Quantity must be a whole number")
         .positive("Quantity must be a positive number"),
 });
+
+
+const VALID_TYPES = [
+    "Buy",
+    "Sell",
+    "Credit Amount",
+    "Debit Amount",
+    "Breakage",
+    "Open Sell",
+    "Return",
+];
+
+export const transactionSchema = Yup.object().shape({
+    type: Yup.string()
+        .oneOf(VALID_TYPES, "Invalid transaction type")
+        .required("Transaction type is required"),
+
+    product: Yup.string().when(["type", "$selectedProducts"], {
+        is: (type, selectedProducts) =>
+            ["Buy", "Sell", "Open Sell", "Return", "Breakage"].includes(type) &&
+            (!selectedProducts || selectedProducts.length === 0),
+        then: (schema) => schema.required("Product is required"),
+        otherwise: (schema) => schema.notRequired(),
+    }),
+
+
+    quantity: Yup.number().when(["type", "$selectedProducts"], {
+        is: (type, selectedProducts) =>
+            ["Buy", "Sell", "Open Sell", "Return", "Breakage"].includes(type) &&
+            (!selectedProducts || selectedProducts.length === 0),
+        then: (schema) =>
+            schema
+                .typeError("Quantity must be a number")
+                .required("Quantity is required")
+                .positive("Quantity must be greater than 0"),
+        otherwise: (schema) => schema.notRequired(),
+    }),
+
+    price: Yup.mixed().when(["type", "$selectedProducts"], {
+        is: (type, selectedProducts) =>
+            ["Buy", "Sell", "Open Sell", "Return"].includes(type) &&
+            (!selectedProducts || selectedProducts.length === 0),
+        then: () =>
+            Yup.number()
+                .transform((value, originalValue) =>
+                    originalValue === "" ? undefined : value
+                )
+                .required("Price is required")
+                .typeError("Price must be a number")
+                .positive("Price must be a positive number"),
+        otherwise: () => Yup.mixed().notRequired(),
+    }),
+
+
+    amount: Yup.mixed().when("type", {
+        is: (val) => ["Credit Amount", "Debit Amount"].includes(val),
+        then: () =>
+            Yup.number()
+                .transform((value, originalValue) => {
+                    const parsed = Number(originalValue);
+                    return isNaN(parsed) ? undefined : parsed;
+                })
+                .typeError("Amount must be a number")
+                .required("Amount is required")
+                .positive("Amount must be a positive number"),
+        otherwise: () => Yup.mixed().notRequired(),
+    }),
+
+    description: Yup.string().nullable(),
+});
+

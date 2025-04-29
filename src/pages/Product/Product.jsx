@@ -2,8 +2,6 @@ import { Link } from "react-router-dom";
 import { ArrowRight, PlusCircle, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import { fetchProducts } from "../../redux/slices/productSlice";
-import { formatDate } from "../../config/helperFunctions";
 import ReactPaginate from "react-paginate";
 import Loader from "../../components/Loader";
 import { fetchProducts } from "../../redux/slices/productSlice";
@@ -80,7 +78,6 @@ export default function Product() {
           <div className="grid grid-cols-3 md:grid-cols-4 bg-white/5 border-b border-white/10 p-4 text-gray-400 text-sm font-medium">
             <div>Product Name</div>
             <div className="hidden md:block">Description</div>
-            <div className="text-center">Price</div>
             <div className="text-right">Actions</div>
           </div>
 
@@ -98,10 +95,6 @@ export default function Product() {
 
               <div className="hidden md:block text-center text-cyan-400 break-words">
                 {product.description}
-              </div>
-
-              <div className="text-center text-sm text-gray-400">
-                {product.price}
               </div>
 
               <div className="text-right">

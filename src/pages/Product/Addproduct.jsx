@@ -90,23 +90,6 @@ export default function AddProduct() {
 
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Price
-              </label>
-              <input
-                type="number"
-                {...register("price")}
-                className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/30 text-white placeholder-gray-400 transition-all outline-none"
-                placeholder="e.g. 999"
-              />
-              {errors.price && (
-                <p className="mt-1 text-sm text-pink-400">
-                  {errors.price.message}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
                 Quantity
               </label>
               <input
