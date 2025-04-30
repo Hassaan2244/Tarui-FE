@@ -56,7 +56,7 @@ export default function Transaction() {
     const payload = {
       ...data,
       selectedProducts,
-      id: state.ledger?.id,
+      ledgerId: state.ledger?.id,
     };
     dispatch(createTransaction(payload));
   };

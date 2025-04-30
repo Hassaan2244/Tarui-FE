@@ -6,9 +6,8 @@ export const createTransaction = createAsyncThunk(
     async (payload, { rejectWithValue }) => {
         try {
             console.log(payload)
-            return
-            const response = await api.post(`/api/ledger`, {
-
+            const response = await api.post(`/api/transaction`, {
+                ...payload
             });
             return response.data;
         } catch (err) {
@@ -16,6 +15,21 @@ export const createTransaction = createAsyncThunk(
         }
     }
 );
+
+export const fetchTransactions = createAsyncThunk(
+    "billing/fetch",
+    async ({ page = 1, search = "", id }, { rejectWithValue }) => {
+        try {
+            const params = new URLSearchParams({ page, search, id });
+            const response = await api.get(`/api/transaction?${params.toString()}`);
+            console.log(response)
+            return response.data;
+        } catch (err) {
+            return rejectWithValue(err.response?.data?.message || "An error occurred");
+        }
+    }
+);
+
 
 const billingSlice = createSlice({
     name: "billing",
@@ -41,6 +55,21 @@ const billingSlice = createSlice({
                 state.success = action.payload?.message;
             })
             .addCase(createTransaction.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
+            // Fetch
+            .addCase(fetchTransactions.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+                state.success = null;
+            })
+            .addCase(fetchTransactions.fulfilled, (state, action) => {
+                state.loading = false;
+                state.transactions = action.payload
+            })
+            .addCase(fetchTransactions.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })

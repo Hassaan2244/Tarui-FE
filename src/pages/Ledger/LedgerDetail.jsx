@@ -5,6 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import { formatDate } from "../../config/helperFunctions";
 import Loader from "../../components/Loader";
 import { ArrowLeft, EditIcon } from "lucide-react";
+import TransactionList from "../Transaction/TransactionList";
 
 export default function LedgerDetail() {
   const dispatch = useDispatch();
@@ -54,23 +55,7 @@ export default function LedgerDetail() {
               {formatDate(singleLedger?.updatedAt)}
             </div>
             <div className="mt-4">
-              <h3 className="text-xl text-cyan-400">Transactions</h3>
-              <div className="mt-2">
-                {singleLedger?.Transactions?.length > 0 ? (
-                  singleLedger?.Transactions.map((transaction, index) => (
-                    <div key={index} className="text-gray-300">
-                      <p>
-                        <strong>Amount:</strong> {transaction.amount}
-                      </p>
-                      <p>
-                        <strong>Details:</strong> {transaction.details}
-                      </p>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-gray-500">No transactions available.</p>
-                )}
-              </div>
+              <TransactionList id={id} />
             </div>
           </div>
         </div>
