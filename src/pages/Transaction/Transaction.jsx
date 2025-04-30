@@ -16,7 +16,7 @@ export default function Transaction() {
     register,
     handleSubmit,
     watch,
-    setValue,
+    reset,
     resetField,
     formState: { errors },
   } = useForm({
@@ -108,16 +108,21 @@ export default function Transaction() {
     (p) => !selectedProducts.some((sp) => sp.id === p.id)
   );
 
+  useEffect(() => {
+    if (billingState?.success) {
+      reset();
+    }
+  }, [billingState?.success]);
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-black to-gray-900 text-white flex items-center justify-center p-6">
       {billingState?.loading && <Loader />}
 
       <Link
-        to="/dashboard"
+        to={`/ledger/${state.ledger?.id}`}
         className="absolute top-8 left-8 flex items-center text-cyan-400 hover:text-cyan-300 transition-all group"
       >
         <CircleArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
-        <span>Back to Dashboard</span>
+        <span>Back to Ledger</span>
       </Link>
 
       <div className="bg-white/5 backdrop-blur-md border-white/20 rounded-2xl p-8 shadow-2xl space-y-6 w-full max-w-5xl mt-10">
@@ -321,6 +326,16 @@ export default function Transaction() {
             <ArrowRight className="w-4 h-4 ml-2" />
           </button>
         </form>
+        {billingState?.error && (
+          <div className="p-3 bg-red-900/30 border border-red-500/50 rounded-lg text-center text-red-300">
+            {billingState?.error}
+          </div>
+        )}
+        {billingState?.success && (
+          <div className="m-3 p-3 bg-green-900/30 border border-green-500/50 rounded-lg text-center text-green-300">
+            {billingState?.success}
+          </div>
+        )}
       </div>
     </div>
   );
