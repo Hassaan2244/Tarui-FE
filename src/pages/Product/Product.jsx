@@ -78,6 +78,7 @@ export default function Product() {
           <div className="grid grid-cols-3 md:grid-cols-4 bg-white/5 border-b border-white/10 p-4 text-gray-400 text-sm font-medium">
             <div>Product Name</div>
             <div className="hidden md:block">Description</div>
+            <div className="text-center">Quantity</div>
             <div className="text-right">Actions</div>
           </div>
 
@@ -96,7 +97,9 @@ export default function Product() {
               <div className="hidden md:block text-center text-cyan-400 break-words">
                 {product.description}
               </div>
-
+              <div className="text-center text-sm text-gray-400">
+                {product.qty}
+              </div>
               <div className="text-right">
                 <Link
                   to={`/product/${product.id}`}

@@ -11,7 +11,7 @@ import { updateProduct } from "../../redux/slices/productSlice";
 export default function EditProduct() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { state } = useLocation(); // Product data is passed through location state
+  const { state } = useLocation();
   const { loading, error, success } = useSelector((state) => state.product);
 
   const {

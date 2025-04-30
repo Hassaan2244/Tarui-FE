@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CircleArrowLeft, ArrowRight, Trash2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../components/Loader";
@@ -11,6 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 export default function Transaction() {
   const [selectedProducts, setSelectedProducts] = useState([]);
+  const { state } = useLocation();
   const {
     register,
     handleSubmit,
@@ -55,6 +56,7 @@ export default function Transaction() {
     const payload = {
       ...data,
       selectedProducts,
+      id: state.ledger?.id,
     };
     dispatch(createTransaction(payload));
   };
@@ -105,7 +107,7 @@ export default function Transaction() {
   const availableProducts = products.filter(
     (p) => !selectedProducts.some((sp) => sp.id === p.id)
   );
-  console.log(errors);
+
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-black to-gray-900 text-white flex items-center justify-center p-6">
       {billingState?.loading && <Loader />}
@@ -124,7 +126,9 @@ export default function Transaction() {
             Create Transaction
           </h2>
         </div>
-
+        <div className="text-gray-300">
+          <strong>Ledger:</strong> {state.ledger?.name}
+        </div>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {/* Radio Buttons */}
           <div className="grid grid-cols-2 gap-4">
@@ -240,9 +244,10 @@ export default function Transaction() {
                         className="flex justify-between items-center bg-white/10 p-3 rounded-lg"
                       >
                         <div>
-                          <p className="font-semibold">{p.name}</p>
+                          <p className="font-semibold mb-2">{p.name}</p>
                           <p className="text-sm text-gray-300">
-                            Qty: {p.qty} × {p.price} rs= {p.total} rs
+                            {p.quantity} × {p.price.toLocaleString()} rs ={" "}
+                            {p.total.toLocaleString()} rs
                           </p>
                         </div>
                         <button
@@ -254,6 +259,17 @@ export default function Transaction() {
                         </button>
                       </div>
                     ))}
+
+                    {/* Total Row */}
+                    <div className="flex justify-between items-center bg-white/20 p-3 rounded-lg border border-cyan-400/30">
+                      <p className="font-semibold text-cyan-300">Total</p>
+                      <p className="font-bold text-lg">
+                        {selectedProducts
+                          .reduce((sum, p) => sum + p.total, 0)
+                          .toLocaleString()}{" "}
+                        rs
+                      </p>
+                    </div>
                   </div>
                 </div>
               )}

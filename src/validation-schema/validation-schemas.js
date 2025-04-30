@@ -59,18 +59,21 @@ export const transactionSchema = Yup.object().shape({
         otherwise: (schema) => schema.notRequired(),
     }),
 
-
-    quantity: Yup.number().when(["type", "$selectedProducts"], {
-        is: (type, selectedProducts) =>
-            ["Buy", "Sell", "Open Sell", "Return", "Breakage"].includes(type) &&
-            (!selectedProducts || selectedProducts.length === 0),
-        then: (schema) =>
-            schema
-                .typeError("Quantity must be a number")
-                .required("Quantity is required")
-                .positive("Quantity must be greater than 0"),
-        otherwise: (schema) => schema.notRequired(),
-    }),
+    quantity: Yup.number()
+        .transform((value, originalValue) =>
+            originalValue === "" ? undefined : value
+        )
+        .when(["type", "$selectedProducts"], {
+            is: (type, selectedProducts) =>
+                ["Buy", "Sell", "Open Sell", "Return", "Breakage"].includes(type) &&
+                (!selectedProducts || selectedProducts.length === 0),
+            then: (schema) =>
+                schema
+                    .typeError("Quantity must be a number")
+                    .required("Quantity is required")
+                    .positive("Quantity must be greater than 0"),
+            otherwise: (schema) => schema.notRequired(),
+        }),
 
     price: Yup.mixed().when(["type", "$selectedProducts"], {
         is: (type, selectedProducts) =>
