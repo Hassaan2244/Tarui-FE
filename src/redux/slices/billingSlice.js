@@ -18,9 +18,9 @@ export const createTransaction = createAsyncThunk(
 
 export const fetchTransactions = createAsyncThunk(
     "billing/fetch",
-    async ({ page = 1, search = "", id }, { rejectWithValue }) => {
+    async ({ page = 1, id, startDate, endDate }, { rejectWithValue }) => {
         try {
-            const params = new URLSearchParams({ page, search, id });
+            const params = new URLSearchParams({ page, id, startDate, endDate });
             const response = await api.get(`/api/transaction?${params.toString()}`);
             console.log(response)
             return response.data;

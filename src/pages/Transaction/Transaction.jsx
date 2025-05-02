@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { CircleArrowLeft, ArrowRight, Trash2 } from "lucide-react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../components/Loader";
@@ -30,7 +30,7 @@ export default function Transaction() {
   const products = productState?.products?.data || [];
 
   useEffect(() => {
-    if (!products || products.length === 0) dispatch(fetchProducts({}));
+    dispatch(fetchProducts({}));
   }, []);
 
   const transactionType = watch("type");
@@ -51,7 +51,7 @@ export default function Transaction() {
       productRequiredTypes.includes(data.type) &&
       selectedProducts.length === 0
     ) {
-      alert("At least one product must be selected.");
+      setAddproductErrors("At least one product must be selected.");
       return;
     }
     const payload = {
@@ -62,7 +62,7 @@ export default function Transaction() {
     dispatch(createTransaction(payload));
   };
 
-  const handleAddProduct = () => {
+  const handleAddProduct = useCallback(() => {
     setAddproductErrors(null);
     const isBreakage = transactionType === "Breakage";
     const isBuy = transactionType === "Buy";
@@ -71,6 +71,11 @@ export default function Transaction() {
 
     const product = products.find((p) => p.id === parseInt(selectedProductId));
     if (!product) return;
+
+    if (selectedProducts.some((p) => p.id === product.id)) {
+      setAddproductErrors("This product is already added.");
+      return;
+    }
 
     const parsedQuantity = Number(quantity);
 
@@ -102,11 +107,11 @@ export default function Transaction() {
     if (!isBreakage) {
       resetField("price");
     }
-  };
+  });
 
-  const handleRemoveProduct = (id) => {
+  const handleRemoveProduct = useCallback((id) => {
     setSelectedProducts((prev) => prev.filter((p) => p.id !== id));
-  };
+  });
 
   const availableProducts = products.filter(
     (p) => !selectedProducts.some((sp) => sp.id === p.id)
@@ -115,6 +120,7 @@ export default function Transaction() {
   useEffect(() => {
     if (billingState?.success) {
       reset();
+      setSelectedProducts([]);
     }
   }, [billingState?.success]);
 

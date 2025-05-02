@@ -1,5 +1,4 @@
-import { Link, useParams } from "react-router-dom";
-import { ArrowRight, Search } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ReactPaginate from "react-paginate";
@@ -11,34 +10,23 @@ export default function TransactionList({ id = "" }) {
   const dispatch = useDispatch();
   const billingState = useSelector((state) => state.billing);
   const [currentPage, setCurrentPage] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [startDateTime, setStartDateTime] = useState("");
+  const [endDateTime, setEndDateTime] = useState("");
   const transactions = billingState?.transactions?.data;
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedSearch(searchTerm);
-    }, 500);
-
-    return () => clearTimeout(handler);
-  }, [searchTerm]);
 
   useEffect(() => {
     dispatch(
       fetchTransactions({
         id,
         page: currentPage + 1,
-        search: debouncedSearch,
+        startDate: startDateTime,
+        endDate: endDateTime,
       })
     );
-  }, [currentPage, debouncedSearch]);
+  }, [currentPage, startDateTime, endDateTime]);
 
   const handlePageClick = (event) => {
     setCurrentPage(event.selected);
-  };
-
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
   };
 
   return (
@@ -53,6 +41,30 @@ export default function TransactionList({ id = "" }) {
             <p className="text-gray-400 mt-1">
               View and manage transactions for this ledger.
             </p>
+          </div>
+        </div>
+        <div className="flex flex-col md:flex-row gap-4 mb-6">
+          <div>
+            <label className="block text-sm text-gray-400 mb-1">
+              Start Date & Time
+            </label>
+            <input
+              type="datetime-local"
+              value={startDateTime}
+              onChange={(e) => setStartDateTime(e.target.value)}
+              className="bg-white/10 text-white px-3 py-2 rounded-lg border border-white/20"
+            />
+          </div>
+          <div>
+            <label className="block text-sm text-gray-400 mb-1">
+              End Date & Time
+            </label>
+            <input
+              type="datetime-local"
+              value={endDateTime}
+              onChange={(e) => setEndDateTime(e.target.value)}
+              className="bg-white/10 text-white px-3 py-2 rounded-lg border border-white/20"
+            />
           </div>
         </div>
 
