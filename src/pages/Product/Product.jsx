@@ -52,8 +52,15 @@ export default function Product() {
             </p>
           </div>
           <Link
+            to="breakage"
+            className="mt-4 md:mt-0 md:ml-4  px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-cyan-500/30 flex items-center justify-center"
+          >
+            <PlusCircle className="w-5 h-5 mr-2" />
+            <span>Add Breakage</span>
+          </Link>
+          <Link
             to="add"
-            className="mt-4 md:mt-0 px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-cyan-500/30 flex items-center justify-center"
+            className=" mt-4 md:mt-0 md:ml-4 px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-cyan-500/30 flex items-center justify-center"
           >
             <PlusCircle className="w-5 h-5 mr-2" />
             <span>Add New Product</span>

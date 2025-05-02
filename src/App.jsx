@@ -16,6 +16,7 @@ import ProductDetail from "./pages/Product/ProductDetail";
 import EditProduct from "./pages/Product/EditProduct";
 import Transaction from "./pages/Transaction/Transaction";
 import TransactionDetail from "./pages/Transaction/TransactionDetails";
+import ProdcutBreakage from "./pages/Product/ProdcutBreakage";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
           {/** Product routes */}
           <Route path="/product" element={<Products />} />
           <Route path="/product/add" element={<AddProduct />} />
+          <Route path="/product/breakage" element={<ProdcutBreakage />} />
           <Route path="/product/edit" element={<EditProduct />} />
           <Route path="/product/:id" element={<ProductDetail />} />
 

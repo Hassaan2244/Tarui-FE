@@ -5,8 +5,37 @@ export const createTransaction = createAsyncThunk(
     "billing/create",
     async (payload, { rejectWithValue }) => {
         try {
-            console.log(payload)
             const response = await api.post(`/api/transaction`, {
+                ...payload
+            });
+            return response.data;
+        } catch (err) {
+            return rejectWithValue(err.response?.data?.message || "An error occured");
+        }
+    }
+);
+
+export const createOpenSellTransaction = createAsyncThunk(
+    "billing/openSell/create",
+    async (payload, { rejectWithValue }) => {
+        try {
+            console.log(payload)
+            const response = await api.post(`/api/transaction/openSell`, {
+                ...payload
+            });
+            return response.data;
+        } catch (err) {
+            return rejectWithValue(err.response?.data?.message || "An error occured");
+        }
+    }
+);
+
+export const createBreakageTransaction = createAsyncThunk(
+    "billing/breakage/create",
+    async (payload, { rejectWithValue }) => {
+        try {
+            console.log(payload)
+            const response = await api.post(`/api/transaction/breakage`, {
                 ...payload
             });
             return response.data;
@@ -55,6 +84,36 @@ const billingSlice = createSlice({
                 state.success = action.payload?.message;
             })
             .addCase(createTransaction.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
+            // Create OpenSell Transaction
+            .addCase(createOpenSellTransaction.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+                state.success = null;
+            })
+            .addCase(createOpenSellTransaction.fulfilled, (state, action) => {
+                state.loading = false;
+                state.success = action.payload?.message;
+            })
+            .addCase(createOpenSellTransaction.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
+            // Create Breakage Transaction
+            .addCase(createBreakageTransaction.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+                state.success = null;
+            })
+            .addCase(createBreakageTransaction.fulfilled, (state, action) => {
+                state.loading = false;
+                state.success = action.payload?.message;
+            })
+            .addCase(createBreakageTransaction.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })
