@@ -73,7 +73,14 @@ export default function TransactionList({ id = "" }) {
             >
               <div>
                 <span className="md:hidden text-gray-400">Type:</span>
-                <h3 className="font-semibold text-white">{transaction.type}</h3>
+                <Link
+                  to={`/billing/${transaction.id}`}
+                  state={{ transaction: transaction }}
+                >
+                  <h3 className="font-semibold text-white">
+                    {transaction.type}
+                  </h3>
+                </Link>
               </div>
 
               <div className="md:text-center">

@@ -51,8 +51,7 @@ export default function LedgerDetail() {
               <strong>Created At:</strong> {formatDate(singleLedger?.createdAt)}
             </div>
             <div className="text-gray-400">
-              <strong>Last Updated At:</strong>{" "}
-              {formatDate(singleLedger?.updatedAt)}
+              <strong>Ledger ID:</strong> {singleLedger?.id}
             </div>
             <div className="mt-4">
               <TransactionList id={id} />

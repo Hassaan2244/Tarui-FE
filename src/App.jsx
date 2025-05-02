@@ -6,7 +6,6 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import PublicLayout from "./components/PublicRoute";
 import Ledger from "./pages/Ledger/Ledger";
-import Inventory from "./pages/Inventory";
 import Billing from "./pages/Billing";
 import AddLedger from "./pages/Ledger/AddLedger";
 import Sidebar from "./components/Sidebar";
@@ -16,6 +15,7 @@ import AddProduct from "./pages/Product/Addproduct";
 import ProductDetail from "./pages/Product/ProductDetail";
 import EditProduct from "./pages/Product/EditProduct";
 import Transaction from "./pages/Transaction/Transaction";
+import TransactionDetail from "./pages/Transaction/TransactionDetails";
 
 function App() {
   return (
@@ -42,12 +42,10 @@ function App() {
           <Route path="/product/edit" element={<EditProduct />} />
           <Route path="/product/:id" element={<ProductDetail />} />
 
-          {/** Inventory routes */}
-          <Route path="/inventory" element={<Inventory />} />
-
           {/** Billing routes */}
           <Route path="/billing" element={<Billing />} />
           <Route path="/billing/add" element={<Transaction />} />
+          <Route path="/billing/:id" element={<TransactionDetail />} />
         </Route>
       </Routes>
     </BrowserRouter>

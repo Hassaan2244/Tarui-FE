@@ -22,7 +22,7 @@ export default function Sidebar() {
         <div>
           <div className="p-6 border-b border-white/20">
             <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-              Sidebar{" "}
+              Sidebar
             </h1>
           </div>
 
@@ -41,14 +41,6 @@ export default function Sidebar() {
             >
               <div className="w-2 h-2 rounded-full bg-purple-400 mr-3 group-hover:shadow-purple-400/40 group-hover:shadow-sm"></div>
               <span>Ledger</span>
-            </Link>
-
-            <Link
-              to="/inventory"
-              className="px-4 py-3 rounded-lg hover:bg-white/10 transition-all flex items-center group"
-            >
-              <div className="w-2 h-2 rounded-full bg-blue-400 mr-3 group-hover:shadow-blue-400/40 group-hover:shadow-sm"></div>
-              <span>Inventory</span>
             </Link>
 
             <Link

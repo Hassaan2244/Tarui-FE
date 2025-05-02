@@ -11,6 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 export default function Transaction() {
   const [selectedProducts, setSelectedProducts] = useState([]);
+  const [addproductErrors, setAddproductErrors] = useState(null);
   const { state } = useLocation();
   const {
     register,
@@ -62,24 +63,27 @@ export default function Transaction() {
   };
 
   const handleAddProduct = () => {
+    setAddproductErrors(null);
     const isBreakage = transactionType === "Breakage";
+    const isBuy = transactionType === "Buy";
 
     if (!selectedProductId || !quantity || (!isBreakage && !price)) return;
 
     const product = products.find((p) => p.id === parseInt(selectedProductId));
     if (!product) return;
 
-    if (quantity > product.qty || quantity < 1) {
-      alert(
+    const parsedQuantity = Number(quantity);
+
+    if (!isBuy && (parsedQuantity > product.qty || parsedQuantity < 1)) {
+      setAddproductErrors(
         `Quantity cannot be more than available stock (${product.qty}) or smaller than 1`
       );
       return;
     }
 
-    const parsedQuantity = Number(quantity);
     const parsedPrice = isBreakage ? 1 : Number(price);
     if (parsedPrice < 1) {
-      alert(`Price should be a positive number.`);
+      setAddproductErrors(`Price should be a positive number.`);
       return;
     }
 
@@ -113,6 +117,12 @@ export default function Transaction() {
       reset();
     }
   }, [billingState?.success]);
+
+  useEffect(() => {
+    setSelectedProducts([]);
+    setAddproductErrors(null);
+  }, [transactionType]);
+
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-black to-gray-900 text-white flex items-center justify-center p-6">
       {billingState?.loading && <Loader />}
@@ -235,6 +245,9 @@ export default function Transaction() {
                 <p className="mt-1 text-sm text-pink-400">
                   {errors.product.message}
                 </p>
+              )}
+              {addproductErrors && (
+                <p className="mt-1 text-sm text-pink-400">{addproductErrors}</p>
               )}
               {/* Selected Products Table */}
               {selectedProducts.length > 0 && (
