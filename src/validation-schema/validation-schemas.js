@@ -43,7 +43,8 @@ const VALID_TYPES = [
     "Debit Amount",
     "Breakage",
     "Open Sell",
-    "Return",
+    "Return-In",
+    "Return-Out"
 ];
 
 export const transactionSchema = Yup.object().shape({
@@ -53,7 +54,7 @@ export const transactionSchema = Yup.object().shape({
 
     product: Yup.string().when(["type", "$selectedProducts"], {
         is: (type, selectedProducts) =>
-            ["Buy", "Sell", "Open Sell", "Return", "Breakage"].includes(type) &&
+            ["Buy", "Sell", "Open Sell", "Return-In", "Return-Out", "Breakage"].includes(type) &&
             (!selectedProducts || selectedProducts.length === 0),
         then: (schema) => schema.required("Product is required"),
         otherwise: (schema) => schema.notRequired(),
@@ -65,7 +66,7 @@ export const transactionSchema = Yup.object().shape({
         )
         .when(["type", "$selectedProducts"], {
             is: (type, selectedProducts) =>
-                ["Buy", "Sell", "Open Sell", "Return", "Breakage"].includes(type) &&
+                ["Buy", "Sell", "Open Sell", "Return-In", "Return-Out", "Breakage"].includes(type) &&
                 (!selectedProducts || selectedProducts.length === 0),
             then: (schema) =>
                 schema
@@ -77,7 +78,7 @@ export const transactionSchema = Yup.object().shape({
 
     price: Yup.mixed().when(["type", "$selectedProducts"], {
         is: (type, selectedProducts) =>
-            ["Buy", "Sell", "Open Sell", "Return"].includes(type) &&
+            ["Buy", "Sell", "Open Sell", "Return-In", "Return-Out"].includes(type) &&
             (!selectedProducts || selectedProducts.length === 0),
         then: () =>
             Yup.number()

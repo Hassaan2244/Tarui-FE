@@ -42,7 +42,7 @@ export default function Transaction() {
   const price = watch("price");
 
   const onSubmit = (data) => {
-    const productRequiredTypes = ["Buy", "Sell", "Return"];
+    const productRequiredTypes = ["Buy", "Sell", "Return-In", , "Return-Out"];
 
     if (
       productRequiredTypes.includes(data.type) &&
@@ -56,6 +56,7 @@ export default function Transaction() {
       selectedProducts,
       ledgerId: state.ledger?.id,
     };
+    console.log(payload);
     dispatch(createTransaction(payload));
   };
 
@@ -63,6 +64,7 @@ export default function Transaction() {
     setAddproductErrors(null);
     const isBreakage = transactionType === "Breakage";
     const isBuy = transactionType === "Buy";
+    const isReturnIn = transactionType === "Return-In";
 
     if (!selectedProductId || !quantity || !price) return;
 
@@ -76,7 +78,11 @@ export default function Transaction() {
 
     const parsedQuantity = Number(quantity);
 
-    if (!isBuy && (parsedQuantity > product.qty || parsedQuantity < 1)) {
+    if (
+      !isBuy &&
+      !isReturnIn &&
+      (parsedQuantity > product.qty || parsedQuantity < 1)
+    ) {
       setAddproductErrors(
         `Quantity cannot be more than available stock (${product.qty}) or smaller than 1`
       );
@@ -151,24 +157,29 @@ export default function Transaction() {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {/* Radio Buttons */}
           <div className="grid grid-cols-2 gap-4">
-            {["Buy", "Sell", "Credit Amount", "Debit Amount", "Return"].map(
-              (option) => (
-                <label
-                  key={option}
-                  className="flex items-center space-x-2 cursor-pointer"
-                >
-                  <input
-                    type="radio"
-                    value={option}
-                    {...register("type", {
-                      required: "Transaction type is required",
-                    })}
-                    className="accent-cyan-400"
-                  />
-                  <span className="text-gray-300">{option}</span>
-                </label>
-              )
-            )}
+            {[
+              "Buy",
+              "Sell",
+              "Return-In",
+              "Return-Out",
+              "Credit Amount",
+              "Debit Amount",
+            ].map((option) => (
+              <label
+                key={option}
+                className="flex items-center space-x-2 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  value={option}
+                  {...register("type", {
+                    required: "Transaction type is required",
+                  })}
+                  className="accent-cyan-400"
+                />
+                <span className="text-gray-300">{option}</span>
+              </label>
+            ))}
           </div>
           {errors.type && (
             <p className="text-sm text-pink-400">{errors.type.message}</p>
@@ -177,7 +188,8 @@ export default function Transaction() {
           {/* Conditional Product Section */}
           {(transactionType === "Buy" ||
             transactionType === "Sell" ||
-            transactionType === "Return") && (
+            transactionType === "Return-Out" ||
+            transactionType === "Return-In") && (
             <>
               <div className="grid grid-cols-4 gap-4 items-end">
                 <select
