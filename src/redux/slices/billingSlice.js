@@ -19,7 +19,6 @@ export const createOpenSellTransaction = createAsyncThunk(
     "billing/openSell/create",
     async (payload, { rejectWithValue }) => {
         try {
-            console.log(payload)
             const response = await api.post(`/api/transaction/openSell`, {
                 ...payload
             });
@@ -34,7 +33,6 @@ export const createBreakageTransaction = createAsyncThunk(
     "billing/breakage/create",
     async (payload, { rejectWithValue }) => {
         try {
-            console.log(payload)
             const response = await api.post(`/api/transaction/breakage`, {
                 ...payload
             });
@@ -51,7 +49,6 @@ export const fetchTransactions = createAsyncThunk(
         try {
             const params = new URLSearchParams({ page, id, startDate, endDate });
             const response = await api.get(`/api/transaction?${params.toString()}`);
-            console.log(response)
             return response.data;
         } catch (err) {
             return rejectWithValue(err.response?.data?.message || "An error occurred");

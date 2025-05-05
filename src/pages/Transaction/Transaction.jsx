@@ -23,6 +23,9 @@ export default function Transaction() {
   } = useForm({
     resolver: yupResolver(transactionSchema),
     context: { selectedProducts },
+    defaultValues: {
+      paid: false,
+    },
   });
   const dispatch = useDispatch();
   const productState = useSelector((state) => state.product);
@@ -39,13 +42,7 @@ export default function Transaction() {
   const price = watch("price");
 
   const onSubmit = (data) => {
-    const productRequiredTypes = [
-      "Buy",
-      "Sell",
-      "Open Sell",
-      "Return",
-      "Breakage",
-    ];
+    const productRequiredTypes = ["Buy", "Sell", "Return"];
 
     if (
       productRequiredTypes.includes(data.type) &&
@@ -67,7 +64,7 @@ export default function Transaction() {
     const isBreakage = transactionType === "Breakage";
     const isBuy = transactionType === "Buy";
 
-    if (!selectedProductId || !quantity || (!isBreakage && !price)) return;
+    if (!selectedProductId || !quantity || !price) return;
 
     const product = products.find((p) => p.id === parseInt(selectedProductId));
     if (!product) return;
@@ -153,30 +150,24 @@ export default function Transaction() {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {/* Radio Buttons */}
           <div className="grid grid-cols-2 gap-4">
-            {[
-              "Buy",
-              "Sell",
-              "Credit Amount",
-              "Debit Amount",
-              "Breakage",
-              "Open Sell",
-              "Return",
-            ].map((option) => (
-              <label
-                key={option}
-                className="flex items-center space-x-2 cursor-pointer"
-              >
-                <input
-                  type="radio"
-                  value={option}
-                  {...register("type", {
-                    required: "Transaction type is required",
-                  })}
-                  className="accent-cyan-400"
-                />
-                <span className="text-gray-300">{option}</span>
-              </label>
-            ))}
+            {["Buy", "Sell", "Credit Amount", "Debit Amount", "Return"].map(
+              (option) => (
+                <label
+                  key={option}
+                  className="flex items-center space-x-2 cursor-pointer"
+                >
+                  <input
+                    type="radio"
+                    value={option}
+                    {...register("type", {
+                      required: "Transaction type is required",
+                    })}
+                    className="accent-cyan-400"
+                  />
+                  <span className="text-gray-300">{option}</span>
+                </label>
+              )
+            )}
           </div>
           {errors.type && (
             <p className="text-sm text-pink-400">{errors.type.message}</p>
@@ -185,9 +176,7 @@ export default function Transaction() {
           {/* Conditional Product Section */}
           {(transactionType === "Buy" ||
             transactionType === "Sell" ||
-            transactionType === "Open Sell" ||
-            transactionType === "Return" ||
-            transactionType === "Breakage") && (
+            transactionType === "Return") && (
             <>
               <div className="grid grid-cols-3 gap-4 items-end">
                 <select
@@ -213,18 +202,13 @@ export default function Transaction() {
                   {...register("quantity")}
                   className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/30 text-white placeholder-gray-400 transition-all outline-none"
                 />
-
-                {transactionType !== "Breakage" && (
-                  <>
-                    <input
-                      type="number"
-                      min="1"
-                      placeholder="Price"
-                      {...register("price")}
-                      className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/30 text-white placeholder-gray-400 transition-all outline-none"
-                    />
-                  </>
-                )}
+                <input
+                  type="number"
+                  min="1"
+                  placeholder="Price"
+                  {...register("price")}
+                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/30 text-white placeholder-gray-400 transition-all outline-none"
+                />
               </div>
               <button
                 type="button"
@@ -233,14 +217,11 @@ export default function Transaction() {
               >
                 Add Product
               </button>
-              {transactionType !== "Breakage" && (
-                <>
-                  {errors.price && (
-                    <p className="mt-1 text-sm text-pink-400">
-                      {errors.price.message}
-                    </p>
-                  )}
-                </>
+
+              {errors.price && (
+                <p className="mt-1 text-sm text-pink-400">
+                  {errors.price.message}
+                </p>
               )}
               {errors.quantity && (
                 <p className="mt-1 text-sm text-pink-400">
@@ -295,6 +276,17 @@ export default function Transaction() {
                       </p>
                     </div>
                   </div>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      {...register("paid")}
+                      className="accent-cyan-400"
+                      id="paid"
+                    />
+                    <h1 htmlFor="paid" className="text-gray-300">
+                      Mark as Paid
+                    </h1>
+                  </div>
                 </div>
               )}
             </>
@@ -336,7 +328,7 @@ export default function Transaction() {
           </div>
           <button
             type="submit"
-            disabled={billingState?.loading}
+            disabled={billingState.loading}
             className={`w-full py-3 px-6 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-cyan-500/30 flex items-center justify-center ${
               billingState?.loading ? "opacity-70 cursor-not-allowed" : ""
             }`}
@@ -345,12 +337,12 @@ export default function Transaction() {
             <ArrowRight className="w-4 h-4 ml-2" />
           </button>
         </form>
-        {billingState?.error && (
+        {billingState.error && (
           <div className="p-3 bg-red-900/30 border border-red-500/50 rounded-lg text-center text-red-300">
             {billingState?.error}
           </div>
         )}
-        {billingState?.success && (
+        {billingState.success && (
           <div className="m-3 p-3 bg-green-900/30 border border-green-500/50 rounded-lg text-center text-green-300">
             {billingState?.success}
           </div>

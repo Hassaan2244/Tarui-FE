@@ -102,7 +102,9 @@ export default function TransactionList({ id = "" }) {
 
               <div className="md:text-center">
                 <span className="md:hidden text-gray-400">Description:</span>
-                <div className="text-white">{transaction.description}</div>
+                <div className="text-white wrap-break-word">
+                  {transaction.description}
+                </div>
               </div>
 
               <div className="md:text-center">

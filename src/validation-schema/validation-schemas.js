@@ -104,7 +104,7 @@ export const transactionSchema = Yup.object().shape({
                 .positive("Amount must be a positive number"),
         otherwise: () => Yup.mixed().notRequired(),
     }),
-
+    paid: Yup.boolean().optional(),
     description: Yup.string().nullable(),
 });
 
