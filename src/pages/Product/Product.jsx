@@ -84,7 +84,7 @@ export default function Product() {
           {/* Table Header */}
           <div className="grid grid-cols-3 md:grid-cols-4 bg-white/5 border-b border-white/10 p-4 text-gray-400 text-sm font-medium">
             <div>Product Name</div>
-            <div className="hidden md:block">Description</div>
+            <div className="hidden md:block  text-center">Description</div>
             <div className="text-center">Quantity</div>
             <div className="text-right">Actions</div>
           </div>
