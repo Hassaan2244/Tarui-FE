@@ -46,6 +46,9 @@ export default function TransactionDetail() {
               <strong>Description:</strong> {transaction?.description}
             </div>
             <div>
+              <strong>Paid:</strong> {transaction?.paid ? "Yes" : "No"}
+            </div>
+            <div>
               <strong>Ledger ID:</strong> {transaction?.ledgerId}
             </div>
             <div>
