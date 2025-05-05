@@ -13,7 +13,8 @@ export default function TransactionDetail() {
   const showProductTable = [
     "Breakage",
     "Open Sell",
-    "Return",
+    "Return-In",
+    "Return-Out",
     "Buy",
     "Sell",
   ].includes(transaction?.type);
@@ -61,7 +62,8 @@ export default function TransactionDetail() {
               "Credit Amount",
               "Debit Amount",
               "Open Sell",
-              "Return",
+              "Return-In",
+              "Return-Out",
               "Buy",
               "Sell",
             ].includes(transaction?.type) && (
