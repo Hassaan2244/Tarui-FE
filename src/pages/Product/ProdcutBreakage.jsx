@@ -83,6 +83,7 @@ export default function ProdcutBreakage() {
       name: product.name,
       quantity: parsedQuantity,
       price: 1,
+      description: product?.description,
       total: parsedQuantity * 1,
     };
 

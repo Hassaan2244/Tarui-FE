@@ -75,6 +75,7 @@ export default function Billing() {
       name: product.name,
       quantity: parsedQuantity,
       price: parsedPrice,
+      description: product?.description,
       total: parsedQuantity * parsedPrice,
     };
 

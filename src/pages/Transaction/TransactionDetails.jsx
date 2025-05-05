@@ -9,7 +9,7 @@ export default function TransactionDetail() {
   const billingState = useSelector((state) => state.billing);
   const { state } = useLocation();
   const { transaction } = state;
-
+  console.log(transaction);
   const showProductTable = [
     "Breakage",
     "Open Sell",
