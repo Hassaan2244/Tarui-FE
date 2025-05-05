@@ -128,10 +128,10 @@ export default function ProdcutBreakage() {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-          <div className="grid grid-cols-2 gap-4 items-end">
+          <div className="grid grid-cols-3 gap-4 items-end">
             <select
               {...register("product")}
-              className="w-full px-4 py-3 rounded-lg bg-black/40 text-white border border-white/10 focus:border-cyan-400/50"
+              className="col-span-2 w-full px-4 py-3 rounded-lg bg-black/40 text-white border border-white/10 focus:border-cyan-400/50"
             >
               <option value="">Select Product</option>
               {availableProducts.map((product) => (
@@ -140,7 +140,7 @@ export default function ProdcutBreakage() {
                   value={product.id}
                   className="text-black"
                 >
-                  {product.name} (Qty: {product.qty})
+                  {product.name} - {product.description} (Qty: {product.qty})
                 </option>
               ))}
             </select>
@@ -150,7 +150,7 @@ export default function ProdcutBreakage() {
               min="1"
               placeholder="Quantity"
               {...register("quantity")}
-              className="w-full px-4 py-3 rounded-lg bg-white/5 text-white"
+              className="col-span-1 w-full px-4 py-3 rounded-lg bg-white/5 text-white"
             />
           </div>
 
@@ -184,9 +184,8 @@ export default function ProdcutBreakage() {
                 >
                   <div>
                     <p className="font-semibold mb-2">{p.name}</p>
-                    <p className="text-sm text-gray-300">
-                      {p.quantity} × 1 = {p.total} rs
-                    </p>
+                    <p className="mb-2 text-gray-300">{p.description}</p>
+                    <p className="text-sm text-gray-300">{p.quantity} units</p>
                   </div>
                   <button
                     type="button"

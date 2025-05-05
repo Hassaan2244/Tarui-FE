@@ -76,6 +76,7 @@ export default function TransactionDetail() {
                   <thead className="bg-white/10 text-gray-300">
                     <tr>
                       <th className="p-2">Product Name</th>
+                      <th className="p-2">Description</th>
                       <th className="p-2">Quantity</th>
                       {transaction?.type !== "Breakage" && (
                         <>
@@ -89,6 +90,7 @@ export default function TransactionDetail() {
                     {transaction.selectedProducts.map((product, idx) => (
                       <tr key={idx} className="border-t border-white/5">
                         <td className="p-2">{product.name}</td>
+                        <td className="p-2">{product.description}</td>
                         <td className="p-2">{product.quantity}</td>
                         {transaction?.type !== "Breakage" && (
                           <>

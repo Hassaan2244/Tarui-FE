@@ -92,6 +92,7 @@ export default function Transaction() {
     const newProduct = {
       id: product.id,
       name: product.name,
+      description: product.description,
       quantity: parsedQuantity,
       price: parsedPrice,
       total: parsedQuantity * parsedPrice,
@@ -178,10 +179,10 @@ export default function Transaction() {
             transactionType === "Sell" ||
             transactionType === "Return") && (
             <>
-              <div className="grid grid-cols-3 gap-4 items-end">
+              <div className="grid grid-cols-4 gap-4 items-end">
                 <select
                   {...register("product")}
-                  className="w-full px-4 py-3 rounded-lg bg-black/40 text-white border border-white/10 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/30 placeholder-gray-400 transition-all outline-none appearance-none"
+                  className="col-span-2 w-full px-4 py-3 rounded-lg bg-black/40 text-white border border-white/10 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/30 placeholder-gray-400 transition-all outline-none appearance-none"
                 >
                   <option value="">Select Product</option>
                   {availableProducts.map((product) => (
@@ -190,7 +191,8 @@ export default function Transaction() {
                       value={product.id}
                       className="text-black"
                     >
-                      {product.name} (Qty: {product.qty})
+                      {product.name} - {product.description} (Qty: {product.qty}
+                      )
                     </option>
                   ))}
                 </select>
@@ -200,16 +202,17 @@ export default function Transaction() {
                   min="1"
                   placeholder="Quantity"
                   {...register("quantity")}
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/30 text-white placeholder-gray-400 transition-all outline-none"
+                  className="col-span-1 w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/30 text-white placeholder-gray-400 transition-all outline-none"
                 />
                 <input
                   type="number"
                   min="1"
                   placeholder="Price"
                   {...register("price")}
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/30 text-white placeholder-gray-400 transition-all outline-none"
+                  className="col-span-1 w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/30 text-white placeholder-gray-400 transition-all outline-none"
                 />
               </div>
+
               <button
                 type="button"
                 onClick={handleAddProduct}
@@ -250,8 +253,9 @@ export default function Transaction() {
                       >
                         <div>
                           <p className="font-semibold mb-2">{p.name}</p>
+                          <p className="mb-2 text-gray-300">{p.description}</p>
                           <p className="text-sm text-gray-300">
-                            {p.quantity} × {p.price.toLocaleString()} rs ={" "}
+                            {p.quantity} units × {p.price.toLocaleString()} rs ={" "}
                             {p.total.toLocaleString()} rs
                           </p>
                         </div>
