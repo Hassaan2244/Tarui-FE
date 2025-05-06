@@ -55,6 +55,9 @@ export default function TransactionDetail() {
               <strong>Created At:</strong> {formatDate(transaction?.createdAt)}
             </div>
             <div>
+              <strong>Previous Balance:</strong> {transaction?.prevBalance}
+            </div>
+            <div>
               <strong>Running Balance:</strong> {transaction?.runningBalance}
             </div>
             {[
