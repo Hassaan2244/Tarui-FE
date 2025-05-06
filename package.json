@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
+    "@react-pdf/renderer": "^4.3.0",
     "@reduxjs/toolkit": "^2.7.0",
     "@tailwindcss/vite": "^4.1.4",
     "@tauri-apps/api": "^2.5.0",

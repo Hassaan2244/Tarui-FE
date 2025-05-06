@@ -8,9 +8,10 @@ export const createTransaction = createAsyncThunk(
             const response = await api.post(`/api/transaction`, {
                 ...payload
             });
+            console.log(response.data)
             return response.data;
         } catch (err) {
-            return rejectWithValue(err.response?.data?.message || "An error occured");
+            return rejectWithValue(err.response?.data?.message || err.response?.message || "An error occured");
         }
     }
 );
@@ -24,7 +25,7 @@ export const createOpenSellTransaction = createAsyncThunk(
             });
             return response.data;
         } catch (err) {
-            return rejectWithValue(err.response?.data?.message || "An error occured");
+            return rejectWithValue(err.response?.data?.message || err.response?.message || "An error occured");
         }
     }
 );
@@ -38,7 +39,7 @@ export const createBreakageTransaction = createAsyncThunk(
             });
             return response.data;
         } catch (err) {
-            return rejectWithValue(err.response?.data?.message || "An error occured");
+            return rejectWithValue(err.response?.data?.message || err.response?.message || "An error occured");
         }
     }
 );
@@ -51,7 +52,7 @@ export const fetchTransactions = createAsyncThunk(
             const response = await api.get(`/api/transaction?${params.toString()}`);
             return response.data;
         } catch (err) {
-            return rejectWithValue(err.response?.data?.message || "An error occurred");
+            return rejectWithValue(err.response?.data?.message || err.response?.message || "An error occurred");
         }
     }
 );
@@ -67,6 +68,12 @@ const billingSlice = createSlice({
         success: null,
     },
     reducers: {
+        clearBillingState: (state) => {
+            state.error = null;
+            state.success = null;
+            state.loading = false;
+            state.singletransaction = null;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -79,6 +86,7 @@ const billingSlice = createSlice({
             .addCase(createTransaction.fulfilled, (state, action) => {
                 state.loading = false;
                 state.success = action.payload?.message;
+                state.singletransaction = action.payload?.data;
             })
             .addCase(createTransaction.rejected, (state, action) => {
                 state.loading = false;
@@ -131,5 +139,7 @@ const billingSlice = createSlice({
             })
     },
 });
+
+export const { clearBillingState } = billingSlice.actions;
 
 export default billingSlice.reducer;

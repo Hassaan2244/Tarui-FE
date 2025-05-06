@@ -14,7 +14,7 @@ export const loginUser = createAsyncThunk(
             });
             return response.data;
         } catch (err) {
-            return rejectWithValue(err.response?.data?.message || "Login failed");
+            return rejectWithValue(err.response?.data?.message || err.response?.message || "Login failed");
         }
     }
 );
@@ -29,7 +29,7 @@ export const signupUser = createAsyncThunk(
             });
             return response.data;
         } catch (err) {
-            return rejectWithValue(err.response?.data?.message || "Signup failed");
+            return rejectWithValue(err.response?.data?.message || err.response?.message || "Signup failed");
         }
     }
 );

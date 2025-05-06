@@ -8,7 +8,7 @@ export const createProduct = createAsyncThunk(
             const response = await api.post("/api/product", { name, description, price, qty });
             return response.data;
         } catch (err) {
-            return rejectWithValue(err.response?.data?.message || "An error occurred");
+            return rejectWithValue(err.response?.data?.message || err.response?.message || "An error occurred");
         }
     }
 );
@@ -20,7 +20,7 @@ export const updateProduct = createAsyncThunk(
             const response = await api.patch(`/api/product/${id}`, { name, description, price, qty });
             return response.data;
         } catch (err) {
-            return rejectWithValue(err.response?.data?.message || "An error occurred");
+            return rejectWithValue(err.response?.data?.message || err.response?.message || "An error occurred");
         }
     }
 );
@@ -33,7 +33,7 @@ export const fetchProducts = createAsyncThunk(
             const response = await api.get(`/api/product?${params.toString()}`);
             return response.data;
         } catch (err) {
-            return rejectWithValue(err.response?.data?.message || "An error occurred");
+            return rejectWithValue(err.response?.data?.message || err.response?.message || "An error occurred");
         }
     }
 );
@@ -45,7 +45,7 @@ export const fetchSingleProduct = createAsyncThunk(
             const response = await api.get(`/api/product/${id}`);
             return response.data;
         } catch (err) {
-            return rejectWithValue(err.response?.data?.message || "An error occurred");
+            return rejectWithValue(err.response?.data?.message || err.response?.message || "An error occurred");
         }
     }
 );

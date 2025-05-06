@@ -4,10 +4,15 @@ import { Link, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../components/Loader";
-import { createTransaction } from "../../redux/slices/billingSlice";
+import {
+  clearBillingState,
+  createTransaction,
+} from "../../redux/slices/billingSlice";
 import { fetchProducts } from "../../redux/slices/productSlice";
 import { transactionSchema } from "../../validation-schema/validation-schemas";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Invoice from "../../components/Invoice";
+import { pdf } from "@react-pdf/renderer";
 
 export default function Transaction() {
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -56,7 +61,6 @@ export default function Transaction() {
       selectedProducts,
       ledgerId: state.ledger?.id,
     };
-    console.log(payload);
     dispatch(createTransaction(payload));
   };
 
@@ -90,7 +94,7 @@ export default function Transaction() {
     }
 
     const parsedPrice = isBreakage ? 1 : Number(price);
-    if (parsedPrice < 1) {
+    if (parsedPrice < 0) {
       setAddproductErrors(`Price should be a positive number.`);
       return;
     }
@@ -125,7 +129,34 @@ export default function Transaction() {
     if (billingState?.success) {
       reset();
       setSelectedProducts([]);
+      const printInvoice = async () => {
+        const blob = await pdf(
+          <Invoice data={billingState?.singletransaction} />
+        ).toBlob();
+
+        const url = URL.createObjectURL(blob);
+
+        // Download the file
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `invoice-${Date.now()}.pdf`;
+        link.click();
+
+        // Open in new tab and trigger print
+        const printWindow = window.open(url, "_blank");
+        if (printWindow) {
+          printWindow.onload = () => {
+            printWindow.focus();
+            printWindow.print();
+          };
+        }
+
+        // Cleanup
+        URL.revokeObjectURL(url);
+      };
+      printInvoice();
     }
+    dispatch(clearBillingState());
   }, [billingState?.success]);
 
   useEffect(() => {
