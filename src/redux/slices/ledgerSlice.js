@@ -11,7 +11,7 @@ export const createLedger = createAsyncThunk(
             });
             return response.data;
         } catch (err) {
-            return rejectWithValue(err.response?.data?.message || "An error occured");
+            return rejectWithValue(err.response?.data?.message || err.response?.message || "An error occured");
         }
     }
 );
@@ -25,7 +25,7 @@ export const fetchLedgers = createAsyncThunk(
             const response = await api.get(`/api/ledger?${params.toString()}`);
             return response.data;
         } catch (err) {
-            return rejectWithValue(err.response?.data?.message || "An error occured");
+            return rejectWithValue(err.response?.data?.message || err.response?.message || "An error occured");
         }
     }
 );
@@ -37,7 +37,7 @@ export const fetchSingleLedger = createAsyncThunk(
             const response = await api.get(`/api/ledger/${id}`);
             return response.data;
         } catch (err) {
-            return rejectWithValue(err.response?.data?.message || "An error occured");
+            return rejectWithValue(err.response?.data?.message || err.response?.message || "An error occured");
         }
     }
 );
