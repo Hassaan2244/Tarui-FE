@@ -138,6 +138,9 @@ const Invoice = ({ data }) => {
             {/* Totals */}
             <View style={{ marginTop: 20 }}>
               <Text>Net Total: {data?.amount}</Text>
+              <Text style={styles.section}>
+                Paid: {data?.paid ? "Yes" : "No"}
+              </Text>
               <Text>Amount in words: {amountInWords}</Text>
               <Text>Previous Balance: {data?.prevBalance}</Text>
               <Text>Running Balance: {data?.runningBalance}</Text>
