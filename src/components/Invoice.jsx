@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   logo: {
-    width: 80,
-    height: 80,
+    height: 70,
+    objectFit: "contain",
   },
 
   // Invoice Title Section
@@ -208,11 +208,9 @@ const Invoice = ({ data, setting }) => {
             <Text style={styles.companyInfo}>Phone: {setting?.phone}</Text>
             <Text style={styles.companyInfo}>Email: {setting?.email}</Text>
           </View>
-          {setting?.icon && (
-            <View style={styles.logoContainer}>
-              <Image style={styles.logo} source={setting.icon} />
-            </View>
-          )}
+          <View style={styles.logoContainer}>
+            <Image style={styles.logo} source={setting.icon} />
+          </View>
         </View>
 
         {/* Invoice Title */}
