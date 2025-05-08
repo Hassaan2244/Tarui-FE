@@ -1,14 +1,11 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft, Save } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { productSchema } from "../../validation-schema/validation-schemas"; // Adjust your validation schema
+import { productSchema } from "../../validation-schema/validation-schemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Loader from "../../components/Loader";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  clearProductState,
-  createProduct,
-} from "../../redux/slices/productSlice"; // Adjust your import path
+import { createProduct } from "../../redux/slices/productSlice";
 import { useEffect } from "react";
 
 export default function AddProduct() {

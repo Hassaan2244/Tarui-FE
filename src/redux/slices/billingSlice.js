@@ -8,7 +8,6 @@ export const createTransaction = createAsyncThunk(
             const response = await api.post(`/api/transaction`, {
                 ...payload
             });
-            console.log(response.data)
             return response.data;
         } catch (err) {
             return rejectWithValue(err.response?.data?.message || err.response?.message || "An error occured");

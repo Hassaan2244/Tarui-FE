@@ -109,3 +109,11 @@ export const transactionSchema = Yup.object().shape({
     description: Yup.string().nullable(),
 });
 
+
+export const billSettingSchema = Yup.object().shape({
+    icon: Yup.string().required("Icon is required"),
+    name: Yup.string().required("Name is required"),
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    phone: Yup.string().required("Phone is required"),
+    address: Yup.string().required("Address is required"),
+});

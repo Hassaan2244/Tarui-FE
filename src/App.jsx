@@ -17,6 +17,7 @@ import EditProduct from "./pages/Product/EditProduct";
 import Transaction from "./pages/Transaction/Transaction";
 import TransactionDetail from "./pages/Transaction/TransactionDetails";
 import ProdcutBreakage from "./pages/Product/ProdcutBreakage";
+import BillSetting from "./pages/BillSetting";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
           <Route path="/billing" element={<Billing />} />
           <Route path="/billing/add" element={<Transaction />} />
           <Route path="/billing/:id" element={<TransactionDetail />} />
+          <Route path="/billing/setting" element={<BillSetting />} />
         </Route>
       </Routes>
     </BrowserRouter>

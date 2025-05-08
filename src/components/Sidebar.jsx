@@ -47,15 +47,22 @@ export default function Sidebar() {
               to="/billing"
               className="px-4 py-3 rounded-lg hover:bg-white/10 transition-all flex items-center group"
             >
-              <div className="w-2 h-2 rounded-full bg-green-400 mr-3 group-hover:shadow-green-400/40 group-hover:shadow-sm"></div>
+              <div className="w-2 h-2 rounded-full bg-gray-300 mr-3 group-hover:shadow-green-400/40 group-hover:shadow-sm"></div>
               <span>Billing</span>
             </Link>
             <Link
               to="/product"
               className="px-4 py-3 rounded-lg hover:bg-white/10 transition-all flex items-center group"
             >
-              <div className="w-2 h-2 rounded-full bg-green-400 mr-3 group-hover:shadow-green-400/40 group-hover:shadow-sm"></div>
+              <div className="w-2 h-2 rounded-full bg-orange-400 mr-3 group-hover:shadow-green-400/40 group-hover:shadow-sm"></div>
               <span>Products</span>
+            </Link>
+            <Link
+              to="/billing/setting"
+              className="px-4 py-3 rounded-lg hover:bg-white/10 transition-all flex items-center group"
+            >
+              <div className="w-2 h-2 rounded-full bg-indigo-400 mr-3 group-hover:shadow-green-400/40 group-hover:shadow-sm"></div>
+              <span>Settings</span>
             </Link>
           </nav>
         </div>

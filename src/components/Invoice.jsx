@@ -1,65 +1,13 @@
 import React from "react";
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
-
-// Amount in words utility
-const numberToWords = (num) => {
-  const a = [
-    "",
-    "One",
-    "Two",
-    "Three",
-    "Four",
-    "Five",
-    "Six",
-    "Seven",
-    "Eight",
-    "Nine",
-    "Ten",
-    "Eleven",
-    "Twelve",
-    "Thirteen",
-    "Fourteen",
-    "Fifteen",
-    "Sixteen",
-    "Seventeen",
-    "Eighteen",
-    "Nineteen",
-  ];
-  const b = [
-    "",
-    "",
-    "Twenty",
-    "Thirty",
-    "Forty",
-    "Fifty",
-    "Sixty",
-    "Seventy",
-    "Eighty",
-    "Ninety",
-  ];
-  const inWords = (n) => {
-    if (n < 20) return a[n];
-    if (n < 100) return b[Math.floor(n / 10)] + (n % 10 ? " " + a[n % 10] : "");
-    if (n < 1000)
-      return (
-        a[Math.floor(n / 100)] +
-        " Hundred" +
-        (n % 100 ? " " + inWords(n % 100) : "")
-      );
-    if (n < 100000)
-      return (
-        inWords(Math.floor(n / 1000)) +
-        " Thousand" +
-        (n % 1000 ? " " + inWords(n % 1000) : "")
-      );
-    return (
-      inWords(Math.floor(n / 100000)) +
-      " Lakh" +
-      (n % 100000 ? " " + inWords(n % 100000) : "")
-    );
-  };
-  return inWords(Number(num)) + " Only";
-};
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  Image,
+} from "@react-pdf/renderer";
+import { numberToWords } from "../config/helperFunctions";
 
 const styles = StyleSheet.create({
   page: { padding: 30, fontSize: 12 },
@@ -79,7 +27,7 @@ const styles = StyleSheet.create({
   largeText: { fontSize: 18, marginBottom: 10 },
 });
 
-const Invoice = ({ data }) => {
+const Invoice = ({ data, setting }) => {
   const products = data?.selectedProducts || [];
   const isAmountType =
     data?.type === "Credit Amount" || data?.type === "Debit Amount";
@@ -88,8 +36,13 @@ const Invoice = ({ data }) => {
   return (
     <Document>
       <Page style={styles.page}>
-        <Text style={[styles.largeText, styles.bold]}>KASHIF ZIA CO.</Text>
-
+        <Text style={[styles.largeText, styles.bold]}>{setting?.name}</Text>
+        <Text style={[styles.largeText, styles.bold]}>{setting?.address}</Text>
+        <Text style={[styles.largeText, styles.bold]}>{setting?.phone}</Text>
+        <Text style={[styles.largeText, styles.bold]}>{setting?.email}</Text>
+        {setting?.icon && (
+          <Image style={{ width: 100, height: 100 }} source={setting.icon} />
+        )}
         <Text style={styles.section}>
           Date: {new Date(data?.createdAt).toLocaleDateString()}
         </Text>
@@ -97,7 +50,6 @@ const Invoice = ({ data }) => {
         <Text style={styles.section}>Invoice #{data?.id}</Text>
         <Text style={styles.section}>Type: {data?.type}</Text>
         <Text style={styles.section}>Description: {data?.description}</Text>
-
         {isAmountType ? (
           <>
             <View style={[styles.section]}>
@@ -147,12 +99,10 @@ const Invoice = ({ data }) => {
             </View>
           </>
         )}
-
         <View style={{ marginTop: 40 }}>
           <Text>___________________________</Text>
           <Text>Signature</Text>
         </View>
-
         <Text style={{ marginTop: 20 }}>Thanks for Shopping</Text>
       </Page>
     </Document>

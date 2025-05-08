@@ -35,6 +35,7 @@ export default function Transaction() {
   const dispatch = useDispatch();
   const productState = useSelector((state) => state.product);
   const billingState = useSelector((state) => state.billing);
+  const { setting } = useSelector((state) => state.billSetting);
   const products = productState?.products?.data || [];
 
   useEffect(() => {
@@ -131,18 +132,16 @@ export default function Transaction() {
       setSelectedProducts([]);
       const printInvoice = async () => {
         const blob = await pdf(
-          <Invoice data={billingState?.singletransaction} />
+          <Invoice data={billingState?.singletransaction} setting={setting} />
         ).toBlob();
 
         const url = URL.createObjectURL(blob);
 
-        // Download the file
         const link = document.createElement("a");
         link.href = url;
         link.download = `invoice-${Date.now()}.pdf`;
         link.click();
 
-        // Open in new tab and trigger print
         const printWindow = window.open(url, "_blank");
         if (printWindow) {
           printWindow.onload = () => {
