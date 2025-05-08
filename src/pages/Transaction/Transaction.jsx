@@ -132,7 +132,7 @@ export default function Transaction() {
       setSelectedProducts([]);
       const printInvoice = async () => {
         const blob = await pdf(
-          <Invoice data={billingState?.singletransaction} setting={setting} />
+          <Invoice data={billingState?.singletransaction} />
         ).toBlob();
 
         const url = URL.createObjectURL(blob);

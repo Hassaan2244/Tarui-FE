@@ -6,25 +6,189 @@ import {
   View,
   StyleSheet,
   Image,
+  Font,
 } from "@react-pdf/renderer";
-import { numberToWords } from "../config/helperFunctions";
+import { formatDate, numberToWords } from "../config/helperFunctions";
 
 const styles = StyleSheet.create({
-  page: { padding: 30, fontSize: 12 },
-  section: { marginBottom: 10 },
-  table: { display: "table", width: "auto", marginTop: 10 },
-  row: { flexDirection: "row" },
-  cell: {
-    flex: 1,
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: "#000",
-    padding: 4,
+  page: {
+    padding: 40,
+    fontFamily: "Helvetica",
+    fontSize: 10,
+    color: "#333333",
   },
-  bold: { fontWeight: "bold" },
-  underline: { textDecoration: "underline" },
-  rightAlign: { textAlign: "right" },
-  largeText: { fontSize: 18, marginBottom: 10 },
+
+  // Header Styles
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 30,
+  },
+  companyDetails: {
+    maxWidth: "60%",
+  },
+  companyName: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 4,
+    color: "#2563eb",
+  },
+  companyInfo: {
+    fontSize: 9,
+    marginBottom: 3,
+    color: "#555555",
+  },
+  logoContainer: {
+    alignItems: "flex-end",
+  },
+  logo: {
+    width: 80,
+    height: 80,
+  },
+
+  // Invoice Title Section
+  invoiceTitle: {
+    fontSize: 28,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#2563eb",
+    textTransform: "uppercase",
+  },
+
+  // Invoice Info Section
+  infoContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    borderTop: "1px solid #e5e7eb",
+    borderBottom: "1px solid #e5e7eb",
+    paddingVertical: 15,
+    marginBottom: 30,
+  },
+  infoColumn: {
+    width: "33%",
+  },
+  infoTitle: {
+    fontSize: 10,
+    color: "#6b7280",
+    marginBottom: 4,
+  },
+  infoValue: {
+    fontSize: 11,
+    fontWeight: "bold",
+  },
+
+  // Table Styles
+  table: {
+    display: "table",
+    width: "100%",
+    marginVertical: 15,
+    borderRadius: 4,
+  },
+  tableHeader: {
+    flexDirection: "row",
+    backgroundColor: "#f1f5f9",
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
+    borderBottom: "1px solid #e5e7eb",
+  },
+  tableRow: {
+    flexDirection: "row",
+    borderBottom: "1px solid #e5e7eb",
+    paddingVertical: 2,
+  },
+  tableCell: {
+    padding: 8,
+  },
+  indexCell: { width: "5%" },
+  productCell: { width: "30%" },
+  descCell: { width: "25%" },
+  qtyCell: { width: "10%", textAlign: "center" },
+  rateCell: { width: "15%", textAlign: "right" },
+  totalCell: { width: "15%", textAlign: "right" },
+  headerText: {
+    fontSize: 10,
+    fontWeight: "bold",
+    color: "#4b5563",
+  },
+
+  // Summary Styles
+  summary: {
+    marginTop: 20,
+    marginLeft: "auto",
+    width: "40%",
+  },
+  summaryRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 4,
+  },
+  summaryLabel: {
+    fontSize: 10,
+    color: "#6b7280",
+  },
+  summaryValue: {
+    fontSize: 10,
+    fontWeight: "bold",
+    textAlign: "right",
+  },
+  totalAmount: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#2563eb",
+  },
+
+  // Notes Section
+  notesSection: {
+    marginTop: 30,
+    borderTop: "1px solid #e5e7eb",
+    paddingTop: 10,
+  },
+  notesTitle: {
+    fontSize: 10,
+    fontWeight: "bold",
+    marginBottom: 5,
+    color: "#4b5563",
+  },
+  notesText: {
+    fontSize: 9,
+    color: "#6b7280",
+  },
+
+  // Footer Styles
+  footer: {
+    position: "absolute",
+    bottom: 30,
+    left: 40,
+    right: 40,
+    paddingTop: 10,
+    borderTop: "1px solid #e5e7eb",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  footerText: {
+    fontSize: 8,
+    color: "#9ca3af",
+  },
+  signatureSection: {
+    marginTop: 40,
+    width: "30%",
+  },
+  signatureLine: {
+    borderBottom: "1px solid #9ca3af",
+    marginBottom: 5,
+  },
+  signatureText: {
+    fontSize: 9,
+    color: "#6b7280",
+    textAlign: "center",
+  },
+
+  // Words Amount
+  wordsAmount: {
+    fontSize: 9,
+    marginTop: 10,
+    color: "#6b7280",
+  },
 });
 
 const Invoice = ({ data, setting }) => {
@@ -36,74 +200,316 @@ const Invoice = ({ data, setting }) => {
   return (
     <Document>
       <Page style={styles.page}>
-        <Text style={[styles.largeText, styles.bold]}>{setting?.name}</Text>
-        <Text style={[styles.largeText, styles.bold]}>{setting?.address}</Text>
-        <Text style={[styles.largeText, styles.bold]}>{setting?.phone}</Text>
-        <Text style={[styles.largeText, styles.bold]}>{setting?.email}</Text>
-        {setting?.icon && (
-          <Image style={{ width: 100, height: 100 }} source={setting.icon} />
+        {/* Header Section */}
+        <View style={styles.headerContainer}>
+          <View style={styles.companyDetails}>
+            <Text style={styles.companyName}>{setting?.name}</Text>
+            <Text style={styles.companyInfo}>{setting?.address}</Text>
+            <Text style={styles.companyInfo}>Phone: {setting?.phone}</Text>
+            <Text style={styles.companyInfo}>Email: {setting?.email}</Text>
+          </View>
+          {setting?.icon && (
+            <View style={styles.logoContainer}>
+              <Image style={styles.logo} source={setting.icon} />
+            </View>
+          )}
+        </View>
+
+        {/* Invoice Title */}
+        <Text style={styles.invoiceTitle}>Invoice</Text>
+
+        {/* Invoice Info */}
+        <View style={styles.infoContainer}>
+          <View style={styles.infoColumn}>
+            <Text style={styles.infoTitle}>INVOICE TO</Text>
+            <Text style={styles.infoValue}>
+              Customer Ledger #{data?.ledgerId}
+            </Text>
+          </View>
+          <View style={styles.infoColumn}>
+            <Text style={styles.infoTitle}>INVOICE NUMBER</Text>
+            <Text style={styles.infoValue}>#{data?.id}</Text>
+            <Text style={styles.infoTitle}>INVOICE TYPE</Text>
+            <Text style={styles.infoValue}>{data?.type}</Text>
+          </View>
+          <View style={styles.infoColumn}>
+            <Text style={styles.infoTitle}>DATE ISSUED</Text>
+            <Text style={styles.infoValue}>{formatDate(data.createdAt)}</Text>
+          </View>
+        </View>
+
+        {/* Description */}
+        {data?.description && (
+          <View>
+            <Text style={styles.infoTitle}>DESCRIPTION</Text>
+            <Text style={{ ...styles.infoValue, marginBottom: 15 }}>
+              {data.description}
+            </Text>
+          </View>
         )}
-        <Text style={styles.section}>
-          Date: {new Date(data?.createdAt).toLocaleDateString()}
-        </Text>
-        <Text style={styles.section}>Customer: Ledger #{data?.ledgerId}</Text>
-        <Text style={styles.section}>Invoice #{data?.id}</Text>
-        <Text style={styles.section}>Type: {data?.type}</Text>
-        <Text style={styles.section}>Description: {data?.description}</Text>
+
         {isAmountType ? (
           <>
-            <View style={[styles.section]}>
-              <Text>Amount: {data?.amount}</Text>
+            {/* Amount Type Invoice */}
+            <View
+              style={{
+                ...styles.infoContainer,
+                marginTop: 10,
+                paddingVertical: 20,
+              }}
+            >
+              <View style={{ width: "60%" }}>
+                <Text style={styles.infoTitle}>AMOUNT IN WORDS</Text>
+                <Text style={styles.infoValue}>{amountInWords}</Text>
+              </View>
+              <View style={{ width: "40%", alignItems: "flex-end" }}>
+                <Text style={styles.infoTitle}>AMOUNT</Text>
+                <Text
+                  style={{
+                    ...styles.infoValue,
+                    fontSize: 20,
+                    color: "#2563eb",
+                  }}
+                >
+                  rs {data?.amount}
+                </Text>
+              </View>
             </View>
-            <Text style={styles.section}>Amount in words: {amountInWords}</Text>
-            <Text style={styles.section}>
-              Previous Balance:{data?.prevBalance}
-            </Text>
-            <Text style={styles.section}>
-              Ledger Current Balance: {data?.runningBalance}
-            </Text>
+
+            {/* Balance Information */}
+            <View style={{ ...styles.table, marginTop: 30 }}>
+              <View style={styles.tableHeader}>
+                <Text
+                  style={{
+                    ...styles.tableCell,
+                    ...styles.headerText,
+                    width: "50%",
+                  }}
+                >
+                  BALANCE DETAILS
+                </Text>
+                <Text
+                  style={{
+                    ...styles.tableCell,
+                    ...styles.headerText,
+                    width: "50%",
+                    textAlign: "right",
+                  }}
+                >
+                  AMOUNT
+                </Text>
+              </View>
+              <View style={styles.tableRow}>
+                <Text style={{ ...styles.tableCell, width: "50%" }}>
+                  Previous Balance
+                </Text>
+                <Text
+                  style={{
+                    ...styles.tableCell,
+                    width: "50%",
+                    textAlign: "right",
+                  }}
+                >
+                  rs {data?.prevBalance}
+                </Text>
+              </View>
+              <View style={styles.tableRow}>
+                <Text style={{ ...styles.tableCell, width: "50%" }}>
+                  Current Transaction
+                </Text>
+                <Text
+                  style={{
+                    ...styles.tableCell,
+                    width: "50%",
+                    textAlign: "right",
+                    color:
+                      data?.type === "Credit Amount" ? "#10b981" : "#ef4444",
+                  }}
+                >
+                  {data?.type === "Credit Amount" ? "+" : "-"}rs {data?.amount}
+                </Text>
+              </View>
+              <View style={styles.tableRow}>
+                <Text
+                  style={{
+                    ...styles.tableCell,
+                    width: "50%",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Ledger Current Balance
+                </Text>
+                <Text
+                  style={{
+                    ...styles.tableCell,
+                    width: "50%",
+                    textAlign: "right",
+                    fontWeight: "bold",
+                  }}
+                >
+                  rs {data?.runningBalance}
+                </Text>
+              </View>
+            </View>
           </>
         ) : (
           <>
-            {/* Table Header */}
-            <View style={[styles.table, styles.row, styles.bold]}>
-              <Text style={styles.cell}>#</Text>
-              <Text style={styles.cell}>Product</Text>
-              <Text style={styles.cell}>Desc</Text>
-              <Text style={styles.cell}>Qty</Text>
-              <Text style={styles.cell}>Rate</Text>
-              <Text style={styles.cell}>Total</Text>
+            {/* Products Table */}
+            <View style={styles.table}>
+              {/* Table Header */}
+              <View style={styles.tableHeader}>
+                <Text
+                  style={{
+                    ...styles.tableCell,
+                    ...styles.headerText,
+                    ...styles.indexCell,
+                  }}
+                >
+                  #
+                </Text>
+                <Text
+                  style={{
+                    ...styles.tableCell,
+                    ...styles.headerText,
+                    ...styles.productCell,
+                  }}
+                >
+                  PRODUCT
+                </Text>
+                <Text
+                  style={{
+                    ...styles.tableCell,
+                    ...styles.headerText,
+                    ...styles.descCell,
+                  }}
+                >
+                  DESCRIPTION
+                </Text>
+                <Text
+                  style={{
+                    ...styles.tableCell,
+                    ...styles.headerText,
+                    ...styles.qtyCell,
+                  }}
+                >
+                  QTY
+                </Text>
+                <Text
+                  style={{
+                    ...styles.tableCell,
+                    ...styles.headerText,
+                    ...styles.rateCell,
+                  }}
+                >
+                  RATE
+                </Text>
+                <Text
+                  style={{
+                    ...styles.tableCell,
+                    ...styles.headerText,
+                    ...styles.totalCell,
+                  }}
+                >
+                  TOTAL
+                </Text>
+              </View>
+
+              {/* Table Rows */}
+              {products.map((p, i) => (
+                <View style={styles.tableRow} key={i}>
+                  <Text style={{ ...styles.tableCell, ...styles.indexCell }}>
+                    {i + 1}
+                  </Text>
+                  <Text style={{ ...styles.tableCell, ...styles.productCell }}>
+                    {p.name}
+                  </Text>
+                  <Text style={{ ...styles.tableCell, ...styles.descCell }}>
+                    {p.description}
+                  </Text>
+                  <Text style={{ ...styles.tableCell, ...styles.qtyCell }}>
+                    {p.quantity}
+                  </Text>
+                  <Text style={{ ...styles.tableCell, ...styles.rateCell }}>
+                    rs {p.price}
+                  </Text>
+                  <Text style={{ ...styles.tableCell, ...styles.totalCell }}>
+                    rs {p.total}
+                  </Text>
+                </View>
+              ))}
             </View>
 
-            {/* Table Rows */}
-            {products.map((p, i) => (
-              <View style={styles.row} key={i}>
-                <Text style={styles.cell}>{i + 1}</Text>
-                <Text style={styles.cell}>{p.name}</Text>
-                <Text style={styles.cell}>{p.description}</Text>
-                <Text style={styles.cell}>{p.quantity}</Text>
-                <Text style={styles.cell}>{p.price}</Text>
-                <Text style={styles.cell}>{p.total}</Text>
+            {/* Summary */}
+            <View style={styles.summary}>
+              <View style={styles.summaryRow}>
+                <Text style={styles.summaryLabel}>SUBTOTAL</Text>
+                <Text style={styles.summaryValue}>rs {data?.amount}</Text>
               </View>
-            ))}
-
-            {/* Totals */}
-            <View style={{ marginTop: 20 }}>
-              <Text>Net Total: {data?.amount}</Text>
-              <Text style={styles.section}>
-                Paid: {data?.paid ? "Yes" : "No"}
+              <View
+                style={{
+                  ...styles.summaryRow,
+                  marginTop: 5,
+                  paddingTop: 5,
+                  borderTop: "1px solid #e5e7eb",
+                }}
+              >
+                <Text style={{ ...styles.summaryLabel, fontWeight: "bold" }}>
+                  TOTAL
+                </Text>
+                <Text style={styles.totalAmount}>rs {data?.amount}</Text>
+              </View>
+              <Text style={styles.wordsAmount}>
+                Amount in words: {amountInWords}
               </Text>
-              <Text>Amount in words: {amountInWords}</Text>
-              <Text>Previous Balance: {data?.prevBalance}</Text>
-              <Text>Running Balance: {data?.runningBalance}</Text>
+
+              <View style={{ ...styles.summaryRow, marginTop: 15 }}>
+                <Text style={styles.summaryLabel}>PAYMENT STATUS</Text>
+                <Text
+                  style={{
+                    ...styles.summaryValue,
+                    color: data?.paid ? "#10b981" : "#ef4444",
+                  }}
+                >
+                  {data?.paid ? "PAID" : "UNPAID"}
+                </Text>
+              </View>
+
+              <View style={styles.summaryRow}>
+                <Text style={styles.summaryLabel}>PREVIOUS BALANCE</Text>
+                <Text style={styles.summaryValue}>rs {data?.prevBalance}</Text>
+              </View>
+              <View style={styles.summaryRow}>
+                <Text style={styles.summaryLabel}>CURRENT BALANCE</Text>
+                <Text style={{ ...styles.summaryValue, fontWeight: "bold" }}>
+                  rs {data?.runningBalance}
+                </Text>
+              </View>
             </View>
           </>
         )}
-        <View style={{ marginTop: 40 }}>
-          <Text>___________________________</Text>
-          <Text>Signature</Text>
+
+        {/* Signature Section */}
+        <View style={styles.signatureSection}>
+          <View style={styles.signatureLine} />
+          <Text style={styles.signatureText}>Authorized Signature</Text>
         </View>
-        <Text style={{ marginTop: 20 }}>Thanks for Shopping</Text>
+
+        {/* Notes */}
+        <View style={styles.notesSection}>
+          <Text style={styles.notesTitle}>THANK YOU FOR YOUR BUSINESS</Text>
+          <Text style={styles.notesText}>
+            If you have any questions about this invoice, please contact us
+            using the information provided at the top of this document.
+          </Text>
+        </View>
+
+        {/* Footer */}
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>
+            {setting?.name} • Invoice #{data?.id}
+          </Text>
+          <Text style={styles.footerText}>Page 1 of 1</Text>
+        </View>
       </Page>
     </Document>
   );

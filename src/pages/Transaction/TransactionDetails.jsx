@@ -4,9 +4,12 @@ import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import Loader from "../../components/Loader";
 import { formatDate } from "../../config/helperFunctions";
+import Invoice from "../../components/Invoice";
+import { pdf } from "@react-pdf/renderer";
 
 export default function TransactionDetail() {
   const billingState = useSelector((state) => state.billing);
+  const { setting } = useSelector((state) => state.billSetting);
   const { state } = useLocation();
   const { transaction } = state;
   const showProductTable = [
@@ -17,6 +20,28 @@ export default function TransactionDetail() {
     "Buy",
     "Sell",
   ].includes(transaction?.type);
+
+  const printInvoice = async () => {
+    const blob = await pdf(
+      <Invoice data={transaction} setting={setting} />
+    ).toBlob();
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `invoice-${Date.now()}.pdf`;
+    link.click();
+
+    const printWindow = window.open(url, "_blank");
+    if (printWindow) {
+      printWindow.onload = () => {
+        printWindow.focus();
+        printWindow.print();
+      };
+    }
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black to-gray-900 text-white p-6">
@@ -37,7 +62,7 @@ export default function TransactionDetail() {
           <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
             Transaction Detail
           </h2>
-
+          <button onClick={printInvoice}>Print</button>
           <div className="text-gray-300 space-y-2">
             <div>
               <strong>Type:</strong> {transaction?.type}
