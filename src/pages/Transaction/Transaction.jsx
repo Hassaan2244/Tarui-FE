@@ -13,6 +13,7 @@ import { transactionSchema } from "../../validation-schema/validation-schemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Invoice from "../../components/Invoice";
 import { pdf } from "@react-pdf/renderer";
+import { fetchSetting } from "../../redux/slices/billSettingSlice";
 
 export default function Transaction() {
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -40,6 +41,7 @@ export default function Transaction() {
 
   useEffect(() => {
     dispatch(fetchProducts({}));
+    if (!setting) dispatch(fetchSetting());
   }, []);
 
   const transactionType = watch("type");

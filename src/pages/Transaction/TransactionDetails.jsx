@@ -1,13 +1,15 @@
 import { ArrowLeft } from "lucide-react";
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import Loader from "../../components/Loader";
 import { formatDate } from "../../config/helperFunctions";
 import Invoice from "../../components/Invoice";
 import { pdf } from "@react-pdf/renderer";
+import { fetchSetting } from "../../redux/slices/billSettingSlice";
 
 export default function TransactionDetail() {
+  const dispatch = useDispatch();
   const billingState = useSelector((state) => state.billing);
   const { setting } = useSelector((state) => state.billSetting);
   const { state } = useLocation();
@@ -42,6 +44,9 @@ export default function TransactionDetail() {
     }
     URL.revokeObjectURL(url);
   };
+  useEffect(() => {
+    if (!setting) dispatch(fetchSetting());
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black to-gray-900 text-white p-6">
