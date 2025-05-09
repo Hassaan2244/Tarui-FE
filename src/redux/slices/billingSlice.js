@@ -101,6 +101,7 @@ const billingSlice = createSlice({
             .addCase(createOpenSellTransaction.fulfilled, (state, action) => {
                 state.loading = false;
                 state.success = action.payload?.message;
+                state.singletransaction = action.payload?.data;
             })
             .addCase(createOpenSellTransaction.rejected, (state, action) => {
                 state.loading = false;

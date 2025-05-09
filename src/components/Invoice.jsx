@@ -209,7 +209,7 @@ const Invoice = ({ data, setting }) => {
             <Text style={styles.companyInfo}>Email: {setting?.email}</Text>
           </View>
           <View style={styles.logoContainer}>
-            <Image style={styles.logo} source={setting.icon} />
+            <Image style={styles.logo} source={setting?.icon} />
           </View>
         </View>
 

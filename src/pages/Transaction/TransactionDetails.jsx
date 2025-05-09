@@ -3,9 +3,8 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import Loader from "../../components/Loader";
-import { formatDate } from "../../config/helperFunctions";
+import { formatDate, printInvoice } from "../../config/helperFunctions";
 import Invoice from "../../components/Invoice";
-import { pdf } from "@react-pdf/renderer";
 import { fetchSetting } from "../../redux/slices/billSettingSlice";
 
 export default function TransactionDetail() {
@@ -23,27 +22,6 @@ export default function TransactionDetail() {
     "Sell",
   ].includes(transaction?.type);
 
-  const printInvoice = async () => {
-    const blob = await pdf(
-      <Invoice data={transaction} setting={setting} />
-    ).toBlob();
-
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `invoice-${Date.now()}.pdf`;
-    link.click();
-
-    const printWindow = window.open(url, "_blank");
-    if (printWindow) {
-      printWindow.onload = () => {
-        printWindow.focus();
-        printWindow.print();
-      };
-    }
-    URL.revokeObjectURL(url);
-  };
   useEffect(() => {
     if (!setting) dispatch(fetchSetting());
   }, []);
@@ -67,7 +45,18 @@ export default function TransactionDetail() {
           <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
             Transaction Detail
           </h2>
-          <button onClick={printInvoice}>Print</button>
+          <button
+            onClick={() =>
+              printInvoice(
+                <Invoice
+                  data={billingState?.singletransaction}
+                  setting={setting}
+                />
+              )
+            }
+          >
+            Print
+          </button>
           <div className="text-gray-300 space-y-2">
             <div>
               <strong>Type:</strong> {transaction?.type}

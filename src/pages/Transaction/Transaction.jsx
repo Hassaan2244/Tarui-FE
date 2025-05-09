@@ -14,6 +14,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Invoice from "../../components/Invoice";
 import { pdf } from "@react-pdf/renderer";
 import { fetchSetting } from "../../redux/slices/billSettingSlice";
+import { printInvoice } from "../../config/helperFunctions";
 
 export default function Transaction() {
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -132,30 +133,9 @@ export default function Transaction() {
     if (billingState?.success) {
       reset();
       setSelectedProducts([]);
-      const printInvoice = async () => {
-        const blob = await pdf(
-          <Invoice data={billingState?.singletransaction} />
-        ).toBlob();
-
-        const url = URL.createObjectURL(blob);
-
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = `invoice-${Date.now()}.pdf`;
-        link.click();
-
-        const printWindow = window.open(url, "_blank");
-        if (printWindow) {
-          printWindow.onload = () => {
-            printWindow.focus();
-            printWindow.print();
-          };
-        }
-
-        // Cleanup
-        URL.revokeObjectURL(url);
-      };
-      printInvoice();
+      printInvoice(
+        <Invoice data={billingState?.singletransaction} setting={setting} />
+      );
     }
     dispatch(clearBillingState());
   }, [billingState?.success]);

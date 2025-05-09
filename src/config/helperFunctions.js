@@ -1,3 +1,5 @@
+import { pdf } from "@react-pdf/renderer";
+
 export const getAuthHeaders = () => {
     const token = localStorage.getItem("token");
     return {
@@ -76,4 +78,30 @@ export const numberToWords = (num) => {
         );
     };
     return inWords(Number(num)) + " Only";
+};
+
+
+export const printInvoice = async (invoiceComponent, filenamePrefix = "invoice") => {
+    try {
+        const blob = await pdf(invoiceComponent).toBlob();
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${filenamePrefix}-${Date.now()}.pdf`;
+        link.click();
+
+        const printWindow = window.open(url, "_blank");
+        if (printWindow) {
+            printWindow.onload = () => {
+                printWindow.focus();
+                printWindow.print();
+            };
+        }
+
+        // Cleanup
+        URL.revokeObjectURL(url);
+    } catch (error) {
+        console.error("Failed to generate and print invoice:", error);
+    }
 };

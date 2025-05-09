@@ -1,13 +1,18 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Trash2, CircleArrowLeft, ArrowRight } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Trash2, ArrowRight } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Loader from "../components/Loader";
-import { createOpenSellTransaction } from "../redux/slices/billingSlice";
+import {
+  clearBillingState,
+  createOpenSellTransaction,
+} from "../redux/slices/billingSlice";
 import { fetchProducts } from "../redux/slices/productSlice";
 import { transactionSchema } from "../validation-schema/validation-schemas";
+import { printInvoice } from "../config/helperFunctions";
+import Invoice from "../components/Invoice";
+import { fetchSetting } from "../redux/slices/billSettingSlice";
 
 export default function Billing() {
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -17,6 +22,7 @@ export default function Billing() {
   const productState = useSelector((state) => state.product);
   const billingState = useSelector((state) => state.billing);
   const products = productState?.products?.data || [];
+  const { setting } = useSelector((state) => state.billSetting);
 
   const {
     register,
@@ -37,6 +43,7 @@ export default function Billing() {
 
   useEffect(() => {
     dispatch(fetchProducts({}));
+    if (!setting) dispatch(fetchSetting());
   }, []);
 
   const handleAddProduct = useCallback(() => {
@@ -65,7 +72,7 @@ export default function Billing() {
       return;
     }
 
-    if (parsedPrice < 1) {
+    if (parsedPrice < 0) {
       setAddProductError("Price must be a positive number!");
       return;
     }
@@ -112,6 +119,10 @@ export default function Billing() {
     if (billingState?.success) {
       reset();
       setSelectedProducts([]);
+      printInvoice(
+        <Invoice data={billingState?.singletransaction} setting={setting} />
+      );
+      dispatch(clearBillingState());
     }
   }, [billingState?.success]);
 
