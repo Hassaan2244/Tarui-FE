@@ -1,21 +1,17 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchSingleLedger } from "../../redux/slices/ledgerSlice";
-import { Link, useParams } from "react-router-dom";
+import React from "react";
+import { useSelector } from "react-redux";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { formatDate } from "../../config/helperFunctions";
 import Loader from "../../components/Loader";
 import { ArrowLeft, EditIcon } from "lucide-react";
 import TransactionList from "../Transaction/TransactionList";
 
 export default function LedgerDetail() {
-  const dispatch = useDispatch();
   const { id } = useParams();
-  const ledgerState = useSelector((state) => state.ledger);
-  const singleLedger = ledgerState?.singleLedger;
+  const { state } = useLocation();
 
-  useEffect(() => {
-    dispatch(fetchSingleLedger(id));
-  }, []);
+  const ledgerState = useSelector((state) => state.ledger);
+  const { singleLedger } = state;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black to-gray-900 text-white p-6">

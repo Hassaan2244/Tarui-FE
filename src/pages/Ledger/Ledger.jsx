@@ -107,6 +107,7 @@ export default function Ledger() {
               <div className="col-span-6 md:col-span-4 lg:col-span-1 text-right">
                 <Link
                   to={`/ledger/${ledger.id}`}
+                  state={{ singleLedger: ledger }}
                   className="text-cyan-400 hover:text-cyan-300 transition-colors flex items-center justify-end"
                 >
                   <span className="inline">Details</span>
