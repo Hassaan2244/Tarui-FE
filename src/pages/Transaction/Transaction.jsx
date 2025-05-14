@@ -17,6 +17,7 @@ export default function Transaction() {
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [addproductErrors, setAddproductErrors] = useState(null);
   const { state } = useLocation();
+  const { singleLedger } = state;
   const {
     register,
     handleSubmit,
@@ -55,7 +56,7 @@ export default function Transaction() {
     const payload = {
       ...data,
       selectedProducts,
-      ledgerId: state.ledger?.id,
+      ledgerId: singleLedger?.id,
     };
     dispatch(createTransaction(payload));
   };
@@ -142,7 +143,8 @@ export default function Transaction() {
       {billingState?.loading && <Loader />}
 
       <Link
-        to={`/ledger/${state.ledger?.id}`}
+        to={`/ledger/${singleLedger?.id}`}
+        state={{ singleLedger }}
         className="absolute top-8 left-8 flex items-center text-cyan-400 hover:text-cyan-300 transition-all group"
       >
         <CircleArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
@@ -156,7 +158,7 @@ export default function Transaction() {
           </h2>
         </div>
         <div className="text-gray-300">
-          <strong>Ledger:</strong> {state.ledger?.name}
+          <strong>Ledger:</strong> {singleLedger?.name}
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {/* Radio Buttons */}

@@ -28,6 +28,7 @@ export default function TransactionDetail() {
         <div className="flex items-center justify-between mb-6">
           <Link
             to={`/ledger/${transaction.ledgerId}`}
+            state={{ singleLedger: state.singleLedger }}
             className="flex items-center text-cyan-400 hover:text-cyan-300 transition-all group"
           >
             <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />

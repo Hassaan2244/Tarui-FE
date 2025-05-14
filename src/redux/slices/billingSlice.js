@@ -85,6 +85,7 @@ const billingSlice = createSlice({
                 state.loading = false;
                 state.success = action.payload?.message;
                 state.singletransaction = action.payload?.data;
+                console.log(action.payload)
             })
             .addCase(createTransaction.rejected, (state, action) => {
                 state.loading = false;

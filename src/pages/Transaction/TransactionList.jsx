@@ -6,7 +6,7 @@ import Loader from "../../components/Loader";
 import { fetchTransactions } from "../../redux/slices/billingSlice";
 import { formatDate } from "../../config/helperFunctions";
 
-export default function TransactionList({ id = "" }) {
+export default function TransactionList({ id = "", singleLedger = {} }) {
   const dispatch = useDispatch();
   const billingState = useSelector((state) => state.billing);
   const [currentPage, setCurrentPage] = useState(0);
@@ -87,7 +87,7 @@ export default function TransactionList({ id = "" }) {
                 <span className="md:hidden text-gray-400">Type:</span>
                 <Link
                   to={`/billing/${transaction.id}`}
-                  state={{ transaction: transaction }}
+                  state={{ transaction, singleLedger }}
                 >
                   <h3 className="font-semibold text-white">
                     {transaction.type}
