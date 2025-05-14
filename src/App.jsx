@@ -18,41 +18,56 @@ import Transaction from "./pages/Transaction/Transaction";
 import TransactionDetail from "./pages/Transaction/TransactionDetails";
 import ProdcutBreakage from "./pages/Product/ProdcutBreakage";
 import BillSetting from "./pages/BillSetting";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
+    <>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
 
-        <Route element={<PublicLayout />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-        </Route>
+          <Route element={<PublicLayout />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+          </Route>
 
-        <Route element={<Sidebar />}>
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route element={<Sidebar />}>
+            <Route path="/dashboard" element={<Dashboard />} />
 
-          {/** Ledger routes */}
-          <Route path="/ledger" element={<Ledger />} />
-          <Route path="/ledger/add" element={<AddLedger />} />
-          <Route path="/ledger/:id" element={<LedgerDetail />} />
+            {/** Ledger routes */}
+            <Route path="/ledger" element={<Ledger />} />
+            <Route path="/ledger/add" element={<AddLedger />} />
+            <Route path="/ledger/:id" element={<LedgerDetail />} />
 
-          {/** Product routes */}
-          <Route path="/product" element={<Products />} />
-          <Route path="/product/add" element={<AddProduct />} />
-          <Route path="/product/breakage" element={<ProdcutBreakage />} />
-          <Route path="/product/edit" element={<EditProduct />} />
-          <Route path="/product/:id" element={<ProductDetail />} />
+            {/** Product routes */}
+            <Route path="/product" element={<Products />} />
+            <Route path="/product/add" element={<AddProduct />} />
+            <Route path="/product/breakage" element={<ProdcutBreakage />} />
+            <Route path="/product/edit" element={<EditProduct />} />
+            <Route path="/product/:id" element={<ProductDetail />} />
 
-          {/** Billing routes */}
-          <Route path="/billing" element={<Billing />} />
-          <Route path="/billing/add" element={<Transaction />} />
-          <Route path="/billing/:id" element={<TransactionDetail />} />
-          <Route path="/billing/setting" element={<BillSetting />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+            {/** Billing routes */}
+            <Route path="/billing" element={<Billing />} />
+            <Route path="/billing/add" element={<Transaction />} />
+            <Route path="/billing/:id" element={<TransactionDetail />} />
+            <Route path="/billing/setting" element={<BillSetting />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 

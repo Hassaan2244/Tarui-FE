@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../config/api";
+import { createBreakageTransaction, createOpenSellTransaction } from "./billingSlice";
 
 export const createProduct = createAsyncThunk(
     "product/create",
@@ -38,18 +39,6 @@ export const fetchProducts = createAsyncThunk(
     }
 );
 
-export const fetchSingleProduct = createAsyncThunk(
-    "product/fetchSingle",
-    async (id, { rejectWithValue }) => {
-        try {
-            const response = await api.get(`/api/product/${id}`);
-            return response.data;
-        } catch (err) {
-            return rejectWithValue(err.response?.data?.message || err.response?.message || "An error occurred");
-        }
-    }
-);
-
 const productSlice = createSlice({
     name: "product",
     initialState: {
@@ -77,6 +66,9 @@ const productSlice = createSlice({
             .addCase(createProduct.fulfilled, (state, action) => {
                 state.loading = false;
                 state.success = action.payload?.message;
+                if (state.products.data) {
+                    state.products.data.unshift(action.payload.product);
+                }
             })
             .addCase(createProduct.rejected, (state, action) => {
                 state.loading = false;
@@ -92,6 +84,12 @@ const productSlice = createSlice({
             .addCase(updateProduct.fulfilled, (state, action) => {
                 state.loading = false;
                 state.success = action.payload?.message;
+                if (state.products?.data) {
+                    const index = state.products.data.findIndex(p => p.id === action.payload.product.id);
+                    if (index !== -1) {
+                        state.products.data[index] = action.payload.product;
+                    }
+                }
             })
             .addCase(updateProduct.rejected, (state, action) => {
                 state.loading = false;
@@ -113,20 +111,40 @@ const productSlice = createSlice({
                 state.error = action.payload;
             })
 
-            // Fetch Single
-            .addCase(fetchSingleProduct.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-                state.success = null;
+            // Handle product qty updates for Breakage transactions
+            .addCase(createBreakageTransaction.fulfilled, (state, action) => {
+                const usedProducts = action.payload?.data?.selectedProducts || [];
+
+                if (state.products?.data) {
+                    usedProducts.forEach((used) => {
+                        const index = state.products.data.findIndex((p) => p.id === used.id);
+                        if (index !== -1) {
+                            state.products.data[index].qty -= used.quantity;
+                            if (state.products.data[index].qty < 0) {
+                                state.products.data[index].qty = 0;
+                            }
+                        }
+                    });
+                }
             })
-            .addCase(fetchSingleProduct.fulfilled, (state, action) => {
-                state.loading = false;
-                state.singleProduct = action.payload;
+
+            // Handle product qty updates for Open Sell transactions
+            .addCase(createOpenSellTransaction.fulfilled, (state, action) => {
+                const usedProducts = action.payload?.data?.selectedProducts || [];
+
+                if (state.products?.data) {
+                    usedProducts.forEach((used) => {
+                        const index = state.products.data.findIndex((p) => p.id === used.id);
+                        if (index !== -1) {
+                            state.products.data[index].qty -= used.quantity;
+                            if (state.products.data[index].qty < 0) {
+                                state.products.data[index].qty = 0;
+                            }
+                        }
+                    });
+                }
             })
-            .addCase(fetchSingleProduct.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
-            });
+
     },
 });
 

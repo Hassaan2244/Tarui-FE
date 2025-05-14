@@ -8,11 +8,10 @@ import {
   clearBillingState,
   createOpenSellTransaction,
 } from "../redux/slices/billingSlice";
-import { fetchProducts } from "../redux/slices/productSlice";
 import { transactionSchema } from "../validation-schema/validation-schemas";
 import { printInvoice } from "../config/helperFunctions";
 import Invoice from "../components/Invoice";
-import { fetchSetting } from "../redux/slices/billSettingSlice";
+import { toast } from "react-toastify";
 
 export default function Billing() {
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -40,11 +39,6 @@ export default function Billing() {
   const selectedProductId = watch("product");
   const quantity = watch("quantity");
   const price = watch("price");
-
-  useEffect(() => {
-    dispatch(fetchProducts({}));
-    if (!setting) dispatch(fetchSetting());
-  }, []);
 
   const handleAddProduct = useCallback(() => {
     setAddProductError(null);
@@ -116,15 +110,20 @@ export default function Billing() {
   };
 
   useEffect(() => {
-    if (billingState?.success) {
-      reset();
+    if (billingState.success) {
+      toast.success(billingState.success);
       setSelectedProducts([]);
+      reset();
+      dispatch(clearBillingState());
       printInvoice(
         <Invoice data={billingState?.singletransaction} setting={setting} />
       );
+    }
+    if (billingState.error) {
+      toast.error(billingState.error);
       dispatch(clearBillingState());
     }
-  }, [billingState?.success]);
+  }, [billingState.success, billingState.error]);
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-black to-gray-900 text-white flex items-center justify-center p-6">
@@ -251,17 +250,6 @@ export default function Billing() {
             <ArrowRight className="ml-2 w-4 h-4" />
           </button>
         </form>
-
-        {billingState?.error && (
-          <div className="p-3 bg-red-900/30 border border-red-500/50 rounded-lg text-center text-red-300">
-            {billingState?.error}
-          </div>
-        )}
-        {billingState?.success && (
-          <div className="m-3 p-3 bg-green-900/30 border border-green-500/50 rounded-lg text-center text-green-300">
-            {billingState?.success}
-          </div>
-        )}
       </div>
     </div>
   );

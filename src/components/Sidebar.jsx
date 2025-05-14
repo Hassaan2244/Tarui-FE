@@ -1,10 +1,22 @@
 import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/slices/authSlice";
+import { useEffect } from "react";
+import { fetchProducts } from "../redux/slices/productSlice";
+import { fetchSetting } from "../redux/slices/billSettingSlice";
 
 export default function Sidebar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const productState = useSelector((state) => state.product);
+  const products = productState.products?.data;
+  const { setting } = useSelector((state) => state.billSetting);
+
+  useEffect(() => {
+    if (!products?.length > 0) dispatch(fetchProducts({}));
+    if (!setting) dispatch(fetchSetting());
+  }, []);
 
   const handleLogout = () => {
     dispatch(logout());

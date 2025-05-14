@@ -71,7 +71,6 @@ const billingSlice = createSlice({
             state.error = null;
             state.success = null;
             state.loading = false;
-            state.singletransaction = null;
         },
     },
     extraReducers: (builder) => {
@@ -102,6 +101,7 @@ const billingSlice = createSlice({
                 state.loading = false;
                 state.success = action.payload?.message;
                 state.singletransaction = action.payload?.data;
+                console.log(action.payload)
             })
             .addCase(createOpenSellTransaction.rejected, (state, action) => {
                 state.loading = false;

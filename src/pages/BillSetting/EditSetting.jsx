@@ -9,9 +9,7 @@ import { billSettingSchema } from "../../validation-schema/validation-schemas";
 
 export default function EditSetting() {
   const dispatch = useDispatch();
-  const { setting, loading, error, success } = useSelector(
-    (state) => state.billSetting
-  );
+  const { setting, loading } = useSelector((state) => state.billSetting);
 
   const {
     register,
@@ -76,17 +74,6 @@ export default function EditSetting() {
               </button>
             </div>
           </form>
-
-          {error && (
-            <div className="p-3 mt-4 bg-red-900/30 border border-red-500/50 rounded-lg text-center text-red-300">
-              {error}
-            </div>
-          )}
-          {success && (
-            <div className="m-3 p-3 bg-green-900/30 border border-green-500/50 rounded-lg text-center text-green-300">
-              {success}
-            </div>
-          )}
         </div>
       </div>
     </div>

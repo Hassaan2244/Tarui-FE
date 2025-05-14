@@ -1,46 +1,15 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, PlusCircle, Search } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import ReactPaginate from "react-paginate";
+import { ArrowRight, PlusCircle } from "lucide-react";
+import { useSelector } from "react-redux";
 import Loader from "../../components/Loader";
-import { fetchProducts } from "../../redux/slices/productSlice";
 
 export default function Product() {
-  const dispatch = useDispatch();
   const productState = useSelector((state) => state.product);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
-  const products = productState?.products?.data;
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedSearch(searchTerm);
-    }, 500);
-
-    return () => clearTimeout(handler);
-  }, [searchTerm]);
-
-  useEffect(() => {
-    dispatch(fetchProducts({ page: currentPage + 1, search: debouncedSearch }));
-  }, [currentPage, debouncedSearch]);
-
-  useEffect(() => {
-    setCurrentPage(0);
-  }, [debouncedSearch]);
-
-  const handlePageClick = (event) => {
-    setCurrentPage(event.selected);
-  };
-
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-  };
+  const products = productState.products?.data;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black to-gray-900 text-white p-6">
-      {productState?.loading && <Loader />}
+      {productState.loading && <Loader />}
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
           <div>
@@ -67,7 +36,7 @@ export default function Product() {
           </Link>
         </div>
 
-        <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-xl p-1 mb-8 shadow-xl">
+        {/* <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-xl p-1 mb-8 shadow-xl">
           <div className="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-4">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
@@ -78,7 +47,7 @@ export default function Product() {
               className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-cyan-400/30"
             />
           </div>
-        </div>
+        </div> */}
 
         <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden shadow-xl">
           {/* Table Header */}
@@ -110,6 +79,7 @@ export default function Product() {
               <div className="text-right">
                 <Link
                   to={`/product/${product.id}`}
+                  state={{ singleProduct: product }}
                   className="text-cyan-400 hover:text-cyan-300 transition-colors flex items-center justify-end"
                 >
                   <span className="inline">Details</span>
@@ -120,7 +90,7 @@ export default function Product() {
           ))}
         </div>
       </div>
-      {productState?.products?.pages > 1 && (
+      {/* {productState?.products?.pages > 1 && (
         <div className="flex justify-center mt-6">
           <ReactPaginate
             breakLabel={"..."}
@@ -138,7 +108,7 @@ export default function Product() {
             disabledLinkClassName="opacity-50 pointer-events-none"
           />
         </div>
-      )}
+      )} */}
     </div>
   );
 }

@@ -5,12 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { createSetting } from "../../redux/slices/billSettingSlice";
 import { Link } from "react-router-dom";
 import Loader from "../../components/Loader";
-import { useEffect } from "react";
 import { billSettingSchema } from "../../validation-schema/validation-schemas";
 
 export default function AddSetting() {
   const dispatch = useDispatch();
-  const { loading, error, success } = useSelector((state) => state.billSetting);
+  const { loading } = useSelector((state) => state.billSetting);
 
   const {
     register,
@@ -24,12 +23,6 @@ export default function AddSetting() {
   const onSubmit = (data) => {
     dispatch(createSetting(data));
   };
-
-  useEffect(() => {
-    if (success) {
-      reset();
-    }
-  }, [success]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black to-gray-900 text-white p-6">
@@ -80,17 +73,6 @@ export default function AddSetting() {
               </button>
             </div>
           </form>
-
-          {error && (
-            <div className="p-3 mt-4 bg-red-900/30 border border-red-500/50 rounded-lg text-center text-red-300">
-              {error}
-            </div>
-          )}
-          {success && (
-            <div className="m-3 p-3 bg-green-900/30 border border-green-500/50 rounded-lg text-center text-green-300">
-              {success}
-            </div>
-          )}
         </div>
       </div>
     </div>

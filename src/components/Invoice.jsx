@@ -232,7 +232,7 @@ const Invoice = ({ data, setting }) => {
           </View>
           <View style={styles.infoColumn}>
             <Text style={styles.infoTitle}>DATE ISSUED</Text>
-            <Text style={styles.infoValue}>{formatDate(data.createdAt)}</Text>
+            <Text style={styles.infoValue}>{formatDate(data?.createdAt)}</Text>
           </View>
         </View>
 
@@ -459,29 +459,38 @@ const Invoice = ({ data, setting }) => {
               <Text style={styles.wordsAmount}>
                 Amount in words: {amountInWords}
               </Text>
+              {data.type == "Open Sell" ? (
+                <></>
+              ) : (
+                <>
+                  <View style={{ ...styles.summaryRow, marginTop: 15 }}>
+                    <Text style={styles.summaryLabel}>PAYMENT STATUS</Text>
+                    <Text
+                      style={{
+                        ...styles.summaryValue,
+                        color: data?.paid ? "#10b981" : "#ef4444",
+                      }}
+                    >
+                      {data?.paid ? "PAID" : "UNPAID"}
+                    </Text>
+                  </View>
 
-              <View style={{ ...styles.summaryRow, marginTop: 15 }}>
-                <Text style={styles.summaryLabel}>PAYMENT STATUS</Text>
-                <Text
-                  style={{
-                    ...styles.summaryValue,
-                    color: data?.paid ? "#10b981" : "#ef4444",
-                  }}
-                >
-                  {data?.paid ? "PAID" : "UNPAID"}
-                </Text>
-              </View>
-
-              <View style={styles.summaryRow}>
-                <Text style={styles.summaryLabel}>PREVIOUS BALANCE</Text>
-                <Text style={styles.summaryValue}>rs {data?.prevBalance}</Text>
-              </View>
-              <View style={styles.summaryRow}>
-                <Text style={styles.summaryLabel}>CURRENT BALANCE</Text>
-                <Text style={{ ...styles.summaryValue, fontWeight: "bold" }}>
-                  rs {data?.runningBalance}
-                </Text>
-              </View>
+                  <View style={styles.summaryRow}>
+                    <Text style={styles.summaryLabel}>PREVIOUS BALANCE</Text>
+                    <Text style={styles.summaryValue}>
+                      rs {data?.prevBalance}
+                    </Text>
+                  </View>
+                  <View style={styles.summaryRow}>
+                    <Text style={styles.summaryLabel}>CURRENT BALANCE</Text>
+                    <Text
+                      style={{ ...styles.summaryValue, fontWeight: "bold" }}
+                    >
+                      rs {data?.runningBalance}
+                    </Text>
+                  </View>
+                </>
+              )}
             </View>
           </>
         )}

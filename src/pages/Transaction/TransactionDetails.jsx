@@ -1,14 +1,12 @@
 import { ArrowLeft } from "lucide-react";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import Loader from "../../components/Loader";
 import { formatDate, printInvoice } from "../../config/helperFunctions";
 import Invoice from "../../components/Invoice";
-import { fetchSetting } from "../../redux/slices/billSettingSlice";
 
 export default function TransactionDetail() {
-  const dispatch = useDispatch();
   const billingState = useSelector((state) => state.billing);
   const { setting } = useSelector((state) => state.billSetting);
   const { state } = useLocation();
@@ -21,10 +19,6 @@ export default function TransactionDetail() {
     "Buy",
     "Sell",
   ].includes(transaction?.type);
-
-  useEffect(() => {
-    if (!setting) dispatch(fetchSetting());
-  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black to-gray-900 text-white p-6">
@@ -47,12 +41,7 @@ export default function TransactionDetail() {
           </h2>
           <button
             onClick={() =>
-              printInvoice(
-                <Invoice
-                  data={billingState?.singletransaction}
-                  setting={setting}
-                />
-              )
+              printInvoice(<Invoice data={transaction} setting={setting} />)
             }
           >
             Print

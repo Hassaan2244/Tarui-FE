@@ -16,7 +16,7 @@ export const createSetting = createAsyncThunk(
     }
 );
 
-// Update Bill Setting (no need for ID, backend uses req.user.id)
+// Update Bill Setting
 export const updateSetting = createAsyncThunk(
     "setting/update",
     async ({ icon, name, email, phone, address, id }, { rejectWithValue }) => {

@@ -6,7 +6,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Loader from "../../components/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { updateProduct } from "../../redux/slices/productSlice";
+import {
+  clearProductState,
+  updateProduct,
+} from "../../redux/slices/productSlice";
+import { toast } from "react-toastify";
 
 export default function EditProduct() {
   const dispatch = useDispatch();
@@ -35,10 +39,16 @@ export default function EditProduct() {
 
   useEffect(() => {
     if (success) {
+      dispatch(clearProductState());
+      toast.success(success);
       reset();
       navigate("/product");
     }
-  }, [success]);
+    if (error) {
+      toast.error(error);
+      dispatch(clearProductState());
+    }
+  }, [success, error]);
 
   if (!state?.product) {
     return (
@@ -130,17 +140,6 @@ export default function EditProduct() {
               </button>
             </div>
           </form>
-
-          {error && (
-            <div className="p-3 bg-red-900/30 border border-red-500/50 rounded-lg text-center text-red-300">
-              {error}
-            </div>
-          )}
-          {success && (
-            <div className="m-3 p-3 bg-green-900/30 border border-green-500/50 rounded-lg text-center text-green-300">
-              {success}
-            </div>
-          )}
         </div>
       </div>
     </div>

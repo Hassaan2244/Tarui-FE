@@ -8,12 +8,9 @@ import {
   clearBillingState,
   createTransaction,
 } from "../../redux/slices/billingSlice";
-import { fetchProducts } from "../../redux/slices/productSlice";
 import { transactionSchema } from "../../validation-schema/validation-schemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Invoice from "../../components/Invoice";
-import { pdf } from "@react-pdf/renderer";
-import { fetchSetting } from "../../redux/slices/billSettingSlice";
 import { printInvoice } from "../../config/helperFunctions";
 
 export default function Transaction() {
@@ -39,11 +36,6 @@ export default function Transaction() {
   const billingState = useSelector((state) => state.billing);
   const { setting } = useSelector((state) => state.billSetting);
   const products = productState?.products?.data || [];
-
-  useEffect(() => {
-    dispatch(fetchProducts({}));
-    if (!setting) dispatch(fetchSetting());
-  }, []);
 
   const transactionType = watch("type");
   const selectedProductId = watch("product");
