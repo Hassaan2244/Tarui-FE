@@ -35,7 +35,7 @@ export default function TransactionDetail() {
           </Link>
         </div>
 
-        <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-xl p-6 shadow-xl space-y-4">
+        <div className=" backdrop-blur-md border border-white/20 rounded-xl p-6 shadow-xl space-y-4">
           <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
             Transaction Detail
           </h2>
