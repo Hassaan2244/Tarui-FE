@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../config/api";
-import { createBreakageTransaction, createOpenSellTransaction } from "./billingSlice";
+import { createBreakageTransaction, createOpenSellTransaction, createTransaction } from "./billingSlice";
 
 export const createProduct = createAsyncThunk(
     "product/create",
@@ -145,6 +145,29 @@ const productSlice = createSlice({
                 }
             })
 
+            .addCase(createTransaction.fulfilled, (state, action) => {
+                const transaction = action.payload?.data;
+                const type = transaction?.type;
+                const usedProducts = transaction?.selectedProducts || [];
+
+                if (state.products?.data && type) {
+                    usedProducts.forEach((used) => {
+                        const index = state.products.data.findIndex((p) => p.id === used.id);
+                        if (index !== -1) {
+                            if (["Buy", "Return-In"].includes(type)) {
+                                // Increase qty
+                                state.products.data[index].qty += used.quantity;
+                            } else if (["Sell", "Open Sell", "Return-Out"].includes(type)) {
+                                // Decrease qty
+                                state.products.data[index].qty -= used.quantity;
+                                if (state.products.data[index].qty < 0) {
+                                    state.products.data[index].qty = 0;
+                                }
+                            }
+                        }
+                    });
+                }
+            })
     },
 });
 

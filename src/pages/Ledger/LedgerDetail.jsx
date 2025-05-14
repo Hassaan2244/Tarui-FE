@@ -9,7 +9,6 @@ import TransactionList from "../Transaction/TransactionList";
 export default function LedgerDetail() {
   const { id } = useParams();
   const { state } = useLocation();
-  console.log(state);
   const { singleLedger } = state || {};
   const ledgerState = useSelector((state) => state.ledger);
 

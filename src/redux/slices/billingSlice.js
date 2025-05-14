@@ -85,7 +85,6 @@ const billingSlice = createSlice({
                 state.loading = false;
                 state.success = action.payload?.message;
                 state.singletransaction = action.payload?.data;
-                console.log(action.payload)
             })
             .addCase(createTransaction.rejected, (state, action) => {
                 state.loading = false;
@@ -102,7 +101,6 @@ const billingSlice = createSlice({
                 state.loading = false;
                 state.success = action.payload?.message;
                 state.singletransaction = action.payload?.data;
-                console.log(action.payload)
             })
             .addCase(createOpenSellTransaction.rejected, (state, action) => {
                 state.loading = false;
