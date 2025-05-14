@@ -1,16 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, Save } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { ledgerSchema } from "../../validation-schema/validation-schemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Loader from "../../components/Loader";
 import { useDispatch, useSelector } from "react-redux";
-import { createLedger } from "../../redux/slices/ledgerSlice";
+import { clearLedgerState, createLedger } from "../../redux/slices/ledgerSlice";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 export default function AddLedger() {
   const dispatch = useDispatch();
   const { loading, error, success } = useSelector((state) => state.ledger);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -27,9 +29,16 @@ export default function AddLedger() {
 
   useEffect(() => {
     if (success) {
+      dispatch(clearLedgerState());
+      toast.success(success);
       reset();
+      navigate("/ledger");
     }
-  }, [success]);
+    if (error) {
+      toast.error(error);
+      dispatch(clearLedgerState());
+    }
+  }, [success, error]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black to-gray-900 text-white p-6">
@@ -95,16 +104,6 @@ export default function AddLedger() {
               </button>
             </div>
           </form>
-          {error && (
-            <div className="p-3 bg-red-900/30 border border-red-500/50 rounded-lg text-center text-red-300">
-              {error}
-            </div>
-          )}
-          {success && (
-            <div className="m-3 p-3 bg-green-900/30 border border-green-500/50 rounded-lg text-center text-green-300">
-              {success}
-            </div>
-          )}
         </div>
       </div>
     </div>
