@@ -269,7 +269,7 @@ const Invoice = ({ data, setting }) => {
                     color: "#2563eb",
                   }}
                 >
-                  rs {data?.amount}
+                  RS {data?.amount}
                 </Text>
               </View>
             </View>
@@ -308,7 +308,7 @@ const Invoice = ({ data, setting }) => {
                     textAlign: "right",
                   }}
                 >
-                  rs {data?.prevBalance}
+                  RS {data?.prevBalance}
                 </Text>
               </View>
               <View style={styles.tableRow}>
@@ -324,7 +324,7 @@ const Invoice = ({ data, setting }) => {
                       data?.type === "Credit Amount" ? "#10b981" : "#ef4444",
                   }}
                 >
-                  {data?.type === "Credit Amount" ? "+" : "-"}rs {data?.amount}
+                  {data?.type === "Credit Amount" ? "+" : "-"}RS {data?.amount}
                 </Text>
               </View>
               <View style={styles.tableRow}>
@@ -345,7 +345,7 @@ const Invoice = ({ data, setting }) => {
                     fontWeight: "bold",
                   }}
                 >
-                  rs {data?.runningBalance}
+                  RS {data?.runningBalance}
                 </Text>
               </View>
             </View>
@@ -428,10 +428,10 @@ const Invoice = ({ data, setting }) => {
                     {p.quantity}
                   </Text>
                   <Text style={{ ...styles.tableCell, ...styles.rateCell }}>
-                    rs {p.price}
+                    RS {p.price}
                   </Text>
                   <Text style={{ ...styles.tableCell, ...styles.totalCell }}>
-                    rs {p.total}
+                    RS {p.total}
                   </Text>
                 </View>
               ))}
@@ -441,7 +441,7 @@ const Invoice = ({ data, setting }) => {
             <View style={styles.summary}>
               <View style={styles.summaryRow}>
                 <Text style={styles.summaryLabel}>SUBTOTAL</Text>
-                <Text style={styles.summaryValue}>rs {data?.amount}</Text>
+                <Text style={styles.summaryValue}>RS {data?.amount}</Text>
               </View>
               <View
                 style={{
@@ -454,7 +454,7 @@ const Invoice = ({ data, setting }) => {
                 <Text style={{ ...styles.summaryLabel, fontWeight: "bold" }}>
                   TOTAL
                 </Text>
-                <Text style={styles.totalAmount}>rs {data?.amount}</Text>
+                <Text style={styles.totalAmount}>RS {data?.amount}</Text>
               </View>
               <Text style={styles.wordsAmount}>
                 Amount in words: {amountInWords}
@@ -478,7 +478,7 @@ const Invoice = ({ data, setting }) => {
                   <View style={styles.summaryRow}>
                     <Text style={styles.summaryLabel}>PREVIOUS BALANCE</Text>
                     <Text style={styles.summaryValue}>
-                      rs {data?.prevBalance}
+                      RS {data?.prevBalance}
                     </Text>
                   </View>
                   <View style={styles.summaryRow}>
@@ -486,7 +486,7 @@ const Invoice = ({ data, setting }) => {
                     <Text
                       style={{ ...styles.summaryValue, fontWeight: "bold" }}
                     >
-                      rs {data?.runningBalance}
+                      RS {data?.runningBalance}
                     </Text>
                   </View>
                 </>

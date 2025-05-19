@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { CircleArrowLeft, ArrowRight, Trash2 } from "lucide-react";
+import { CircleArrowLeft, ArrowRight, Trash2, PlusCircle } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -67,7 +67,10 @@ export default function Transaction() {
     const isBuy = transactionType === "Buy";
     const isReturnIn = transactionType === "Return-In";
 
-    if (!selectedProductId || !quantity || !price) return;
+    if (!selectedProductId || !quantity || !price) {
+      setAddproductErrors("Please select a product, it's quantity and price!");
+      return;
+    }
 
     const product = products.find((p) => p.id === parseInt(selectedProductId));
     if (!product) return;
@@ -78,6 +81,11 @@ export default function Transaction() {
     }
 
     const parsedQuantity = Number(quantity);
+
+    if (!Number.isInteger(parsedQuantity) || parsedQuantity <= 0) {
+      setAddproductErrors("Quantity must be a positive whole number.");
+      return;
+    }
 
     if (
       !isBuy &&
@@ -142,16 +150,26 @@ export default function Transaction() {
     <div className="relative min-h-screen bg-gradient-to-br from-black to-gray-900 text-white flex items-center justify-center p-6">
       {billingState?.loading && <Loader />}
 
-      <Link
-        to={`/ledger/${singleLedger?.id}`}
-        state={{ singleLedger }}
-        className="absolute top-8 left-8 flex items-center text-cyan-400 hover:text-cyan-300 transition-all group"
-      >
-        <CircleArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
-        <span>Back to Ledger</span>
-      </Link>
+      <div className="absolute top-8 left-8 flex items-center justify-between w-full px-10">
+        <Link
+          to={`/ledger/${singleLedger?.id}`}
+          state={{ singleLedger }}
+          className="flex items-center text-cyan-400 hover:text-cyan-300 transition-all group"
+        >
+          <CircleArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
+          <span>Back to Ledger</span>
+        </Link>
 
-      <div className="bg-white/5 backdrop-blur-md border-white/20 rounded-2xl p-8 shadow-2xl space-y-6 w-full max-w-5xl mt-10">
+        <Link
+          to="/product/add"
+          className="px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-cyan-500/30 flex items-center justify-center"
+        >
+          <PlusCircle className="w-5 h-5 mr-2" />
+          <span>Add New Product</span>
+        </Link>
+      </div>
+
+      <div className="bg-white/5 backdrop-blur-md border-white/20 rounded-2xl p-4 shadow-2xl space-y-6 w-full max-w-5xl mt-16">
         <div className="text-center">
           <h2 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent p-2">
             Create Transaction
@@ -218,6 +236,7 @@ export default function Transaction() {
                 <input
                   type="number"
                   min="1"
+                  step="1"
                   placeholder="Quantity"
                   {...register("quantity")}
                   className="col-span-1 w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/30 text-white placeholder-gray-400 transition-all outline-none"

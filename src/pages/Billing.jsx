@@ -57,6 +57,11 @@ export default function Billing() {
     }
 
     const parsedQuantity = Number(quantity);
+    if (!Number.isInteger(parsedQuantity) || parsedQuantity <= 0) {
+      setAddProductError("Quantity must be a positive whole number.");
+      return;
+    }
+
     const parsedPrice = Number(price);
 
     if (parsedQuantity > product.qty || parsedQuantity < 1) {

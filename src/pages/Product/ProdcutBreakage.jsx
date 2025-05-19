@@ -67,6 +67,12 @@ export default function ProdcutBreakage() {
     }
 
     const parsedQuantity = Number(quantity);
+
+    if (!Number.isInteger(parsedQuantity) || parsedQuantity <= 0) {
+      setAddproductErrors("Quantity must be a positive whole number.");
+      return;
+    }
+
     if (parsedQuantity > product.qty || parsedQuantity < 1) {
       setAddproductErrors(
         `Quantity must be between 1 and available stock (${product.qty})`

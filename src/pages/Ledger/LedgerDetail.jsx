@@ -14,7 +14,7 @@ export default function LedgerDetail() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black to-gray-900 text-white p-6">
-      {ledgerState?.loading && <Loader />}
+      {true && <Loader />}
       <div className="flex items-center justify-between flex-wrap gap-4 mb-4">
         <Link
           to="/ledger"

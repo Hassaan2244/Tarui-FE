@@ -40,13 +40,7 @@ export default function TransactionDetail() {
           <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
             Transaction Detail
           </h2>
-          <button
-            onClick={() =>
-              printInvoice(<Invoice data={transaction} setting={setting} />)
-            }
-          >
-            Print
-          </button>
+
           <div className="text-gray-300 space-y-2">
             <div>
               <strong>Type:</strong> {transaction?.type}
@@ -83,7 +77,14 @@ export default function TransactionDetail() {
               </div>
             )}
           </div>
-
+          <button
+            className="mt-4 md:mt-0 md:ml-4  px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-cyan-500/30 flex items-center justify-center"
+            onClick={() =>
+              printInvoice(<Invoice data={transaction} setting={setting} />)
+            }
+          >
+            Print
+          </button>
           {showProductTable && transaction?.selectedProducts?.length > 0 && (
             <div className="mt-4">
               <h3 className="text-lg font-semibold mb-2">Products</h3>
