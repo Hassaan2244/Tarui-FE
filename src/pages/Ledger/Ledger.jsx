@@ -78,10 +78,10 @@ export default function Ledger() {
               Ledger Name
             </div>
             <div className="hidden lg:block lg:col-span-8 text-center">
-              Description
+              Description{" "}
             </div>
             <div className="hidden md:block md:col-span-4 lg:col-span-1">
-              Last Updated
+              Current Balance
             </div>
             <div className="col-span-6 md:col-span-4 lg:col-span-1 text-right">
               Actions
@@ -102,7 +102,7 @@ export default function Ledger() {
                 {ledger.description}
               </div>
               <div className="hidden md:block md:col-span-4 lg:col-span-1 text-sm text-gray-400">
-                {formatDate(ledger.updatedAt)}
+                {ledger.latestBalance}
               </div>
               <div className="col-span-6 md:col-span-4 lg:col-span-1 text-right">
                 <Link

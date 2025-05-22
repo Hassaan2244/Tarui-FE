@@ -54,7 +54,7 @@ export default function ProdcutBreakage() {
   const handleAddProduct = useCallback(() => {
     setAddproductErrors(null);
     if (!selectedProductId || !quantity) {
-      setAddproductErrors("Please select a product and it's quantity!");
+      ("Please select a product and it's quantity!");
       return;
     }
 
@@ -205,12 +205,6 @@ export default function ProdcutBreakage() {
                   </button>
                 </div>
               ))}
-              <div className="flex justify-between items-center bg-white/20 p-3 rounded-lg border border-cyan-400/30">
-                <p className="font-semibold text-cyan-300">Total</p>
-                <p className="font-bold text-lg">
-                  {selectedProducts.reduce((sum, p) => sum + p.total, 0)} rs
-                </p>
-              </div>
             </div>
           )}
 

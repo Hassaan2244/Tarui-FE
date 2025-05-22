@@ -103,7 +103,7 @@ export default function TransactionList({ id = "", singleLedger = {} }) {
               <div className="md:text-center">
                 <span className="md:hidden text-gray-400">Description:</span>
                 <div className="text-white wrap-break-word">
-                  {transaction.description}
+                  {transaction.description || "N/A"}
                 </div>
               </div>
 
