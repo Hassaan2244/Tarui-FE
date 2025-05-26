@@ -1,10 +1,15 @@
 import { CircleArrowLeft } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
+import DashboardStats from "../components/Dashboard/DashboardStats";
+import RecentTransactions from "../components/Dashboard/RecentTransactions";
+import LowQuantityProducts from "../components/Dashboard/LowQuantityProducts";
+import PayInOut from "../components/Dashboard/PayInOut";
 
 export default function Dashboard() {
   return (
-    <div className=" relatve min-h-screen bg-gradient-to-br from-black to-gray-900 text-white flex flex-col justify-center items-center relative p-6">
+    <div className="relative min-h-screen bg-gradient-to-br from-black to-gray-900 text-white p-6">
+      {/* Back to Home */}
       <Link
         to="/"
         className="absolute top-8 left-8 flex items-center text-cyan-400 hover:text-cyan-300 transition-opacity opacity-80 hover:opacity-100"
@@ -12,9 +17,32 @@ export default function Dashboard() {
         <CircleArrowLeft className="w-5 h-5 mr-2" />
         <span>Go to home</span>
       </Link>
-      <h1 className="text-3xl font-bold text-center text-cyan-400 drop-shadow-lg">
+
+      {/* Page Title */}
+      <h1 className="text-3xl font-bold text-center text-cyan-400 drop-shadow-lg mb-6">
         Dashboard
       </h1>
+
+      {/* Top Stats Section */}
+      <DashboardStats />
+
+      {/* Main Grid Section: Transactions & Inventory */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8 items-stretch">
+        {/* Left: Transactions (2 cols) */}
+        <div className="lg:col-span-2 h-full">
+          <RecentTransactions />
+        </div>
+
+        {/* Right: Low Inventory */}
+        <div className="lg:col-span-1 h-full">
+          <LowQuantityProducts />
+        </div>
+      </div>
+
+      {/* Pay In / Pay Out Section (side-by-side and matching height) */}
+      <div className="mt-8">
+        <PayInOut />
+      </div>
     </div>
   );
 }
