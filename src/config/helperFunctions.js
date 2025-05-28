@@ -90,17 +90,23 @@ export const printInvoice = async (invoiceComponent, filenamePrefix = "invoice")
         link.href = url;
         link.download = `${filenamePrefix}-${Date.now()}.pdf`;
         link.click();
+        link.remove();
 
-        const printWindow = window.open(url, "_blank");
-        if (printWindow) {
-            printWindow.onload = () => {
-                printWindow.focus();
-                printWindow.print();
-            };
-        }
+        setTimeout(() => {
+            const printWindow = window.open(url, "_blank");
+            if (printWindow) {
+                printWindow.onload = () => {
+                    printWindow.focus();
+                    printWindow.print();
+                };
+            }
+        }, 500);
 
         // Cleanup
-        URL.revokeObjectURL(url);
+        setTimeout(() => {
+            URL.revokeObjectURL(url);
+        }, 2000);
+
     } catch (error) {
         console.error("Failed to generate and print invoice:", error);
     }

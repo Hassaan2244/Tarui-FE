@@ -9,13 +9,14 @@ export default function ProductDetail() {
   const productState = useSelector((state) => state.product);
   const { state } = useLocation();
   const { singleProduct } = state;
+  const from = state?.from;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black to-gray-900 text-white p-6">
       {productState?.loading && <Loader />}
       <div className="flex items-center mb-8">
         <Link
-          to="/product"
+          to={from || "/product"}
           className="flex items-center text-cyan-400 hover:text-cyan-300 transition-all group mr-6"
         >
           <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />

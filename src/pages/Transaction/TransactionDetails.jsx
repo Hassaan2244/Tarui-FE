@@ -19,6 +19,7 @@ export default function TransactionDetail() {
     "Buy",
     "Sell",
   ].includes(transaction?.type);
+  const from = state?.from;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black to-gray-900 text-white p-6">
@@ -27,7 +28,7 @@ export default function TransactionDetail() {
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <Link
-            to={`/ledger/${transaction.ledgerId}`}
+            to={from || `/ledger/${transaction.ledgerId}`}
             state={{ singleLedger: state.singleLedger }}
             className="flex items-center text-cyan-400 hover:text-cyan-300 transition-all group"
           >
