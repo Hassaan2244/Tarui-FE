@@ -9,6 +9,8 @@ export default function RecentTransactions({ transactions }) {
     "Credit Amount",
     "Open Sell",
   ]);
+
+  console.log(transactions);
   return (
     <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-lg">
       <div className="flex items-center justify-between mb-6">

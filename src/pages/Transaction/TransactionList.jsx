@@ -29,6 +29,9 @@ export default function TransactionList({ id = "", singleLedger = {} }) {
     setCurrentPage(event.selected);
   };
 
+  const creditTypes = ["Credit Amount", "Sell", "Open Sell", "Return-Out"];
+  const debitTypes = ["Debit Amount", "Buy", "Return-In"];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-black to-gray-900 text-white p-6">
       {billingState?.loading && <Loader />}
@@ -52,7 +55,7 @@ export default function TransactionList({ id = "", singleLedger = {} }) {
               type="datetime-local"
               value={startDateTime}
               onChange={(e) => setStartDateTime(e.target.value)}
-              className="bg-white/10 text-white px-3 py-2 rounded-lg border border-white/20"
+              className="bg-white/30 text-white px-3 py-2 rounded-lg border border-white/20"
             />
           </div>
           <div>
@@ -63,67 +66,98 @@ export default function TransactionList({ id = "", singleLedger = {} }) {
               type="datetime-local"
               value={endDateTime}
               onChange={(e) => setEndDateTime(e.target.value)}
-              className="bg-white/10 text-white px-3 py-2 rounded-lg border border-white/20"
+              className="bg-white/30 text-white px-3 py-2 rounded-lg border border-white/20"
             />
           </div>
         </div>
 
         <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden shadow-xl">
-          <div className="hidden md:grid md:grid-cols-5 bg-white/5 border-b border-white/10 p-4 text-gray-400 text-sm font-medium">
-            <div>Transaction Type</div>
-            <div className="text-center">Amount</div>
+          <div className="hidden md:grid md:grid-cols-7 bg-white/5 border-b border-white/10 p-4 text-gray-400 text-sm font-medium">
+            <div>Date</div>
             <div className="text-center">Description</div>
-            <div className="text-center">Date</div>
+            <div className="text-center">Type</div>
+            <div className="text-center">Credit</div>
+            <div className="text-center">Debit</div>
+            <div className="text-center">Paid</div>
             <div className="text-right">Running Balance</div>
           </div>
 
-          {/* Table Rows */}
-          {transactions?.map((transaction) => (
-            <div
-              key={transaction.id}
-              className="flex flex-col md:grid md:grid-cols-5 border-b border-white/10 hover:bg-white/5 p-4 text-sm"
-            >
-              <div>
-                <span className="md:hidden text-gray-400">Type:</span>
-                <Link
-                  to={`/billing/${transaction.id}`}
-                  state={{ transaction, singleLedger }}
-                >
-                  <h3 className="font-semibold text-white">
-                    {transaction.type}
-                  </h3>
-                </Link>
-              </div>
+          {transactions?.map((transaction) => {
+            const isCredit = creditTypes.includes(transaction.type);
+            const isDebit = debitTypes.includes(transaction.type);
 
-              <div className="md:text-center">
-                <span className="md:hidden text-gray-400">Amount:</span>
-                <div className="text-white">{transaction.amount}</div>
-              </div>
+            return (
+              <div
+                key={transaction.id}
+                className="flex flex-col md:grid md:grid-cols-7 border-b border-white/10 hover:bg-white/5 p-4 text-sm"
+              >
+                <div>
+                  <span className="md:hidden text-gray-400">Date:</span>
+                  <Link
+                    to={`/billing/${transaction.id}`}
+                    state={{ transaction, singleLedger }}
+                  >
+                    <div className="text-white">
+                      {formatDate(transaction.createdAt)}
+                    </div>
+                  </Link>
+                </div>
 
-              <div className="md:text-center">
-                <span className="md:hidden text-gray-400">Description:</span>
-                <div className="text-white wrap-break-word">
-                  {transaction.description || "N/A"}
+                <div className="md:text-center">
+                  <span className="md:hidden text-gray-400">Description:</span>
+                  <div className="text-white break-words">
+                    {transaction.description || "N/A"}
+                  </div>
+                </div>
+
+                <div className="md:text-center">
+                  <span className="md:hidden text-gray-400">Type:</span>
+                  <Link
+                    to={`/billing/${transaction.id}`}
+                    state={{ transaction, singleLedger }}
+                  >
+                    <h3 className="font-semibold text-white">
+                      {transaction.type}
+                    </h3>
+                  </Link>
+                </div>
+
+                <div className="md:text-center">
+                  <span className="md:hidden text-gray-400">Credit:</span>
+                  <div className="text-white">
+                    {isCredit
+                      ? Number(transaction.amount).toLocaleString()
+                      : "-"}
+                  </div>
+                </div>
+
+                <div className="md:text-center">
+                  <span className="md:hidden text-gray-400">Debit:</span>
+                  <div className="text-white">
+                    {isDebit
+                      ? Number(transaction.amount).toLocaleString()
+                      : "-"}
+                  </div>
+                </div>
+
+                <div className="md:text-center">
+                  <span className="md:hidden text-gray-400">Paid:</span>
+                  <div className="text-white">
+                    {transaction.paid ? "Yes" : "No"}
+                  </div>
+                </div>
+
+                <div className="text-right md:text-right mt-2 md:mt-0">
+                  <span className="md:hidden block text-gray-400">
+                    Running Balance:
+                  </span>
+                  <div className="text-white">
+                    {Number(transaction.runningBalance || 0).toLocaleString()}
+                  </div>
                 </div>
               </div>
-
-              <div className="md:text-center">
-                <span className="md:hidden text-gray-400">Date:</span>
-                <div className="text-white">
-                  {formatDate(transaction.createdAt)}
-                </div>
-              </div>
-
-              <div className="text-right mt-2 md:mt-0">
-                <span className="md:hidden block text-gray-400">
-                  Running Balance:
-                </span>
-                <div className="text-white">
-                  {transaction.runningBalance ?? "0.00"}
-                </div>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
