@@ -109,6 +109,7 @@ export default function Billing() {
       ...data,
       type: "Open Sell",
       selectedProducts,
+      paid: true,
     };
 
     dispatch(createOpenSellTransaction(payload));

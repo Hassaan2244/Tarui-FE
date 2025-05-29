@@ -5,6 +5,7 @@ import { formatDate } from "../../config/helperFunctions";
 import Loader from "../../components/Loader";
 import { ArrowLeft, EditIcon } from "lucide-react";
 import TransactionList from "../Transaction/TransactionList";
+import LedgerDownloadModal from "../../components/DownloadLedgerModal";
 
 export default function LedgerDetail() {
   const { id } = useParams();
@@ -23,6 +24,8 @@ export default function LedgerDetail() {
           <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
           <span>Back</span>
         </Link>
+
+        <LedgerDownloadModal ledgerId={singleLedger.id} />
 
         <Link
           to={`/billing/add`}
