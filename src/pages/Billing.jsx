@@ -9,8 +9,9 @@ import {
   createOpenSellTransaction,
 } from "../redux/slices/billingSlice";
 import { transactionSchema } from "../validation-schema/validation-schemas";
-import { printInvoice } from "../config/helperFunctions";
-import Invoice from "../components/Invoice";
+import { printReceiptViaQZ } from "../config/helperFunctions";
+// import { printInvoice } from "../config/helperFunctions";
+// import Invoice from "../components/Invoice";
 import { toast } from "react-toastify";
 
 export default function Billing() {
@@ -121,9 +122,10 @@ export default function Billing() {
       setSelectedProducts([]);
       reset();
       dispatch(clearBillingState());
-      printInvoice(
-        <Invoice data={billingState?.singletransaction} setting={setting} />
-      );
+      printReceiptViaQZ(billingState?.singletransaction, setting);
+      // printInvoice(
+      //   <Invoice data={billingState?.singletransaction} setting={setting} />
+      // );
     }
     if (billingState.error) {
       toast.error(billingState.error);
