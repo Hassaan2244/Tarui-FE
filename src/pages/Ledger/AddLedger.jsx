@@ -79,13 +79,13 @@ export default function AddLedger() {
 
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Description
+                Customer Detail
               </label>
               <textarea
                 {...register("description")}
                 rows={4}
                 className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/30 text-white placeholder-gray-400 transition-all outline-none"
-                placeholder="Briefly describe this ledger's purpose..."
+                placeholder="Customer's Address And Phone Number"
               />
               {errors.description && (
                 <p className="mt-1 text-sm text-pink-400">

@@ -210,8 +210,8 @@ export default function Billing() {
                     <p className="font-semibold mb-2">{p.name}</p>
                     <p className="mb-2 text-gray-300">{p.description}</p>
                     <p className="text-sm text-gray-300">
-                      {p.quantity} units × {p.price.toLocaleString()} rs ={" "}
-                      {p.total.toLocaleString()} rs
+                      {p.quantity} units × {p.price.toLocaleString()} Rs ={" "}
+                      {p.total.toLocaleString()} Rs
                     </p>
                   </div>
                   <button
@@ -226,7 +226,7 @@ export default function Billing() {
               <div className="flex justify-between items-center bg-white/20 p-3 rounded-lg border border-cyan-400/30">
                 <p className="font-semibold text-cyan-300">Total</p>
                 <p className="font-bold text-lg">
-                  {selectedProducts.reduce((sum, p) => sum + p.total, 0)} rs
+                  {selectedProducts.reduce((sum, p) => sum + p.total, 0).toLocaleString()} Rs
                 </p>
               </div>
             </div>
@@ -234,7 +234,7 @@ export default function Billing() {
 
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
-              Description
+              Customer Details
             </label>
             <textarea
               {...register("description")}

@@ -191,11 +191,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const Invoice = ({ data, setting }) => {
+const Invoice = ({ ledgerDetail, data, setting }) => {
   const products = data?.selectedProducts || [];
   const isAmountType =
     data?.type === "Credit Amount" || data?.type === "Debit Amount";
   const amountInWords = numberToWords(parseFloat(data?.amount || 0));
+
+  function formatWithCommas(number) {
+    return Number(number).toLocaleString("en-US");
+  }
 
   return (
     <Document>
@@ -219,29 +223,31 @@ const Invoice = ({ data, setting }) => {
         {/* Invoice Info */}
         <View style={styles.infoContainer}>
           <View style={styles.infoColumn}>
-            <Text style={styles.infoTitle}>INVOICE TO</Text>
+            <Text style={styles.infoTitle}>Invoice To</Text>
             <Text style={styles.infoValue}>
-              Customer Ledger #{data?.ledgerId}
+              Customer Ledger No {data?.ledgerId}
             </Text>
           </View>
           <View style={styles.infoColumn}>
-            <Text style={styles.infoTitle}>INVOICE NUMBER</Text>
-            <Text style={styles.infoValue}>#{data?.id}</Text>
-            <Text style={styles.infoTitle}>INVOICE TYPE</Text>
-            <Text style={styles.infoValue}>{data?.type}</Text>
+            <Text>
+              Invoice Number: <Text style={styles.infoValue}>{data?.id}</Text>
+            </Text>
+            <Text>
+              Invoice Type: <Text style={styles.infoValue}>{data?.type}</Text>
+            </Text>
           </View>
           <View style={styles.infoColumn}>
-            <Text style={styles.infoTitle}>DATE ISSUED</Text>
+            <Text style={styles.infoTitle}>Date Issued</Text>
             <Text style={styles.infoValue}>{formatDate(data?.createdAt)}</Text>
           </View>
         </View>
 
         {/* Description */}
-        {data?.description && (
+        {ledgerDetail?.description && (
           <View>
-            <Text style={styles.infoTitle}>DESCRIPTION</Text>
+            <Text style={styles.infoTitle}>Customer Detail</Text>
             <Text style={{ ...styles.infoValue, marginBottom: 15 }}>
-              {data.description}
+              {ledgerDetail?.description}
             </Text>
           </View>
         )}
@@ -257,11 +263,11 @@ const Invoice = ({ data, setting }) => {
               }}
             >
               <View style={{ width: "60%" }}>
-                <Text style={styles.infoTitle}>AMOUNT IN WORDS</Text>
+                <Text style={styles.infoTitle}>Amount In Words</Text>
                 <Text style={styles.infoValue}>{amountInWords}</Text>
               </View>
               <View style={{ width: "40%", alignItems: "flex-end" }}>
-                <Text style={styles.infoTitle}>AMOUNT</Text>
+                <Text style={styles.infoTitle}>Amount</Text>
                 <Text
                   style={{
                     ...styles.infoValue,
@@ -269,7 +275,7 @@ const Invoice = ({ data, setting }) => {
                     color: "#2563eb",
                   }}
                 >
-                  RS {data?.amount}
+                  Rs {data?.amount}
                 </Text>
               </View>
             </View>
@@ -284,7 +290,7 @@ const Invoice = ({ data, setting }) => {
                     width: "50%",
                   }}
                 >
-                  BALANCE DETAILS
+                  Balance Details
                 </Text>
                 <Text
                   style={{
@@ -294,7 +300,7 @@ const Invoice = ({ data, setting }) => {
                     textAlign: "right",
                   }}
                 >
-                  AMOUNT
+                  Amount
                 </Text>
               </View>
               <View style={styles.tableRow}>
@@ -308,7 +314,7 @@ const Invoice = ({ data, setting }) => {
                     textAlign: "right",
                   }}
                 >
-                  RS {data?.prevBalance}
+                  Rs {data?.prevBalance}
                 </Text>
               </View>
               <View style={styles.tableRow}>
@@ -324,7 +330,7 @@ const Invoice = ({ data, setting }) => {
                       data?.type === "Credit Amount" ? "#10b981" : "#ef4444",
                   }}
                 >
-                  {data?.type === "Credit Amount" ? "+" : "-"}RS {data?.amount}
+                  {data?.type === "Credit Amount" ? "+" : "-"}Rs {data?.amount}
                 </Text>
               </View>
               <View style={styles.tableRow}>
@@ -345,7 +351,7 @@ const Invoice = ({ data, setting }) => {
                     fontWeight: "bold",
                   }}
                 >
-                  RS {data?.runningBalance}
+                  Rs {data?.runningBalance}
                 </Text>
               </View>
             </View>
@@ -372,7 +378,7 @@ const Invoice = ({ data, setting }) => {
                     ...styles.productCell,
                   }}
                 >
-                  PRODUCT
+                  Product
                 </Text>
                 <Text
                   style={{
@@ -381,7 +387,7 @@ const Invoice = ({ data, setting }) => {
                     ...styles.descCell,
                   }}
                 >
-                  DESCRIPTION
+                  Description
                 </Text>
                 <Text
                   style={{
@@ -390,7 +396,7 @@ const Invoice = ({ data, setting }) => {
                     ...styles.qtyCell,
                   }}
                 >
-                  QTY
+                  Qty
                 </Text>
                 <Text
                   style={{
@@ -399,7 +405,7 @@ const Invoice = ({ data, setting }) => {
                     ...styles.rateCell,
                   }}
                 >
-                  RATE
+                  Rate
                 </Text>
                 <Text
                   style={{
@@ -408,7 +414,7 @@ const Invoice = ({ data, setting }) => {
                     ...styles.totalCell,
                   }}
                 >
-                  TOTAL
+                  Total
                 </Text>
               </View>
 
@@ -428,10 +434,10 @@ const Invoice = ({ data, setting }) => {
                     {p.quantity}
                   </Text>
                   <Text style={{ ...styles.tableCell, ...styles.rateCell }}>
-                    RS {p.price}
+                    Rs {formatWithCommas(p.price)}
                   </Text>
                   <Text style={{ ...styles.tableCell, ...styles.totalCell }}>
-                    RS {p.total}
+                    Rs {formatWithCommas(p.total)}
                   </Text>
                 </View>
               ))}
@@ -440,8 +446,10 @@ const Invoice = ({ data, setting }) => {
             {/* Summary */}
             <View style={styles.summary}>
               <View style={styles.summaryRow}>
-                <Text style={styles.summaryLabel}>SUBTOTAL</Text>
-                <Text style={styles.summaryValue}>RS {data?.amount}</Text>
+                <Text style={styles.summaryLabel}>Subtotal</Text>
+                <Text style={styles.summaryValue}>
+                  Rs {formatWithCommas(data?.amount)}
+                </Text>
               </View>
               <View
                 style={{
@@ -452,9 +460,11 @@ const Invoice = ({ data, setting }) => {
                 }}
               >
                 <Text style={{ ...styles.summaryLabel, fontWeight: "bold" }}>
-                  TOTAL
+                  Total
                 </Text>
-                <Text style={styles.totalAmount}>RS {data?.amount}</Text>
+                <Text style={styles.totalAmount}>
+                  Rs {formatWithCommas(data?.amount)}
+                </Text>
               </View>
               <Text style={styles.wordsAmount}>
                 Amount in words: {amountInWords}
@@ -464,29 +474,29 @@ const Invoice = ({ data, setting }) => {
               ) : (
                 <>
                   <View style={{ ...styles.summaryRow, marginTop: 15 }}>
-                    <Text style={styles.summaryLabel}>PAYMENT STATUS</Text>
+                    <Text style={styles.summaryLabel}>Payment Status</Text>
                     <Text
                       style={{
                         ...styles.summaryValue,
                         color: data?.paid ? "#10b981" : "#ef4444",
                       }}
                     >
-                      {data?.paid ? "PAID" : "UNPAID"}
+                      {data?.paid ? "Paid" : "Unpaid"}
                     </Text>
                   </View>
 
                   <View style={styles.summaryRow}>
-                    <Text style={styles.summaryLabel}>PREVIOUS BALANCE</Text>
+                    <Text style={styles.summaryLabel}>Previous Balance</Text>
                     <Text style={styles.summaryValue}>
-                      RS {data?.prevBalance}
+                      Rs {formatWithCommas(data?.prevBalance)}
                     </Text>
                   </View>
                   <View style={styles.summaryRow}>
-                    <Text style={styles.summaryLabel}>CURRENT BALANCE</Text>
+                    <Text style={styles.summaryLabel}>Current Balance</Text>
                     <Text
                       style={{ ...styles.summaryValue, fontWeight: "bold" }}
                     >
-                      RS {data?.runningBalance}
+                      Rs {formatWithCommas(data?.runningBalance)}
                     </Text>
                   </View>
                 </>
@@ -503,7 +513,7 @@ const Invoice = ({ data, setting }) => {
 
         {/* Notes */}
         <View style={styles.notesSection}>
-          <Text style={styles.notesTitle}>THANK YOU FOR YOUR BUSINESS</Text>
+          <Text style={styles.notesTitle}>Thank You For Your Business</Text>
           <Text style={styles.notesText}>
             If you have any questions about this invoice, please contact us
             using the information provided at the top of this document.
@@ -513,9 +523,9 @@ const Invoice = ({ data, setting }) => {
         {/* Footer */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>
-            {setting?.name} • Invoice #{data?.id}
+            {setting?.name} • Invoice # {data?.id}
           </Text>
-          <Text style={styles.footerText}>Page 1 of 1</Text>
+          {/* <Text  style={styles.footerText}>Page 1 of 1</Text> */}
         </View>
       </Page>
     </Document>

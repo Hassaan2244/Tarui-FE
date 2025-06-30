@@ -135,7 +135,7 @@ export default function Transaction() {
       reset();
       setSelectedProducts([]);
       printInvoice(
-        <Invoice data={billingState?.singletransaction} setting={setting} />
+        <Invoice ledgerDetail={singleLedger} data={billingState?.singletransaction} setting={setting} />
       );
     }
     dispatch(clearBillingState());
@@ -292,8 +292,8 @@ export default function Transaction() {
                           <p className="font-semibold mb-2">{p.name}</p>
                           <p className="mb-2 text-gray-300">{p.description}</p>
                           <p className="text-sm text-gray-300">
-                            {p.quantity} units × {p.price.toLocaleString()} rs ={" "}
-                            {p.total.toLocaleString()} rs
+                            {p.quantity} units × {p.price.toLocaleString()} Rs ={" "}
+                            {p.total.toLocaleString()} Rs
                           </p>
                         </div>
                         <button
@@ -313,7 +313,7 @@ export default function Transaction() {
                         {selectedProducts
                           .reduce((sum, p) => sum + p.total, 0)
                           .toLocaleString()}{" "}
-                        rs
+                        Rs
                       </p>
                     </div>
                   </div>

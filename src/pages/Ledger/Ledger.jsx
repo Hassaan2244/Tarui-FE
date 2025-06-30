@@ -78,7 +78,7 @@ export default function Ledger() {
               Ledger Name
             </div>
             <div className="hidden lg:block lg:col-span-8 text-center">
-              Description{" "}
+              Customer Detail{" "}
             </div>
             <div className="hidden md:block md:col-span-4 lg:col-span-1">
               Current Balance
