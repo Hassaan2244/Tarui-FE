@@ -59,8 +59,8 @@ const styles = StyleSheet.create({
   infoContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    borderTop: "1px solid #e5e7eb",
-    borderBottom: "1px solid #e5e7eb",
+    borderTop: "1px solid black",
+    borderBottom: "1px solid black",
     paddingVertical: 15,
     marginBottom: 30,
   },
@@ -86,14 +86,15 @@ const styles = StyleSheet.create({
   },
   tableHeader: {
     flexDirection: "row",
-    backgroundColor: "#f1f5f9",
+    backgroundColor: "black",
+    color: "#FFFFFF",
     borderTopLeftRadius: 4,
     borderTopRightRadius: 4,
-    borderBottom: "1px solid #e5e7eb",
+    borderBottom: "1px solid black",
   },
   tableRow: {
     flexDirection: "row",
-    borderBottom: "1px solid #e5e7eb",
+    borderBottom: "1px solid black",
     paddingVertical: 2,
   },
   tableCell: {
@@ -108,7 +109,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 10,
     fontWeight: "bold",
-    color: "#4b5563",
+    color: "white",
   },
 
   // Summary Styles
@@ -140,7 +141,7 @@ const styles = StyleSheet.create({
   // Notes Section
   notesSection: {
     marginTop: 30,
-    borderTop: "1px solid #e5e7eb",
+    borderTop: "1px solid black",
     paddingTop: 10,
   },
   notesTitle: {
@@ -161,7 +162,7 @@ const styles = StyleSheet.create({
     left: 40,
     right: 40,
     paddingTop: 10,
-    borderTop: "1px solid #e5e7eb",
+    borderTop: "1px solid black",
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
     width: "30%",
   },
   signatureLine: {
-    borderBottom: "1px solid #9ca3af",
+    borderBottom: "1px solid black",
     marginBottom: 5,
   },
   signatureText: {
@@ -456,7 +457,7 @@ const Invoice = ({ ledgerDetail, data, setting }) => {
                   ...styles.summaryRow,
                   marginTop: 5,
                   paddingTop: 5,
-                  borderTop: "1px solid #e5e7eb",
+                  borderTop: "1px solid black",
                 }}
               >
                 <Text style={{ ...styles.summaryLabel, fontWeight: "bold" }}>
