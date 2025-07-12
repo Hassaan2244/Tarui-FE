@@ -115,7 +115,7 @@ export const printInvoice = async (invoiceComponent, filenamePrefix = "invoice")
 };
 
 export const printReceiptViaQZ = (data, setting) => {
-  const RECEIPT_WIDTH = 300;
+  const RECEIPT_WIDTH = 280; // Narrow width
 
   const formatAmount = (num) =>
     Number(num).toLocaleString("en-PK", { maximumFractionDigits: 0 });
@@ -123,10 +123,10 @@ export const printReceiptViaQZ = (data, setting) => {
   const formatLine = (sr, name, qty, price, total) => `
     <tr>
       <td style="width:10%;text-align:left;">${sr}</td>
-      <td style="width:32%;text-align:left;word-wrap:break-word;white-space:normal;">${name}</td>
+      <td style="width:34%;text-align:left;word-wrap:break-word;white-space:normal;">${name}</td>
       <td style="width:10%;text-align:center;">${qty}</td>
-      <td style="width:24%;text-align:center;">${formatAmount(price)}</td>
-      <td style="width:24%;text-align:right;">${formatAmount(total)}</td>
+      <td style="width:23%;text-align:right;">${formatAmount(price)}</td>
+      <td style="width:23%;text-align:right;">${formatAmount(total)}</td>
     </tr>
   `;
 
@@ -146,30 +146,38 @@ export const printReceiptViaQZ = (data, setting) => {
           }
           body {
             font-family: monospace;
+            font-size: 11px;
+            line-height: 1.3;
             display: inline-block;
             margin: 0;
             padding: 0;
           }
           .receipt {
             width: ${RECEIPT_WIDTH}px;
+            padding: 4px 0;
           }
           h2, p {
             text-align: center;
-            margin: 4px 0;
+            margin: 2px 0;
           }
           table {
             width: 100%;
             border-collapse: collapse;
             table-layout: fixed;
+            font-size: 10px; /* Smaller table font */
+            line-height: 1.2; /* More breathing room */
           }
           th, td {
-            padding: 4px 2px;
-            word-wrap: break-word;
+            padding: 2px 0;
+            vertical-align: top;
           }
           hr {
             border: none;
             border-top: 1px dashed #000;
             margin: 4px 0;
+          }
+          .totals td {
+            padding: 2px 0;
           }
         </style>
       </head>
@@ -177,42 +185,63 @@ export const printReceiptViaQZ = (data, setting) => {
         <div class="receipt">
           <h2>${setting.name}</h2>
           <p>${setting.address}</p>
-          <p>Phone: ${setting.phone}</p>
+          <p>Ph No.: ${setting.phone}</p>
+          <p>Email: ${setting.email || ""}</p>
           <hr>
-          <p>Customer Details: ${data.description}</p>
-          <p>Invoice Type: ${data.type}</p>
-          <p>Date: ${new Date(data.createdAt).toLocaleString()}</p>
+          <p style="text-align:left;">Cash Sale</p>
+          <table>
+            <tr>
+              <td style="text-align:left;">Date:</td>
+              <td style="text-align:left;">${new Date(data.createdAt).toLocaleDateString()}</td>
+            </tr>
+            <tr>
+              <td style="text-align:left;">Invoice Type:</td>
+              <td style="text-align:left;">${data.type}</td>
+            </tr>
+          </table>
+
           <hr>
           <table>
             <thead>
               <tr>
-                <th style="width:10%;text-align:left;">SN</th>
-                <th style="width:32%;text-align:left;">Name</th>
+                <th style="width:10%;text-align:left;">#</th>
+                <th style="width:34%;text-align:left;">Name</th>
                 <th style="width:10%;text-align:center;">Qty</th>
-                <th style="width:24%;text-align:center;">Price</th>
-                <th style="width:24%;text-align:right;">Total</th>
+                <th style="width:23%;text-align:right;">Price</th>
+                <th style="width:23%;text-align:right;">Amount</th>
               </tr>
-              <tr>
-                <td colspan="5"><hr></td>
-              </tr>
+              <tr><td colspan="5"><hr></td></tr>
             </thead>
             <tbody>
               ${data.selectedProducts.map((item, index) =>
-    formatLine(index + 1, item.name, item.quantity, item.price, item.total)
-  ).join("")}
+                formatLine(
+                  index + 1,
+                  item.name,
+                  item.quantity,
+                  item.price,
+                  item.total
+                )
+              ).join("")}
+
             </tbody>
           </table>
           <hr>
-          <table>
+          <table class="totals">
             <tr>
-              <td colspan="3" style="text-align:left;"><strong>Total Paid</strong></td>
-              <td colspan="2" style="text-align:right; white-space:nowrap;">
-                <strong>Rs ${formatAmount(data.amount)}</strong>
-              </td>
+              <td colspan="3" style="text-align:left;">Total</td>
+              <td colspan="2" style="text-align:right;">${formatAmount(data.amount)}</td>
+            </tr>
+            <tr>
+              <td colspan="3" style="text-align:left;">Received</td>
+              <td colspan="2" style="text-align:right;">${formatAmount(data.amount)}</td>
+            </tr>
+            <tr>
+              <td colspan="3" style="text-align:left;">Balance</td>
+              <td colspan="2" style="text-align:right;">0.00</td>
             </tr>
           </table>
           <hr>
-          <p>Thank you for your purchase!</p>
+          <p style="text-align:center; padding-bottom: 10px; padding-top: 10px;">Thank you for your purchase!</p>
         </div>
         <script>
           window.onload = function() {
@@ -232,7 +261,5 @@ export const printReceiptViaQZ = (data, setting) => {
   } else {
     alert("Popup blocked! Please allow popups for this site.");
   }
-};
-
-
+};  
 
