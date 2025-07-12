@@ -98,11 +98,11 @@ export default function Home() {
                   Login
                 </button>
               </Link>
-              <Link to={"/signup"}>
+              {/* <Link to={"/signup"}>
                 <button className="mt-6 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-cyan-500/30">
                   Signup
                 </button>
-              </Link>
+              </Link> */}
             </>
           )}
         </div>

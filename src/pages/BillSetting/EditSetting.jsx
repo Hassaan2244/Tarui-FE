@@ -14,7 +14,6 @@ export default function EditSetting() {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(billSettingSchema),

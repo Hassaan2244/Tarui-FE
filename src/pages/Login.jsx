@@ -92,7 +92,7 @@ export default function Login() {
             {error}
           </div>
         )}
-        <div className="text-center text-sm text-gray-400">
+        {/* <div className="text-center text-sm text-gray-400">
           Nawa'n aya'n ay sohneya?{"  "}
           <Link
             to="/signup"
@@ -100,7 +100,7 @@ export default function Login() {
           >
             Sign up
           </Link>
-        </div>
+        </div> */}
       </div>
     </div>
   );

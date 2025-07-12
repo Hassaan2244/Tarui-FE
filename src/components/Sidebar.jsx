@@ -3,7 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/slices/authSlice";
 import { useEffect } from "react";
 import { fetchProducts } from "../redux/slices/productSlice";
-import { fetchSetting } from "../redux/slices/billSettingSlice";
+import {
+  clearSettingState,
+  fetchSetting,
+} from "../redux/slices/billSettingSlice";
+import { toast } from "react-toastify";
 
 export default function Sidebar() {
   const dispatch = useDispatch();
@@ -11,16 +15,29 @@ export default function Sidebar() {
 
   const productState = useSelector((state) => state.product);
   const products = productState.products?.data;
-  const { setting } = useSelector((state) => state.billSetting);
+  const state = useSelector((state) => state.billSetting);
+
+  useEffect(() => {
+    if (state.success) {
+      dispatch(clearSettingState());
+      toast.success(state?.success);
+    }
+    if (state.error) {
+      toast.error(state?.error);
+      dispatch(clearSettingState());
+    }
+  }, [state.success, state.error]);
 
   useEffect(() => {
     if (!products?.length > 0) dispatch(fetchProducts({}));
-    if (!setting) dispatch(fetchSetting());
+    if (!state?.setting) dispatch(fetchSetting());
   }, []);
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/");
+    setTimeout(() => {
+      navigate("/");
+    }, 1500);
   };
   const { token } = useSelector((state) => state.auth);
 
