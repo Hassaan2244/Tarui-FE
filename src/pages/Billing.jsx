@@ -23,6 +23,7 @@ export default function Billing() {
   const billingState = useSelector((state) => state.billing);
   const products = productState?.products?.data || [];
   const { setting } = useSelector((state) => state.billSetting);
+  const preparedByOptions = setting?.preparedBy || [];
 
   const {
     register,
@@ -226,7 +227,10 @@ export default function Billing() {
               <div className="flex justify-between items-center bg-white/20 p-3 rounded-lg border border-cyan-400/30">
                 <p className="font-semibold text-cyan-300">Total</p>
                 <p className="font-bold text-lg">
-                  {selectedProducts.reduce((sum, p) => sum + p.total, 0).toLocaleString()} Rs
+                  {selectedProducts
+                    .reduce((sum, p) => sum + p.total, 0)
+                    .toLocaleString()}{" "}
+                  Rs
                 </p>
               </div>
             </div>
@@ -245,6 +249,28 @@ export default function Billing() {
             {errors.description && (
               <p className="text-pink-400 text-sm">
                 {errors.description.message}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              Prepared By <span className="text-pink-400">*</span>
+            </label>
+            <select
+              {...register("preparedBy")}
+              className="w-full px-4 py-3 rounded-lg bg-black/40 text-white border border-white/10 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/30 appearance-none transition-all outline-none"
+            >
+              <option value="">Select Preparer</option>
+              {preparedByOptions.map((name, index) => (
+                <option key={index} value={name} className="text-black">
+                  {name}
+                </option>
+              ))}
+            </select>
+            {errors.preparedBy && (
+              <p className="mt-1 text-sm text-pink-400">
+                {errors.preparedBy.message}
               </p>
             )}
           </div>

@@ -107,6 +107,7 @@ export const transactionSchema = Yup.object().shape({
     }),
     paid: Yup.boolean().optional(),
     description: Yup.string().nullable(),
+    preparedBy: Yup.string().required("Enter the preparers name please!"),
 });
 
 
@@ -116,4 +117,8 @@ export const billSettingSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email is required"),
     phone: Yup.string().required("Phone is required"),
     address: Yup.string().required("Address is required"),
+    preparedBy: Yup
+        .array()
+        .of(Yup.string().required("Name is required"))
+        .min(1, "At least one preparer is required"),
 });

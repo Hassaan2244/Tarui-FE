@@ -1,5 +1,5 @@
 import { Save, ArrowLeft } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useDispatch, useSelector } from "react-redux";
 import { updateSetting } from "../../redux/slices/billSettingSlice";
@@ -14,11 +14,21 @@ export default function EditSetting() {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(billSettingSchema),
-    defaultValues: setting,
+    defaultValues: {
+      ...setting,
+      preparedBy: setting?.preparedBy || [""],
+    },
   });
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "preparedBy",
+  });
+
 
   const onSubmit = (data) => {
     dispatch(updateSetting({ ...data }));
@@ -62,6 +72,44 @@ export default function EditSetting() {
                 )}
               </div>
             ))}
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Prepared By
+              </label>
+
+              {fields.map((item, index) => (
+                <div key={item.id} className="flex items-center space-x-2 mb-2">
+                  <input
+                    type="text"
+                    {...register(`preparedBy.${index}`)}
+                    className="flex-1 px-4 py-2 rounded-lg bg-white/5 border border-white/10 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/30 text-white placeholder-gray-400 transition-all outline-none"
+                    placeholder={`Name #${index + 1}`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => remove(index)}
+                    className="text-red-400 hover:text-red-300 text-sm"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+
+              <button
+                type="button"
+                onClick={() => append("")}
+                className="text-cyan-400 mt-2 hover:text-cyan-300 text-sm"
+              >
+                + Add Another
+              </button>
+
+              {errors.preparedBy && (
+                <p className="mt-1 text-sm text-pink-400">
+                  {errors.preparedBy.message}
+                </p>
+              )}
+            </div>
 
             <div className="flex justify-end pt-4 border-t border-white/10">
               <button

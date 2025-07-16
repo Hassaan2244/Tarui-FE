@@ -65,6 +65,9 @@ export default function TransactionDetail() {
             <div>
               <strong>Running Balance:</strong> {transaction?.runningBalance}
             </div>
+            <div>
+              <strong>Prepared by:</strong> {transaction?.preparedBy || "N/A"}
+            </div>
             {[
               "Credit Amount",
               "Debit Amount",
