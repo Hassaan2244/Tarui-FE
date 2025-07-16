@@ -42,6 +42,35 @@ export const fetchSingleLedger = createAsyncThunk(
     }
 );
 
+export const updateLedger = createAsyncThunk(
+    "ledger/update",
+    async ({ id, name, description }, { rejectWithValue }) => {
+        try {
+            const res = await api.patch(`/api/ledger/${id}`, { name, description });
+            return res.data;
+        } catch (err) {
+            return rejectWithValue(
+                err.response?.data?.message ||
+                err.response?.message ||
+                "An error occurred"
+            );
+        }
+    }
+);
+
+export const deleteLedger = createAsyncThunk(
+    "ledger/delete",
+    async (id, { rejectWithValue }) => {
+        try {
+            const response = await api.delete(`/api/ledger/${id}`);
+            return response.data;
+        } catch (err) {
+            return rejectWithValue(err.response?.data?.message || "An error occurred");
+        }
+    }
+);
+  
+
 const ledgerSlice = createSlice({
     name: "ledger",
     initialState: {
@@ -107,7 +136,38 @@ const ledgerSlice = createSlice({
             .addCase(fetchSingleLedger.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
+            })
+            
+            // update ledger
+            .addCase(updateLedger.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+                state.success = null;
+            })
+            .addCase(updateLedger.fulfilled, (state, action) => {
+                state.loading = false;
+                state.success = action.payload?.message;
+            })
+            .addCase(updateLedger.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+              })
+
+
+            // Delete Ledger
+            .addCase(deleteLedger.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(deleteLedger.fulfilled, (state, action) => {
+                state.loading = false;
+                state.success = action.payload?.message;
+            })
+            .addCase(deleteLedger.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
             });
+  
     },
 });
 

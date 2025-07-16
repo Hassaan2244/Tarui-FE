@@ -19,6 +19,8 @@ export default function Dashboard() {
     totalNegativeBalance,
     loading,
   } = useSelector((state) => state.stats);
+  const productState = useSelector((state) => state.product);
+  const state = useSelector((state) => state.billSetting);
 
   useEffect(() => {
     dispatch(getStats());
@@ -26,7 +28,7 @@ export default function Dashboard() {
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-black to-gray-900 text-white p-6">
-      {loading && <Loader />}
+      {(loading || state.loading || productState.loading) && <Loader />}
       <h1 className="text-3xl font-bold text-center text-cyan-400 drop-shadow-lg mb-6">
         Dashboard
       </h1>

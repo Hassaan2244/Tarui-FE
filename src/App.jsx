@@ -20,6 +20,7 @@ import ProdcutBreakage from "./pages/Product/ProdcutBreakage";
 import BillSetting from "./pages/BillSetting";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import EditLedger from "./pages/Ledger/EditLedger";
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
             <Route path="/ledger" element={<Ledger />} />
             <Route path="/ledger/add" element={<AddLedger />} />
             <Route path="/ledger/:id" element={<LedgerDetail />} />
+            <Route path="/ledger/edit" element={<EditLedger />} />
 
             {/** Product routes */}
             <Route path="/product" element={<Products />} />
