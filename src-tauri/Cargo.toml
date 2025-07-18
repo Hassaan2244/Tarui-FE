@@ -1,9 +1,9 @@
 [package]
-name = "my-app"
+name = "POS_by_Marsols"
 version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
-edition = "2021"
+description = "A modern Point-of-Sale (POS) application with comprehensive ledger management, built using Tauri for a lightweight desktop experience, React for an intuitive frontend, and Node.js for a powerful backend — seamlessly deployed via Vercel."
+authors = ["Zunair Saeed"]
+edition = "2024"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
