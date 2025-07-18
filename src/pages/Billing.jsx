@@ -10,8 +10,6 @@ import {
 } from "../redux/slices/billingSlice";
 import { transactionSchema } from "../validation-schema/validation-schemas";
 import { printReceiptViaQZ } from "../config/helperFunctions";
-// import { printInvoice } from "../config/helperFunctions";
-// import Invoice from "../components/Invoice";
 import { toast } from "react-toastify";
 import Select from "react-select";
 import { Controller } from "react-hook-form";
@@ -127,9 +125,6 @@ export default function Billing() {
       reset();
       dispatch(clearBillingState());
       printReceiptViaQZ(billingState?.singletransaction, setting);
-      // printInvoice(
-      //   <Invoice data={billingState?.singletransaction} setting={setting} />
-      // );
     }
     if (billingState.error) {
       toast.error(billingState.error);

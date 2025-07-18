@@ -69,12 +69,13 @@ const styles = StyleSheet.create({
   },
   infoTitle: {
     fontSize: 10,
-    color: "#6b7280",
+    color: "black",
     marginBottom: 4,
   },
   infoValue: {
     fontSize: 11,
     fontWeight: "bold",
+    color: "#6b7280",
   },
 
   // Table Styles
@@ -235,6 +236,10 @@ const Invoice = ({ ledgerDetail, data, setting }) => {
             </Text>
             <Text>
               Invoice Type: <Text style={styles.infoValue}>{data?.type}</Text>
+            </Text>
+            <Text style={styles.infoTitle}>
+              Prepared By:{" "}
+              <Text style={styles.infoValue}>{data?.preparedBy}</Text>
             </Text>
           </View>
           <View style={styles.infoColumn}>

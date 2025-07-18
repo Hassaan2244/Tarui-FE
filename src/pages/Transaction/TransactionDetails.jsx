@@ -3,7 +3,11 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import Loader from "../../components/Loader";
-import { formatDate, printInvoice } from "../../config/helperFunctions";
+import {
+  formatDate,
+  printInvoice,
+  printReceiptViaQZ,
+} from "../../config/helperFunctions";
 import Invoice from "../../components/Invoice";
 
 export default function TransactionDetail() {
@@ -82,14 +86,29 @@ export default function TransactionDetail() {
               </div>
             )}
           </div>
-          <button
-            className="mt-4 md:mt-0 md:ml-4  px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-cyan-500/30 flex items-center justify-center"
-            onClick={() =>
-              printInvoice(<Invoice ledgerDetail={singleLedger} data={transaction} setting={setting} />)
-            }
-          >
-            Print
-          </button>
+          {transaction?.type !== "Open Sell" ? (
+            <button
+              className="mt-4 md:mt-0 md:ml-4  px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-cyan-500/30 flex items-center justify-center"
+              onClick={() =>
+                printInvoice(
+                  <Invoice
+                    ledgerDetail={singleLedger}
+                    data={transaction}
+                    setting={setting}
+                  />
+                )
+              }
+            >
+              Print
+            </button>
+          ) : (
+            <button
+              className="mt-4 md:mt-0 md:ml-4  px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-cyan-500/30 flex items-center justify-center"
+              onClick={() => printReceiptViaQZ(transaction, setting)}
+            >
+              Thermal Print
+            </button>
+          )}
           {showProductTable && transaction?.selectedProducts?.length > 0 && (
             <div className="mt-4">
               <h3 className="text-lg font-semibold mb-2">Products</h3>

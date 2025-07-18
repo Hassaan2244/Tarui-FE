@@ -122,11 +122,11 @@ export const printReceiptViaQZ = (data, setting) => {
 
   const formatLine = (sr, name, qty, price, total) => `
     <tr>
-      <td style="width:10%;text-align:left;">${sr}</td>
-      <td style="width:34%;text-align:left;word-wrap:break-word;white-space:normal;">${name}</td>
-      <td style="width:10%;text-align:center;">${qty}</td>
-      <td style="width:23%;text-align:right;">${formatAmount(price)}</td>
-      <td style="width:23%;text-align:right;">${formatAmount(total)}</td>
+      <td class="cell sr">${sr}</td>
+      <td class="cell name">${name}</td>
+      <td class="cell qty">${qty}</td>
+      <td class="cell price">${formatAmount(price)}</td>
+      <td class="cell total">${formatAmount(total)}</td>
     </tr>
   `;
 
@@ -144,40 +144,68 @@ export const printReceiptViaQZ = (data, setting) => {
               padding: 0;
             }
           }
+
           body {
             font-family: monospace;
             font-size: 11px;
-            line-height: 1.3;
-            display: inline-block;
+            line-height: 1.4;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
           }
+
           .receipt {
             width: ${RECEIPT_WIDTH}px;
-            padding: 4px 0;
+            margin: 0 auto;
+            padding: 6px 8px;
+            box-sizing: border-box;
           }
+
           h2, p {
             text-align: center;
             margin: 2px 0;
           }
+
           table {
             width: 100%;
             border-collapse: collapse;
             table-layout: fixed;
-            font-size: 10px; /* Smaller table font */
-            line-height: 1.2; /* More breathing room */
+            font-size: 10px;
           }
+
           th, td {
             padding: 2px 0;
+            word-wrap: break-word;
+            box-sizing: border-box;
+          }
+
+          .cell {
+            padding: 2px 4px;
             vertical-align: top;
           }
+
+          .sr { width: 8%; text-align: left; }
+          .name { width: 36%; text-align: left; word-wrap: break-word; white-space: normal; }
+          .qty { width: 10%; text-align: center; }
+          .price { width: 23%; text-align: center; }
+          .total { width: 23%; text-align: right; }
+
+          .totals td {
+            font-weight: bold;
+            padding: 3px 4px;
+          }
+
           hr {
             border: none;
             border-top: 1px dashed #000;
-            margin: 4px 0;
+            margin: 6px 0;
           }
-          .totals td {
-            padding: 2px 0;
+
+          .thankyou {
+            text-align: center;
+            padding: 10px 0 5px;
+            font-weight: bold;
+            font-size: 11px;
           }
         </style>
       </head>
@@ -186,62 +214,54 @@ export const printReceiptViaQZ = (data, setting) => {
           <h2>${setting.name}</h2>
           <p>${setting.address}</p>
           <p>Ph No.: ${setting.phone}</p>
-          <p>Email: ${setting.email || ""}</p>
+          ${setting.email ? `<p>Email: ${setting.email}</p>` : ""}
           <hr>
-          <p style="text-align:left;">Cash Sale</p>
+          <p style="text-align:center;">Cash Sale</p>
           <table>
             <tr>
-              <td style="text-align:left;">Date:</td>
-              <td style="text-align:left;">${new Date(data.createdAt).toLocaleDateString()}</td>
+              <td>Date:</td>
+              <td>${new Date(data.createdAt).toLocaleDateString()}</td>
             </tr>
             <tr>
-              <td style="text-align:left;">Invoice Type:</td>
-              <td style="text-align:left;">${data.type}</td>
+              <td>Invoice Type:</td>
+              <td>${data.type}</td>
             </tr>
           </table>
-
           <hr>
           <table>
             <thead>
               <tr>
-                <th style="width:10%;text-align:left;">#</th>
-                <th style="width:34%;text-align:left;">Name</th>
-                <th style="width:10%;text-align:center;">Qty</th>
-                <th style="width:23%;text-align:right;">Price</th>
-                <th style="width:23%;text-align:right;">Amount</th>
+                <th class="sr">#</th>
+                <th class="name">Name</th>
+                <th class="qty">Qty</th>
+                <th class="price">Price</th>
+                <th class="total">Amount</th>
               </tr>
               <tr><td colspan="5"><hr></td></tr>
             </thead>
             <tbody>
               ${data.selectedProducts.map((item, index) =>
-                formatLine(
-                  index + 1,
-                  item.name,
-                  item.quantity,
-                  item.price,
-                  item.total
-                )
+                formatLine(index + 1, item.name, item.quantity, item.price, item.total)
               ).join("")}
-
             </tbody>
           </table>
           <hr>
           <table class="totals">
             <tr>
-              <td colspan="3" style="text-align:left;">Total</td>
+              <td colspan="3">Total</td>
               <td colspan="2" style="text-align:right;">${formatAmount(data.amount)}</td>
             </tr>
             <tr>
-              <td colspan="3" style="text-align:left;">Received</td>
+              <td colspan="3">Received</td>
               <td colspan="2" style="text-align:right;">${formatAmount(data.amount)}</td>
             </tr>
             <tr>
-              <td colspan="3" style="text-align:left;">Balance</td>
+              <td colspan="3">Balance</td>
               <td colspan="2" style="text-align:right;">0.00</td>
             </tr>
           </table>
           <hr>
-          <p style="text-align:center; padding-bottom: 10px; padding-top: 10px;">Thank you for your purchase!</p>
+          <p class="thankyou">Thank you for your purchase!</p>
         </div>
         <script>
           window.onload = function() {
@@ -261,5 +281,6 @@ export const printReceiptViaQZ = (data, setting) => {
   } else {
     alert("Popup blocked! Please allow popups for this site.");
   }
-};  
+};
+ 
 
