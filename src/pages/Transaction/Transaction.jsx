@@ -12,6 +12,9 @@ import { transactionSchema } from "../../validation-schema/validation-schemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Invoice from "../../components/Invoice";
 import { printInvoice } from "../../config/helperFunctions";
+import Select from "react-select";
+import { Controller } from "react-hook-form";
+
 
 export default function Transaction() {
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -24,6 +27,7 @@ export default function Transaction() {
     watch,
     reset,
     resetField,
+    control,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(transactionSchema),
@@ -116,7 +120,7 @@ export default function Transaction() {
 
     setSelectedProducts((prev) => [...prev, newProduct]);
 
-    resetField("product");
+    resetField("product", { defaultValue: "" });
     resetField("quantity");
     if (!isBreakage) {
       resetField("price");
@@ -217,22 +221,70 @@ export default function Transaction() {
             transactionType === "Return-In") && (
             <>
               <div className="grid grid-cols-4 gap-4 items-end">
-                <select
-                  {...register("product")}
-                  className="col-span-2 w-full px-4 py-3 rounded-lg bg-black/40 text-white border border-white/10 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/30 placeholder-gray-400 transition-all outline-none appearance-none"
-                >
-                  <option value="">Select Product</option>
-                  {availableProducts.map((product) => (
-                    <option
-                      key={product.id}
-                      value={product.id}
-                      className="text-black"
-                    >
-                      {product.name} - {product.description} (Qty: {product.qty}
-                      )
-                    </option>
-                  ))}
-                </select>
+                <Controller
+                  control={control}
+                  name="product"
+                  render={({ field }) => {
+                    const options = availableProducts.map((product) => ({
+                      value: product.id,
+                      label: `${product.name} - ${product.description} (Qty: ${product.qty})`,
+                    }));
+
+                    const selectedOption = options.find(
+                      (opt) => opt.value === field.value
+                    );
+
+                    return (
+                      <Select
+                        {...field}
+                        options={options}
+                        value={selectedOption || null}
+                        placeholder="Search & select product"
+                        isSearchable
+                        onChange={(selected) => field.onChange(selected?.value)}
+                        classNamePrefix="react-select"
+                        className="col-span-2"
+                        styles={{
+                          control: (base, state) => ({
+                            ...base,
+                            backgroundColor: "rgba(0,0,0,0.4)",
+                            borderColor: state.isFocused
+                              ? "rgba(34,211,238,0.5)"
+                              : "rgba(255,255,255,0.1)",
+                            boxShadow: state.isFocused
+                              ? "0 0 0 1px rgba(34,211,238,0.3)"
+                              : "none",
+                            padding: "2px",
+                            color: "white",
+                            borderRadius: "0.5rem",
+                          }),
+                          singleValue: (base) => ({
+                            ...base,
+                            color: "white",
+                          }),
+                          menu: (base) => ({
+                            ...base,
+                            backgroundColor: "white",
+                            color: "black",
+                            zIndex: 20,
+                          }),
+                          option: (base, state) => ({
+                            ...base,
+                            backgroundColor: state.isFocused
+                              ? "#bae6fd"
+                              : "white",
+                            color: "black",
+                            cursor: "pointer",
+                          }),
+                          placeholder: (base) => ({
+                            ...base,
+                            color: "#9ca3af",
+                          }),
+                        }}
+                      />
+                    );
+                  }}
+                />
 
                 <input
                   type="number"
