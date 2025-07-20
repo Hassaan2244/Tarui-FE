@@ -226,6 +226,10 @@ export const printReceiptViaQZ = (data, setting) => {
               <td>Invoice Type:</td>
               <td>${data.type}</td>
             </tr>
+            <tr>
+              <td>Prepared By:</td>
+              <td>${data.preparedBy}</td>
+            </tr>
           </table>
           <hr>
           <table>
