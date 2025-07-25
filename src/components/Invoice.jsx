@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     padding: 40,
     fontFamily: "Helvetica",
     fontSize: 10,
-    color: "#333333",
+    color: "black",
   },
 
   // Header Styles
@@ -31,12 +31,12 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
     marginBottom: 4,
-    color: "#2563eb",
+    color: "black",
   },
   companyInfo: {
     fontSize: 9,
     marginBottom: 3,
-    color: "#555555",
+    color: "black",
   },
   logoContainer: {
     alignItems: "flex-end",
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold",
     marginBottom: 10,
-    color: "#2563eb",
+    color: "black",
     textTransform: "uppercase",
   },
 
@@ -70,12 +70,17 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 10,
     color: "black",
+    fontWeight: "bold",
     marginBottom: 4,
   },
   infoValue: {
     fontSize: 11,
-    fontWeight: "bold",
-    color: "#6b7280",
+    color: "black",
+  },
+  infoRow: {
+    flexDirection: "row",
+    gap: 10,
+    marginBottom: 4,
   },
 
   // Table Styles
@@ -126,7 +131,7 @@ const styles = StyleSheet.create({
   },
   summaryLabel: {
     fontSize: 10,
-    color: "#6b7280",
+    color: "black",
   },
   summaryValue: {
     fontSize: 10,
@@ -136,7 +141,7 @@ const styles = StyleSheet.create({
   totalAmount: {
     fontSize: 14,
     fontWeight: "bold",
-    color: "#2563eb",
+    color: "black",
   },
 
   // Notes Section
@@ -149,11 +154,11 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: "bold",
     marginBottom: 5,
-    color: "#4b5563",
+    color: "black",
   },
   notesText: {
     fontSize: 9,
-    color: "#6b7280",
+    color: "black",
   },
 
   // Footer Styles
@@ -169,7 +174,7 @@ const styles = StyleSheet.create({
   },
   footerText: {
     fontSize: 8,
-    color: "#9ca3af",
+    color: "black",
   },
   signatureSection: {
     marginTop: 40,
@@ -181,7 +186,7 @@ const styles = StyleSheet.create({
   },
   signatureText: {
     fontSize: 9,
-    color: "#6b7280",
+    color: "black",
     textAlign: "center",
   },
 
@@ -189,7 +194,7 @@ const styles = StyleSheet.create({
   wordsAmount: {
     fontSize: 9,
     marginTop: 10,
-    color: "#6b7280",
+    color: "black",
   },
 });
 
@@ -231,16 +236,18 @@ const Invoice = ({ ledgerDetail, data, setting }) => {
             </Text>
           </View>
           <View style={styles.infoColumn}>
-            <Text>
-              Invoice Number: <Text style={styles.infoValue}>{data?.id}</Text>
-            </Text>
-            <Text>
-              Invoice Type: <Text style={styles.infoValue}>{data?.type}</Text>
-            </Text>
-            <Text style={styles.infoTitle}>
-              Prepared By:{" "}
+            <View style={styles.infoRow}>
+              <Text style={styles.infoTitle}>Invoice Number:</Text>
+              <Text style={styles.infoValue}>{data?.id}</Text>
+            </View>
+            <View style={styles.infoRow}>
+              <Text style={styles.infoTitle}>Invoice Type:</Text>
+              <Text style={styles.infoValue}>{data?.type}</Text>
+            </View>
+            <View style={styles.infoRow}>
+              <Text style={styles.infoTitle}>Prepared By:</Text>
               <Text style={styles.infoValue}>{data?.preparedBy}</Text>
-            </Text>
+            </View>
           </View>
           <View style={styles.infoColumn}>
             <Text style={styles.infoTitle}>Date Issued</Text>
@@ -278,7 +285,7 @@ const Invoice = ({ ledgerDetail, data, setting }) => {
                   style={{
                     ...styles.infoValue,
                     fontSize: 20,
-                    color: "#2563eb",
+                    color: "black",
                   }}
                 >
                   Rs {data?.amount}
@@ -484,7 +491,7 @@ const Invoice = ({ ledgerDetail, data, setting }) => {
                     <Text
                       style={{
                         ...styles.summaryValue,
-                        color: data?.paid ? "#10b981" : "#ef4444",
+                        color: "black",
                       }}
                     >
                       {data?.paid ? "Paid" : "Unpaid"}
