@@ -21,7 +21,8 @@ export default function ProdcutBreakage() {
   const productState = useSelector((state) => state.product);
   const billingState = useSelector((state) => state.billing);
   const products = productState.products?.data || [];
-
+  const { setting } = useSelector((state) => state.billSetting);
+  const preparedByOptions = setting?.preparedBy || [];
   const {
     register,
     handleSubmit,
@@ -40,6 +41,7 @@ export default function ProdcutBreakage() {
   const quantity = watch("quantity");
 
   const onSubmit = (data) => {
+  console.log(data)
     if (selectedProducts.length === 0) {
       setAddproductErrors("At least one product must be added.");
       return;
@@ -104,7 +106,7 @@ export default function ProdcutBreakage() {
   const availableProducts = products.filter(
     (p) => !selectedProducts.some((sp) => sp.id === p.id)
   );
-
+console.log(errors)
   useEffect(() => {
     if (billingState.success) {
       setSelectedProducts([]);
@@ -275,11 +277,32 @@ export default function ProdcutBreakage() {
               </p>
             )}
           </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              Prepared By <span className="text-pink-400">*</span>
+            </label>
+            <select
+              {...register("preparedBy")}
+              className="w-full px-4 py-3 rounded-lg bg-black/40 text-white border border-white/10 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/30 appearance-none transition-all outline-none"
+            >
+              <option value="">Select Preparer</option>
+              {preparedByOptions.map((name, index) => (
+                <option key={index} value={name} className="text-black">
+                  {name}
+                </option>
+              ))}
+            </select>
+            {errors.preparedBy && (
+              <p className="mt-1 text-sm text-pink-400">
+                {errors.preparedBy.message}
+              </p>
+            )}
+          </div>
 
           <button
             type="submit"
-            disabled={billingState?.loading}
-            className="w-full py-3 bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-xl flex items-center justify-center"
+            // disabled={billingState?.loading}
+            className="w-full py-3 bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-xl disabled:bg-white flex items-center justify-center"
           >
             <span>Submit Breakage Report</span>
             <ArrowRight className="ml-2 w-4 h-4" />
