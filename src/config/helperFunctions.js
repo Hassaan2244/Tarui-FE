@@ -161,9 +161,17 @@ export const printReceiptViaQZ = (data, setting) => {
             box-sizing: border-box;
           }
 
-          h2, p {
+          h2 {
             text-align: center;
             margin: 2px 0;
+            font-size: 25px;
+
+          }
+            p {
+            text-align: center;
+            margin: 2px 0;
+            font-weight: bold;
+            
           }
 
           table {
