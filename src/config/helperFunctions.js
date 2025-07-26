@@ -182,13 +182,14 @@ export const printReceiptViaQZ = (data, setting) => {
           .cell {
             padding: 2px 4px;
             vertical-align: top;
+            
           }
 
-          .sr { width: 8%; text-align: left; }
-          .name { width: 36%; text-align: left; word-wrap: break-word; white-space: normal; }
-          .qty { width: 10%; text-align: center; }
-          .price { width: 23%; text-align: center; }
-          .total { width: 23%; text-align: right; }
+          .sr { width: 8%; text-align: left; font-weight: bold; }
+          .name { width: 36%; text-align: left; word-wrap: break-word; white-space: normal;font-weight: bold; }
+          .qty { width: 10%; text-align: center; font-weight: bold; }
+          .price { width: 23%; text-align: center; font-weight: bold; }
+          .total { width: 23%; text-align: right; font-weight: bold;}
 
           .totals td {
             font-weight: bold;
