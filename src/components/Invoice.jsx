@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   logo: {
-    height: 70,
+    width: 60,
+    height: 90,
     objectFit: "contain",
   },
 
