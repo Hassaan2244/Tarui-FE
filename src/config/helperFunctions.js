@@ -13,12 +13,12 @@ export const getAuthHeaders = () => {
 
 export function formatDate(dateStr) {
   const date = new Date(dateStr);
-  return date.toLocaleString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
+  return date.toLocaleString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
     hour12: true,
   });
 }
@@ -82,8 +82,10 @@ export const numberToWords = (num) => {
   return inWords(Number(num)) + " Only";
 };
 
-
-export const printInvoice = async (invoiceComponent, filenamePrefix = "invoice") => {
+export const printInvoice = async (
+  invoiceComponent,
+  filenamePrefix = "invoice"
+) => {
   try {
     const blob = await pdf(invoiceComponent).toBlob();
     const url = URL.createObjectURL(blob);
@@ -108,7 +110,6 @@ export const printInvoice = async (invoiceComponent, filenamePrefix = "invoice")
     setTimeout(() => {
       URL.revokeObjectURL(url);
     }, 2000);
-
   } catch (error) {
     console.error("Failed to generate and print invoice:", error);
   }
@@ -148,7 +149,7 @@ export const printReceiptViaQZ = (data, setting) => {
           body {
             font-family: monospace;
             font-size: 11px;
-            line-height: 1.4;
+            line-height: 1.5;
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -163,14 +164,15 @@ export const printReceiptViaQZ = (data, setting) => {
 
           h2 {
             text-align: center;
-            margin: 2px 0;
-            font-size: 25px;
+            margin: 2px 0 4px;
+            font-size: 27px;
 
           }
             p {
             text-align: center;
             margin: 2px 0;
             font-weight: bold;
+            font-size: 12px;
             
           }
 
@@ -178,7 +180,7 @@ export const printReceiptViaQZ = (data, setting) => {
             width: 100%;
             border-collapse: collapse;
             table-layout: fixed;
-            font-size: 10px;
+            font-size: 11px;
           }
 
           th, td {
@@ -200,10 +202,13 @@ export const printReceiptViaQZ = (data, setting) => {
           .total { width: 23%; text-align: right; font-weight: bold;}
 
           .totals td {
+          font-size: 12px;
             font-weight: bold;
             padding: 3px 4px;
           }
-
+            .totals td:last-child {
+                font-size: 14px;          
+}
           hr {
             border: none;
             border-top: 1px dashed #000;
@@ -253,20 +258,32 @@ export const printReceiptViaQZ = (data, setting) => {
               <tr><td colspan="5"><hr></td></tr>
             </thead>
             <tbody>
-              ${data.selectedProducts.map((item, index) =>
-                formatLine(index + 1, item.name, item.quantity, item.price, item.total)
-              ).join("")}
+              ${data.selectedProducts
+                .map((item, index) =>
+                  formatLine(
+                    index + 1,
+                    item.name,
+                    item.quantity,
+                    item.price,
+                    item.total
+                  )
+                )
+                .join("")}
             </tbody>
           </table>
           <hr>
           <table class="totals">
             <tr>
               <td colspan="3">Total</td>
-              <td colspan="2" style="text-align:right;">${formatAmount(data.amount)}</td>
+              <td colspan="2" style="text-align:right;">${formatAmount(
+                data.amount
+              )}</td>
             </tr>
             <tr>
               <td colspan="3">Received</td>
-              <td colspan="2" style="text-align:right;">${formatAmount(data.amount)}</td>
+              <td colspan="2" style="text-align:right;">${formatAmount(
+                data.amount
+              )}</td>
             </tr>
             <tr>
               <td colspan="3">Balance</td>
@@ -295,5 +312,3 @@ export const printReceiptViaQZ = (data, setting) => {
     alert("Popup blocked! Please allow popups for this site.");
   }
 };
- 
-

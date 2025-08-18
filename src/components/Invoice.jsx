@@ -12,38 +12,53 @@ import { formatDate, numberToWords } from "../config/helperFunctions";
 
 const styles = StyleSheet.create({
   page: {
-    padding: 40,
+    // padding: 40,
+    paddingTop: 15,
+    paddingHorizontal: 30,
+    paddingBottom: 30,
     fontFamily: "Helvetica",
     fontSize: 10,
     color: "black",
   },
 
   // Header Styles
+  // headerContainer: {
+  //   flexDirection: "column",
+  //   alignItems: "center",
+  //   justifyContent: "space-between",
+  //   // marginBottom: 30,
+  // },
   headerContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 30,
-  },
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "flex-start", 
+  marginBottom: 5,            
+},
   companyDetails: {
-    maxWidth: "60%",
+    maxWidth: "100%",
+    alignItems: "center",
   },
+
   companyName: {
     fontSize: 22,
     fontWeight: "bold",
     marginBottom: 4,
     color: "black",
+  
   },
   companyInfo: {
     fontSize: 9,
     marginBottom: 3,
     color: "black",
+
   },
   logoContainer: {
-    alignItems: "flex-end",
+    alignItems: "center",
+    marginBottom: 3, 
   },
   logo: {
-    width: 60,
-    height: 90,
+    width: 120,
+    height: 170,
     objectFit: "contain",
   },
 
@@ -60,7 +75,8 @@ const styles = StyleSheet.create({
   infoContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    borderTop: "1px solid black",
+    // borderTop: "1px solid black",
+    marginTop: 15,
     borderBottom: "1px solid black",
     paddingVertical: 15,
     marginBottom: 30,
@@ -214,19 +230,19 @@ const Invoice = ({ ledgerDetail, data, setting }) => {
       <Page style={styles.page}>
         {/* Header Section */}
         <View style={styles.headerContainer}>
+          <View style={styles.logoContainer}>
+            <Image style={styles.logo} source={setting?.icon} />
+          </View>
           <View style={styles.companyDetails}>
             <Text style={styles.companyName}>{setting?.name}</Text>
             <Text style={styles.companyInfo}>{setting?.address}</Text>
             <Text style={styles.companyInfo}>Phone: {setting?.phone}</Text>
             <Text style={styles.companyInfo}>Email: {setting?.email}</Text>
           </View>
-          <View style={styles.logoContainer}>
-            <Image style={styles.logo} source={setting?.icon} />
-          </View>
         </View>
 
         {/* Invoice Title */}
-        <Text style={styles.invoiceTitle}>Invoice</Text>
+        {/* <Text style={styles.invoiceTitle}>Invoice</Text> */}
 
         {/* Invoice Info */}
         <View style={styles.infoContainer}>
@@ -526,13 +542,13 @@ const Invoice = ({ ledgerDetail, data, setting }) => {
         </View>
 
         {/* Notes */}
-        <View style={styles.notesSection}>
+        {/* <View style={styles.notesSection}>
           <Text style={styles.notesTitle}>Thank You For Your Business</Text>
           <Text style={styles.notesText}>
             If you have any questions about this invoice, please contact us
             using the information provided at the top of this document.
           </Text>
-        </View>
+        </View> */}
 
         {/* Footer */}
         <View style={styles.footer}>
